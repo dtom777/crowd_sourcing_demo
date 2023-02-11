@@ -1,0 +1,22 @@
+.button {
+  transition: all 0.5s;
+  position: relative;
+}
+
+.button:after {
+  content: '→';
+  position: absolute;
+  opacity: 1;
+  top: 8px;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover {
+  padding-right: 20px;
+}
+
+.button:hover:after {
+  opacity: 1;
+  right: 10px;
+}

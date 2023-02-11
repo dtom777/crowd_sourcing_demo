@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  mysql:
+    image: mysql:8.0.24
+    platform: linux/amd64
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: prisma
+      MYSQL_DATABASE: prisma
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    expose:
+      - 3306
+volumes:
+  mysql:
