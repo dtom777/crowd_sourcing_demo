@@ -3,49 +3,49 @@ import { Session } from 'next-auth';
 import LikeButton from '@/components/atoms/button/LikeButton';
 import { useFetch } from '@/hooks/useFetch';
 import { errorToast } from '@/lib/toast';
+import { data } from 'cypress/types/jquery';
+import { mutate } from 'swr';
 
 type Props = {
   session: Session;
   id: string;
 };
 
-const ToggleLikeButton: VFC<Props> = ({ session, id }) => {
-  const [like, setLike] = useState<boolean>(false);
-  const buttonTitle: string = like ? 'いいね済' : 'いいね！';
+type SubmitData = {
+  like: boolean;
+  postId: string;
+};
 
+const ToggleLikeButton: VFC<Props> = ({ session, id }) => {
+  // getLike
+  const { data, mutate } = useFetch(
+    session ? `/api/like/get?postId=${id}` : null
+  );
+
+  // createLike
   const handleLike = useCallback(async (): Promise<void> => {
-    const body: { like: boolean; postId: string; userId: string } = {
-      like: !like,
+    const body: SubmitData = {
+      like: !data.like,
       postId: id,
-      userId: session.user.id,
     };
-    setLike(body.like);
 
     try {
-      await fetch('/api/like/createLike', {
+      const res = await fetch('/api/like/toggle', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
-    } catch (error) {
-      errorToast(error.message);
+      if (!res.ok) throw new Error('Failed');
+      mutate();
+    } catch (err) {
+      console.error(err);
+      errorToast('Failed');
     }
-  }, [id, like, session.user.id]);
-
-  const { data } = useFetch(session ? `/api/like/getLike?postId=${id}` : null);
-
-  useEffect((): void => {
-    if (!session || !data) {
-      return;
-    }
-    data.length !== 0 ? setLike(true) : setLike(false);
-  }, [data, session]);
+  }, [data, id, mutate]);
 
   return (
     <>
-      <LikeButton handler={handleLike} like={like}>
-        {buttonTitle}
-      </LikeButton>
+      <LikeButton handler={handleLike} like={data?.like} />
     </>
   );
 };

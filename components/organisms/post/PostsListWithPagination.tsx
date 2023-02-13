@@ -3,8 +3,7 @@ import { useRouter } from 'next/router';
 import PostsList from '@/components/organisms/post/PostsList';
 import Pagination from '@/components/molecules/pagination/Pagination';
 import { PostWithUser } from 'types/post.type';
-import CardsListItems from '@/components/molecules/card/CardsListItems';
-import CardsList from '../card/CardsList';
+import CardList from '@/components/elements/card/CardList';
 
 type Props = {
   posts: Array<PostWithUser>;
@@ -37,7 +36,7 @@ const PostsListWithPagination: VFC<Props> = ({ posts }) => {
 
   return (
     <>
-      <CardsList posts={slice} />
+      <CardList posts={slice} />
       <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
     </>
   );

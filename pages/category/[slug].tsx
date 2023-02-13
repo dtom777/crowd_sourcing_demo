@@ -2,11 +2,9 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { Category } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { prisma } from '@/lib/prisma';
-import Layout from '@/components/templates/Layout';
 import Const from '@/components/atoms/const/Const';
 import BaseHead from '@/components/atoms/head/BaseHead';
 import PostsListWithPagination from '@/components/organisms/post/PostsListWithPagination';
-import CategoryTags from '@/components/molecules/category/CategoryTags';
 import { PostWithUser } from 'types/post.type';
 import { ParsedUrlQuery } from 'node:querystring';
 import CategoryLabel from '@/components/CategoryLabel';
@@ -24,11 +22,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     select: {
       slug: true,
     },
-    where: {
-      NOT: {
-        slug: null,
-      },
-    },
   });
 
   const paths = categories.map((category: Category) => ({
@@ -44,25 +37,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
-  const category = await prisma.category.findUnique({
-    where: {
-      slug: params.slug,
-    },
-    select: {
-      id: true,
-    },
-  });
-  const categoryId = category.id;
-
   const posts = await prisma.post.findMany({
     orderBy: {
       id: 'desc',
     },
     where: {
-      AND: [{ published: true }, { draft: false }, { categoryId }],
+      AND: [
+        { published: true },
+        { draft: false },
+        { categorySlug: params.slug },
+      ],
     },
     include: {
-      Category: true,
+      category: true,
       user: true,
     },
   });
@@ -76,8 +63,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 
 const CategorySlugPage: NextPage<Props> = ({ posts }) => {
   return (
-    <Layout>
-      <BaseHead />
+    <>
       <CategoryLabel />
       <div className='lg:ml-0 ml-2 mt-4'>
         {posts.length ? (
@@ -85,10 +71,10 @@ const CategorySlugPage: NextPage<Props> = ({ posts }) => {
             <PostsListWithPagination posts={posts} />
           </div>
         ) : (
-          <Const message='まだお仕事が投稿されていません。' />
+          <Const message='No posts yet' />
         )}
       </div>
-    </Layout>
+    </>
   );
 };
 

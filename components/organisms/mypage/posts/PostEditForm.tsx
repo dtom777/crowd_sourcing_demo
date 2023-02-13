@@ -7,14 +7,14 @@ import Label from '@/components/atoms/input/Label';
 import ErrorMessage from '@/components/atoms/error/ErrorMessage';
 import SubmitButton from '@/components/atoms/button/SubmitButton';
 import { defaultInputStyle } from 'constants/defaultInputStyle';
-import { categoriesList } from 'constants/categoriesList';
+import { categories } from 'constants/category';
 import { useEditPost } from '@/hooks/useEditPost';
 
 type Props = {
   session: Session;
   post: PostWithTags;
 };
-
+// TODO createと同じformを使いタイプで分ける
 const PostEditForm: VFC<Props> = ({ session, post }) => {
   const { title, content, categoryId, reward, rewardFree, tags } = post;
 
@@ -83,7 +83,7 @@ const PostEditForm: VFC<Props> = ({ session, post }) => {
             className='shadow appearance-none border rounded w-full py-2 px-3 focus:outline-none focus:shadow-outline'
           >
             <option value=''>選択してください</option>
-            {categoriesList.map((category) => (
+            {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>
@@ -92,18 +92,6 @@ const PostEditForm: VFC<Props> = ({ session, post }) => {
           {errors.categoryId && (
             <ErrorMessage errorMessage='選択してください。' />
           )}
-        </div>
-        <div className='mb-4'>
-          <Label htmlFor='tags' className='mb-2'>
-            ハッシュタグ(任意)
-          </Label>
-          <input
-            {...register('tags')}
-            type='text'
-            placeholder='ハッシュタグを追加する'
-            defaultValue={tags.map((tag) => tag.tag.name).join(' ')}
-            className='shadow appearance-none border rounded w-full py-2 px-3 focus:outline-none focus:shadow-outline'
-          />
         </div>
         <div className='mb-4'>
           <Label className='mb-2'>報酬金額</Label>
@@ -138,7 +126,7 @@ const PostEditForm: VFC<Props> = ({ session, post }) => {
               placeholder={String(reward === null ? 0 : reward)}
               className='text-right shadow appearance-none border rounded ml-1 py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline '
             />
-            <span className='ml-1'>円</span>
+            <span className='ml-1'>USD</span>
           </div>
         </div>
         <div className='flex justify-center'>

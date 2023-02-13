@@ -1,7 +1,6 @@
-import CardsListItems from '@/components/molecules/card/CardsListItems';
+import CardList from '@/components/elements/card/CardList';
 import { memo, VFC } from 'react';
 import { PostWithUser } from 'types/post.type';
-import SearchForm from '../search/SearchForm';
 
 type Props = {
   posts: Array<PostWithUser>;
@@ -10,10 +9,9 @@ type Props = {
 const CardList: VFC<Props> = ({ posts }) => {
   return (
     <>
-      <SearchForm />
       {posts.length && (
         <div className='mb-6'>
-          <CardsListItems posts={posts} />
+          <CardList posts={posts} />
         </div>
       )}
     </>

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import SubmitButton from '@/components/atoms/button/SubmitButton';
 import { memo, VFC } from 'react';
-import { categoriesList } from 'constants/categoriesList';
+import { categories } from 'constants/category';
 
 const SearchForm: VFC = () => {
   const router = useRouter();

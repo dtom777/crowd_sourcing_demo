@@ -1,53 +1,50 @@
 import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
 import { memo, VFC } from 'react';
 import { PostWithUserAndCategoryAndTags } from 'types/post.type';
+import Link from 'next/link';
+import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
+import CreatedAt from '@/components/atoms/time/CreatedAt';
+import { title } from 'process';
 
 type Props = {
   post: PostWithUserAndCategoryAndTags;
 };
 
 const PostDetails: VFC<Props> = ({ post }) => {
-  // @ts-ignore　tagがtagsOnPostと認識されている
-  const tagArray = post.tags.map((tag) => tag.name);
+  const { id, name, image, createdAt } = post.user;
 
   return (
     <>
-      <div className='py-2 px-4 bg-black lg:text-lg text-sm text-white font-bold'>
-        募集内容
-      </div>
-      <div
-        className='md:p-10 p-4 bg-yellow-300 bg-bg-post'
-        style={{ backgroundSize: '600px 920px' }}
-      >
-        <div className='flex justify-center lg:text-4xl text-2xl font-black break-all whitespace-pre-wrap '>
-          <h1 className='max-w-md'>{post.title}</h1>
-        </div>
-        <div className='mt-6 lg:text-base text-sm font-bold leading-normal'>
-          <pre className='break-all whitespace-pre-wrap'>{post.content}</pre>
-          <div className='mt-6'>
-            {post.reward && post.reward != 0 ? (
-              <p>報酬:{post.reward.toLocaleString()}円</p>
-            ) : (
-              ''
-            )}
+      <div className='rounded-none lg:card w-full bg-success text-neutral-content shadow-2xl'>
+        <div className='card-body'>
+          <h2 className='card-title text-2xl mb-4'>{post.title}</h2>
+          <p className='mb-4'>{post.content}</p>
+          <div className='flex justify-between'>
+            <div className='card-actions'>
+              <div className='badge badge-outline'>
+                <Link href={`/category/${post.categorySlug}`}>
+                  <a>{post.categorySlug}</a>
+                </Link>
+              </div>
+            </div>
+            <div className='card-actions font-bold mb-4'>
+              Reward: {post.reward.toLocaleString()} USD
+            </div>
           </div>
-          {tagArray &&
-            tagArray.map((tag) => (
-              <BaseLinkButton
-                href={`/search?query=${tag}&rewardFree=true`}
-                className='hover:opacity-50'
-                key={tag}
-              >
-                #{tag}
-              </BaseLinkButton>
-            ))}
-          <div className='mt-4'>
-            <BaseLinkButton
-              href={`/category/${post.Category.slug}`}
-              className='py-1 px-2 bg-gray-200 rounded-md hover:opacity-70'
-            >
-              カテゴリ:{post.Category.name}
-            </BaseLinkButton>
+          <div className='flex items-center'>
+            <div className='mr-2'>
+              <Link href={`/user/${id}`}>
+                <a className='hover:opacity-50'>
+                  <BaseAvatar src={image} size={60} />
+                </a>
+              </Link>
+            </div>
+            <div>
+              <div className='font-semibold'>{name}</div>
+              <div className='font-light'>
+                {new Date(createdAt).toLocaleDateString('ja-JP')}
+              </div>
+            </div>
           </div>
         </div>
       </div>

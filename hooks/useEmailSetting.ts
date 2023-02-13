@@ -23,7 +23,7 @@ export const useEmailSetting = (id, name, email) => {
         email: string;
         changeEmail: string;
       } = { id, name, email, changeEmail };
-      await fetch('/api/user/changeEmail', {
+      await fetch('/api/email/change', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },

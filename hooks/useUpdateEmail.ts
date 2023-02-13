@@ -37,7 +37,7 @@ export const useUpdateEmail = () => {
         password,
         expiration,
       };
-      const response = await fetch('/api/user/changeEmail', {
+      const response = await fetch('/api/email/change', {
         method: 'PUT',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },

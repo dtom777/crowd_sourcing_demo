@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -12,6 +12,14 @@ const categoryData: Prisma.CategoryCreateInput[] = [
   { name: '動画', slug: 'video' },
   { name: 'ライティング', slug: 'writing' },
 ];
+
+// develop only
+const userData: Prisma.UserCreateInput = {
+  name: 'test user',
+  email: 'test@mail.com',
+  password: 'testtest',
+  image: '/avatar-1.jpg',
+};
 
 async function main() {
   const categories = await prisma.category.findMany();

@@ -4,6 +4,7 @@ import { Provider } from 'next-auth/client';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Layout from '@/components/layouts/Layout';
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
@@ -15,7 +16,9 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </motion.div>
       </Provider>
     </AnimateSharedLayout>

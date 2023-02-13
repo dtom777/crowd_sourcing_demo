@@ -34,7 +34,7 @@ export const useCreateEventPost = () => {
       userId: session.user.id,
     };
     try {
-      const response = await fetch('/api/post/createPost', {
+      const response = await fetch('/api/post/create', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },

@@ -2,6 +2,8 @@ import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
 import PostsList from './PostsList';
 import { memo, VFC } from 'react';
 import { PostWithUser } from 'types/post.type';
+import Link from 'next/link';
+import RelationCardList from '@/components/elements/card/RelationCardList';
 
 type Props = {
   posts: Array<PostWithUser>;
@@ -9,20 +11,12 @@ type Props = {
 
 const RelationPostList: VFC<Props> = ({ posts }) => {
   return (
-    <div className='mb-12'>
-      <h2 className='py-2 px-4 lg:bg-white bg-black lg:text-black text-white lg:border-b-2 font-bold text-sm'>
-        この募集を見ている人におすすめ
+    <div className='mb-4'>
+      <h2 className='py-2 px-4 mb-4 bg-white text-black border-b-2 font-bold text-sm'>
+        Related Posts
       </h2>
-      <div className='mx-2'>
-        <PostsList posts={posts} display={'list'} />
-      </div>
-      <div className='p-4'>
-        <BaseLinkButton
-          href='/category'
-          className='flex justify-end text-sm hover:opacity-50'
-        >
-          他の募集もみる &gt;
-        </BaseLinkButton>
+      <div className='mx-2 flex justify-center'>
+        {posts.length ? <RelationCardList posts={posts} /> : <>No posts yet</>}
       </div>
     </div>
   );

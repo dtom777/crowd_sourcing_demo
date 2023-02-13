@@ -41,7 +41,7 @@ const Post: VFC<Props> = ({ post }) => {
             報酬
           </p>
           <p className='font-bold text-red-500 text-xl'>
-            {post.reward.toLocaleString()}円
+            {post.reward.toLocaleString()}USD
           </p>
         </div>
       </li>

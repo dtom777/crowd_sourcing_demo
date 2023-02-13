@@ -6,7 +6,7 @@ describe('SignUp', async () => {
       email: 'e2e@example.com',
       password: '11111111',
     };
-    fetch('http://localhost:3000/api/user/deleteUser', {
+    fetch('http://localhost:3000/api/user/delete', {
       method: 'DELETE',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },

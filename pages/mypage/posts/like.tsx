@@ -4,7 +4,6 @@ import { PostWithUserAndLikeAndComment } from 'types/post.type';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 import { useState, useEffect, useCallback } from 'react';
 import { prisma } from '@/lib/prisma';
-import Layout from '@/components/templates/Layout';
 import PostsLikeList from '@/components/organisms/mypage/posts/PostsLikeList';
 import Pagination from '@/components/molecules/pagination/Pagination';
 import BaseHead from '@/components/atoms/head/BaseHead';
@@ -29,76 +28,51 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  // TODO delete password
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
   const likePosts = await prisma.post.findMany({
     where: {
-      Like: {
+      likes: {
         some: {
-          userId: session.user.id,
+          userId: user.id,
         },
       },
     },
     include: {
       user: true,
-      Like: true,
-      comment: true,
+      likes: true,
+      comments: true,
     },
   });
 
   return {
     props: {
       posts: likePosts,
-      session,
+      user,
     },
   };
 };
 
-const LikePostsListPage: NextPage<Props> = ({ posts, session }) => {
+const LikePostsListPage: NextPage<Props> = ({ posts, user }) => {
   const [loading] = useState<boolean>(false);
-  const [offset, setOffset] = useState<number>(0);
-  const [slice, setSlice] = useState<Array<PostWithUserAndLikeAndComment>>([]);
-  const [perPage] = useState<number>(10);
-  const [pageCount, setPageCount] = useState<number>(0);
-
-  const handlePageClick = useCallback(
-    (e): void => {
-      const selectedPage = e.selected;
-      setOffset(selectedPage * perPage);
-    },
-    [perPage]
-  );
-
-  useEffect(() => {
-    const getData = async (): Promise<void> => {
-      const postsData = posts.slice(offset, offset + perPage);
-      setSlice(postsData);
-      setPageCount(Math.ceil(posts.length / perPage));
-    };
-    getData();
-  }, [offset, perPage, posts, session]);
 
   return (
-    <Layout>
-      <BaseHead />
+    <>
       <Loading loading={loading} />
-      <div className='mb-10 max-w-screen-md mx-auto'>
-        <div className='mt-4 py-2 pl-4 pr-2 bg-black text-white font-bold text-md'>
-          いいねした募集
-        </div>
-        <div className='mx-4'>
-          {posts.length === 0 || posts.length === undefined ? (
-            <Const message='現在いいねした募集はありません' />
-          ) : (
-            <>
-              <PostsLikeList posts={slice} session={session} />;
-              <Pagination
-                pageCount={pageCount}
-                onPageChange={handlePageClick}
-              />
-            </>
-          )}
-        </div>
+      <h1 className='text-2xl font-bold pl-4 pt-10'>Like Posts</h1>
+      <div className='mt-4 mb-8'>
+        {posts.length ? (
+          <PostsLikeList posts={posts} user={user} />
+        ) : (
+          <Const message='Not yet' />
+        )}
       </div>
-    </Layout>
+    </>
   );
 };
 

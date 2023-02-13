@@ -19,7 +19,7 @@ const SubmitButton: FC<Props> = ({
   return (
     <BaseButton
       type='submit'
-      className={`justify-center items-center bg-black hover:opacity-50 text-white focus:outline-none focus:shadow-outline ${className}`}
+      className={`justify-center items-center bg-black hover:opacity-50 text-white focus:outline-none focus:shadow-outline font-bold rounded-xl ${className}`}
       growEffect={growEffect}
       shineEffect={shineEffect}
       testId={testId}

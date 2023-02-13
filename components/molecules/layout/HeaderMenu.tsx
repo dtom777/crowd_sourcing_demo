@@ -19,15 +19,6 @@ const HeaderMenu: VFC = () => {
     <div className='mr-2'>
       {session ? (
         <div className='flex items-center'>
-          {/* あとでLinkつける */}
-          <BaseButton headerStyle={true} growEffect={true}>
-            <BaseIcon icon={faEnvelope} className='md:text-xl' />
-          </BaseButton>
-          {/* あとでLinkつける */}
-          <BaseButton headerStyle={true} growEffect={true}>
-            <BaseIcon icon={faCheckCircle} className='md:text-xl' />
-          </BaseButton>
-
           <BaseLinkButton href='/mypage' headerStyle={true} growEffect={true}>
             <BaseAvatar src={session.user.image} size={30} />
           </BaseLinkButton>
@@ -39,7 +30,7 @@ const HeaderMenu: VFC = () => {
             className='bg-black text-white rounded-md'
           >
             <BaseIcon icon={faEdit} className='md:mr-2 mr-1 text-sm' />
-            募集する
+            お仕事を募集
           </BaseLinkButton>
         </div>
       ) : (

@@ -1,101 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { successToast } from '@/lib/toast';
+import { successToast, errorToast } from '@/lib/toast';
 
-export const usePostMyPage = () => {
+export const usePostMyPage = (posts) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const [localData, setLocalData] = useState([]);
 
-  const handlePrivatePost = async (id: string): Promise<void> => {
-    setLoading(true);
-    // 公開、非公開はdraftで制御
-    const body: {
-      id: string;
-      draft: boolean;
-    } = { id, draft: true };
-    try {
-      await fetch('/api/post/togglePost', {
-        method: 'PUT',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      await router.push({
-        pathname: '/mypage/posts',
-        query: {
-          published: true,
-          draft: true,
-          end: true,
-        },
-      });
-      successToast('募集を停止しました🥺');
-      setLoading(false);
-    } catch (error) {
-      console.log(error.message);
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    setLocalData(posts);
+  }, [posts]);
 
-  const handlePublishedPost = async (id: string): Promise<void> => {
-    setLoading(true);
-    const body: {
-      id: string;
-      draft: boolean;
-    } = { id, draft: false };
-    try {
-      await fetch('/api/post/togglePost', {
-        method: 'PUT',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      await router.push({
-        pathname: '/mypage/posts',
-        query: {
-          published: true,
-          draft: true,
-          end: true,
-        },
-      });
-      successToast('募集を再開しました😋');
-      setLoading(false);
-    } catch (error) {
-      console.log(error.message);
-      setLoading(false);
-    }
-  };
-
-  const handleRePublishedPost = async (id: string): Promise<void> => {
-    setLoading(true);
+  const handleTogglePublished = async (id, published): Promise<void> => {
     const body: {
       id: string;
       published: boolean;
-      draft: boolean;
-    } = { id, published: true, draft: false };
+    } = { id, published: !published };
+    setLocalData((prev) =>
+      prev.map((post) => {
+        if (post.id === id) return { ...post, published: !published };
+        else return post;
+      })
+    );
     try {
-      await fetch('/api/post/togglePost', {
+      await fetch('/api/post/toggle', {
         method: 'PUT',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
-      await router.push({
-        pathname: '/mypage/posts',
-        query: {
-          published: true,
-          draft: true,
-          end: true,
-        },
-      });
-      successToast('募集を再開しました😋');
-      setLoading(false);
     } catch (error) {
       console.log(error.message);
-      setLoading(false);
+      errorToast('Failed');
     }
   };
 
   const handleDeletePost = async (id: string): Promise<void> => {
     setLoading(true);
     try {
-      await fetch('/api/post/deletePost', {
+      await fetch('/api/post/delete', {
         method: 'PUT',
         body: JSON.stringify(id),
         headers: { 'Content-Type': 'application/json' },
@@ -117,10 +59,9 @@ export const usePostMyPage = () => {
   };
 
   return {
+    localData,
     loading,
-    handlePrivatePost,
-    handlePublishedPost,
-    handleRePublishedPost,
+    handleTogglePublished,
     handleDeletePost,
   };
 };

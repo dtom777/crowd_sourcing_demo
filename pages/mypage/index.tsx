@@ -5,7 +5,6 @@ import { faCog, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-regular-svg-icons';
 import { prisma } from '@/lib/prisma';
 import getRelativeTime from '@/lib/days';
-import Layout from '@/components/templates/Layout';
 import BaseHead from '@/components/atoms/head/BaseHead';
 import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
 import CreatedAt from '@/components/atoms/time/CreatedAt';
@@ -14,6 +13,9 @@ import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
 import styles from './index.module.css';
 import { PostWithCommentAndLike } from 'types/post.type';
 import { CommentWithUserAndPostWithCategoryAndUser } from 'types/comment.type';
+import Link from 'next/link';
+import Image from 'next/image';
+import Card from '@/components/elements/card/Card';
 
 type Props = {
   session: Session;
@@ -34,11 +36,17 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  const { id: userId } = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+  });
+
   // 最近の募集
-  const latestPost = await prisma.post.findMany({
+  const latestPost = await prisma.post.findFirst({
     where: {
       AND: [
-        { userId: session.user.id },
+        { userId: userId },
         {
           published: true,
         },
@@ -51,13 +59,13 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: {
       createdAt: 'desc',
     },
-    include: { comment: true, Like: true },
+    include: { comments: true, likes: true },
   });
 
   //　応募したもの
   const latestComment = await prisma.comment.findMany({
     where: {
-      userId: session.user.id,
+      userId,
     },
     take: 3,
     orderBy: {
@@ -83,149 +91,128 @@ export const getServerSideProps: GetServerSideProps = async (
 
 const MyPage: NextPage<Props> = ({ session, post, comments }) => {
   return (
-    <Layout>
-      <BaseHead />
-      <div className='md:flex justify-between md:px-4 px-2 md:mt-16 mt-8 md:mb-10 mb-6'>
+    <>
+      <div className='flex justify-between md:px-4 px-2 md:mt-16 mt-8 md:mb-10 mb-6'>
         <div className='mr-2'>
           <div className='flex items-center'>
-            {session && <BaseAvatar src={session.user.image} size={70} />}
+            {session && (
+              <div className='flex flex-col w-full items-center justify-center'>
+                <div className='avatar'>
+                  <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+                    <Image src={session.user.image} width={120} height={120} />
+                  </div>
+                </div>
+              </div>
+            )}
             <div>
               <p className='text-gray-900 font-semibold md:text-3xl text-2xl ml-4'>
                 {session ? session.user.name : ''}
               </p>
-              <BaseLinkButton
-                href='/mypage/profile'
-                className={`text-gray-500 text-sm ml-4 hover:opacity-50 ${styles.shine}`}
-              >
-                プロフィール編集
-              </BaseLinkButton>
+              <Link href='/mypage/profile'>
+                <a className='text-gray-500 text-sm ml-4 hover:opacity-50'>
+                  Edit Profile
+                </a>
+              </Link>
             </div>
           </div>
         </div>
         <div className='flex md:justify-center justify-end items-center text-lg md:mt-0 mt-4'>
           <div className='mr-4 text-red-500'>
-            <BaseLinkButton
-              href={'/mypage/posts/like'}
-              className={styles.shine}
-            >
-              <BaseIcon icon={faHeart} className='mr-1' />
-              いいねした募集
-            </BaseLinkButton>
+            <Link href={'/mypage/posts/like'}>
+              <a>
+                <BaseIcon icon={faHeart} className='mr-1' />
+                Like Posts
+              </a>
+            </Link>
           </div>
           <div className='text-gray-700'>
-            <BaseLinkButton href='/mypage/setting' className={styles.shine}>
-              <BaseIcon icon={faCog} className='mr-1' />
-              設定
-            </BaseLinkButton>
+            <Link href='/mypage/settings'>
+              <a>
+                <BaseIcon icon={faCog} className='mr-1' />
+                Settings
+              </a>
+            </Link>
           </div>
         </div>
       </div>
 
-      <div className='md:flex justify-between bg-gray-50 md:mb-20 mb-4 pb-4'>
-        <div className='md:w-3/5 w-full py-4 lg:px-6 px-4'>
+      <div className='md:flex justify-between bg-base-200 md:mb-20 mb-4 pb-4'>
+        <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
           <div className='flex justify-between items-baseline'>
-            <h2 className='text-lg font-bold'>新着のやりとり</h2>
-            <BaseLinkButton
-              href='/mypage/exchange'
-              className='hover:opacity-50'
-            >
-              <p className={`text-gray-400 text-sm ${styles.shine}`}>
-                全てのやりとりをみる
-              </p>
-            </BaseLinkButton>
+            <h2 className='text-lg font-bold'>Recent Activity</h2>
+            <Link href='/mypage/chat'>
+              <a className='text-gray-400 text-sm hover:opacity-50'>View all</a>
+            </Link>
           </div>
-          {comments !== undefined && comments.length !== 0 ? (
-            // comp化できそう
+          {comments.length ? (
             <ul>
+              {/* TODO　カード化 */}
               {comments.map((comment) => (
                 <li key={comment.id} className='bg-white my-4 p-4'>
-                  <BaseLinkButton
-                    href={`/mypage/exchange/application/${comment.id}`}
-                    className='flex justify-between hover:opacity-50'
-                  >
-                    <div className='flex'>
-                      <BaseAvatar src={comment.post.user.image} size={70} />
-                      <div className='ml-6'>
-                        <p className='w-40 truncate text-gray-900 text-xl font-bold'>
-                          {comment.post.title}
-                        </p>
-                        <p className='text-gray-700 font-medium'>
-                          {comment.post.user.name}
-                        </p>
-                        <p className='text-gray-500 md:text-sm text-xs'>
-                          この募集に応募しました。
-                        </p>
+                  <Link href={`/posts/${comment.post.id}`}>
+                    <a className='flex justify-between hover:opacity-50'>
+                      <div className='flex'>
+                        {/* avatar */}
+                        <div className='flex flex-col w-full items-center justify-center'>
+                          <div className='avatar'>
+                            <div className='w-14 rounded-full'>
+                              <Image
+                                src={comment.post.user.image}
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {/* avatar */}
+                        <div className='ml-6'>
+                          <p className='w-40 truncate text-gray-900 text-md font-bold'>
+                            {comment.post.title}
+                          </p>
+                          <p className='text-gray-700 font-medium'>
+                            {comment.post.user.name}
+                          </p>
+                          <p className='text-gray-500 md:text-sm text-xs'>
+                            You applied for this post
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <p className='text-gray-500 md:text-sm text-xs'>
-                      {getRelativeTime(comment)}
-                    </p>
-                  </BaseLinkButton>
+                      <p className='text-gray-500 md:text-sm text-xs'>
+                        {getRelativeTime(comment)}
+                      </p>
+                    </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           ) : (
             <div className='flex justify-center items-center'>
-              <p className='text-gray-500 my-10'>現在のやりとりはありません</p>
+              <p className='text-gray-500 my-10'>No recent activity</p>
             </div>
           )}
         </div>
-        <div className='md:w-2/5 w-full py-4 lg:px-6 px-4'>
+        {/*  */}
+        <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
           <div className='flex justify-between items-baseline'>
-            <h2 className='text-lg font-bold'>あなたの最近の募集</h2>
-            <BaseLinkButton
-              href={{
-                pathname: '/mypage/posts',
-                query: { published: true, draft: true, end: true },
-              }}
-              className='hover:opacity-50'
-            >
-              <p className={`text-gray-400 text-sm ${styles.shine}`}>
-                全ての募集をみる
-              </p>
-            </BaseLinkButton>
+            <h2 className='text-lg font-bold'>Your recent post</h2>
+            <Link href='/mypage/posts'>
+              <a className='text-gray-400 text-sm hover:opacity-50'>
+                View all your posts
+              </a>
+            </Link>
           </div>
-          {post !== undefined && post.length !== 0 ? (
-            <div className='mt-2 shadow-md'>
-              <BaseLinkButton
-                href={`/posts/${post[0].id}`}
-                className={`flex flex-col ${styles.shine}`}
-              >
-                <div className='h-40 flex justify-center items-center px-4 bg-yellow-300 bg-bg-post text-lg font-bold rounded-t-md'>
-                  <p className='text-center'>{post[0].title}</p>
-                </div>
-              </BaseLinkButton>
-              <div className='bg-white rounded-b-md py-2 px-6'>
-                <div className='flex justify-between'>
-                  {post[0].comment.length !== 0 ? (
-                    <BaseLinkButton
-                      href={`/mypage/exchange/recruitment/${post[0].comment[0].id}`}
-                      className='hover:opacity-50'
-                    >
-                      <p className='text-red-400'>
-                        <BaseIcon icon={faComments} className='mr-1' />
-                        {post[0].comment.length}件の応募があります!
-                      </p>
-                    </BaseLinkButton>
-                  ) : (
-                    <p>まだ応募がありません</p>
-                  )}
-                  <div className='flex items-center text-red-500'>
-                    <BaseIcon icon={faHeart} className='mr-1' />
-                    <p>{post[0].Like.length}</p>
-                  </div>
-                </div>
-                <CreatedAt createdAt={post[0].createdAt} />
-              </div>
+          {post ? (
+            <div className='pt-4 pr-4'>
+              <Card post={post} />
             </div>
           ) : (
             <div className='flex justify-center items-center'>
-              <p className='text-gray-500 my-10'>募集中の募集はありません</p>
+              <p className='text-gray-500 my-10'>No posts yet</p>
             </div>
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

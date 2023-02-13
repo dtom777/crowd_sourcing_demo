@@ -5,59 +5,48 @@ import ErrorMessage from '@/components/atoms/error/ErrorMessage';
 import SubmitButton from '@/components/atoms/button/SubmitButton';
 import Loading from '@/components/atoms/loading/Loading';
 import { defaultInputStyle } from 'constants/defaultInputStyle';
-import { useApplicationPost } from '@/hooks/useApplicationPost';
+import { useApplyPost } from '@/hooks/useApplyPost';
 
 type Props = {
-  user: {
-    name?: string;
-    email?: string;
-  };
   post: { id: string };
 };
 
-const ApplicationForm: VFC<Props> = ({ user, post }) => {
+const ApplicationForm: VFC<Props> = ({ post }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const { loading, sendMail } = useApplicationPost(user, post);
+  const { loading, sendMail } = useApplyPost(post);
 
   return (
     <>
       <Loading loading={loading} />
       <form
         onSubmit={handleSubmit(sendMail)}
-        className='flex flex-col px-8 pt-6 pb-8 bg-white rounded'
+        className='flex flex-col px-8 pb-8 bg-white rounded'
       >
         <div className='mb-4'>
-          <Label className='mb-2'>メッセージ</Label>
+          <label className='label'>
+            <span className='label-text font-bold'>Message</span>
+          </label>
           <textarea
+            className='textarea textarea-bordered w-full mb-3'
+            rows={6}
             {...register('message', {
               required: true,
               maxLength: 1000,
             })}
-            className={`w-full mb-3 ${defaultInputStyle}`}
-            rows={6}
-            placeholder='例:興味あります。よければメッセージお待ちしています!'
-          />
+            placeholder='message'
+          ></textarea>
           {errors.message && (
             <ErrorMessage errorMessage='1〜1000文字で入力してください。' />
           )}
         </div>
         <div className='flex justify-center items-center'>
-          <SubmitButton
-            className='font-bold py-2 px-12 focus:outline-none focus:shadow-outline rounded-md'
-            growEffect={true}
-            shineEffect={true}
-          >
-            応募する
-          </SubmitButton>
+          <button className='btn btn-success'>Send Message</button>
         </div>
-        <p className='text-gray-500 mt-4 text-sm md:text-base'>
-          応募状況は他ユーザーには公開されません。
-        </p>
       </form>
     </>
   );

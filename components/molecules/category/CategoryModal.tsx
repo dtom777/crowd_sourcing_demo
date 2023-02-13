@@ -3,7 +3,7 @@ import { faAngleDoubleDown } from '@fortawesome/free-solid-svg-icons';
 import BaseIcon from '@/components/atoms/icon/BaseIcon';
 import ActiveLink from '@/components/atoms/link/ActiveLink';
 import styles from './CategoryModal.module.css';
-import { categoriesLinkList } from 'constants/categoriesList';
+import { categories } from 'constants/category';
 
 const CategoryModal: VFC = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -37,7 +37,7 @@ const CategoryModal: VFC = () => {
         {show && (
           <div className='absolute top-12 right-0 flex justify-center items-center mr-2 z-20'>
             <div className='w-72 flex flex-wrap z-10 bg-white shadow-2xl rounded-xl p-2'>
-              {categoriesLinkList.map((category) => (
+              {categories.map((category) => (
                 <div className='w-1/2' key={category.name}>
                   <ActiveLink
                     href={category.link}

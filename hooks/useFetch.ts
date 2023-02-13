@@ -12,7 +12,7 @@ export const useFetch = (url: string) => {
     return res.json();
   };
 
-  const { data, error } = useSWR(url, fetcher);
+  const { data, error, mutate } = useSWR(url, fetcher);
 
-  return { data, error };
+  return { data, error, isLoading: !error && !data, mutate };
 };

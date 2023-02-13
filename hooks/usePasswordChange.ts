@@ -27,7 +27,7 @@ export const usePasswordChange = () => {
         password,
         passwordToken,
       };
-      const response = await fetch('/api/user/changePassword', {
+      const response = await fetch('/api/password/change', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },

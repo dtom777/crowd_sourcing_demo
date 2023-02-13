@@ -50,7 +50,7 @@ export const useEditPost = (session, rewardFree) => {
         userId: session.user.id,
       };
       try {
-        await fetch('/api/post/updatePost', {
+        await fetch('/api/post/update', {
           method: 'PUT',
           body: JSON.stringify(body),
           headers: { 'Content-Type': 'application/json' },
@@ -76,7 +76,7 @@ export const useEditPost = (session, rewardFree) => {
         userId: session.user.id,
       };
       try {
-        await fetch('/api/post/updatePost', {
+        await fetch('/api/post/update', {
           method: 'PUT',
           body: JSON.stringify(body),
           headers: { 'Content-Type': 'application/json' },

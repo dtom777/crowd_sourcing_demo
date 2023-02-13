@@ -28,7 +28,7 @@ const PostCard: VFC<Props> = ({ post }) => {
               </pre>
               <div className='mt-6'>
                 {post.reward && post.reward !== 0 ? (
-                  <p>報酬:{post.reward.toLocaleString()}円</p>
+                  <p>報酬:{post.reward.toLocaleString()}USD</p>
                 ) : (
                   ''
                 )}

@@ -1,7 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { prisma } from '@/lib/prisma';
-import { faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import Layout from '@/components/templates/Layout';
 import PostsList from '@/components/organisms/post/PostsList';
 import BaseHead from '@/components/atoms/head/BaseHead';
 import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
@@ -9,10 +7,12 @@ import SnsLinkButton from '@/components/atoms/button/SnsLinkButton';
 import { PostWithUser } from 'types/post.type';
 import { UserWithPost } from 'types/user.type';
 import { ParsedUrlQuery } from 'node:querystring';
+import Image from 'next/image';
+import CardList from '@/components/elements/card/CardList';
+import UserCardList from '@/components/elements/card/UserCardList';
 
 type Props = {
   user: UserWithPost;
-  posts: Array<PostWithUser>;
 };
 
 type Params = ParsedUrlQuery & {
@@ -39,95 +39,78 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
+  // TODO パスワードとってこない select つかう
   const user = await prisma.user.findUnique({
     where: {
       id: params.id,
     },
     include: {
-      posts: true,
+      posts: {
+        include: {
+          category: true,
+          user: true,
+        },
+        take: 4,
+      },
+      profile: true,
     },
   });
-
-  const posts = await prisma.post.findMany({
-    where: {
-      userId: params.id,
-    },
-    take: 5,
-    include: {
-      user: true,
-    },
-  });
+  console.log(user);
 
   return {
     props: {
-      posts,
       user,
     },
   };
 };
 
-const UserPage: NextPage<Props> = ({ posts, user }) => {
+const UserPage: NextPage<Props> = ({ user }) => {
+  const { posts, profile, image, name } = user;
+
   return (
-    <Layout>
-      <BaseHead />
-      <div className='lg:flex lg:justify-between lg:my-12 lg:px-4 my-4'>
-        <div className='lg:w-7/12 lg:mx-2 mx-4 lg:text-left lg:mr-10'>
+    <>
+      <div className='lg:my-12 lg:px-4 my-4'>
+        <div className='lg:mx-2 mx-4 lg:text-left lg:mr-10'>
           <div className='flex items-center'>
             <div>
-              <BaseAvatar
-                src={user.image ? user.image : '/avatar-default.png'}
-                size={70}
-              />
-            </div>
-            <div className='flex flex-col'>
-              <p className='lg:text-3xl text-xl font-bold ml-4'>{user.name}</p>
-              <div className='text-xl font-bold ml-4'>
-                {user.twitter && (
-                  <SnsLinkButton
-                    href={`https://twitter.com/${user.twitter}`}
-                    className='mr-2'
-                    iconClassName='text-blue-300'
-                    icon={faTwitter}
+              <div className='avatar'>
+                <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+                  <Image
+                    src={image ? image : '/avatar-default.png'}
+                    width={100}
+                    height={100}
                   />
-                )}
-                {user.facebook && (
-                  <SnsLinkButton
-                    href={`https://www.facebook.com/${user.facebook}`}
-                    iconClassName='text-blue-500'
-                    icon={faFacebook}
-                  />
-                )}
+                </div>
               </div>
             </div>
+            <div className='flex flex-col'>
+              <p className='lg:text-3xl text-xl font-bold ml-4'>{name}</p>
+            </div>
           </div>
-          {user.profile ? (
+
+          {profile.bio ? (
             <div className='h-40 py-4 px-6 mt-4 mb-8 leading-relaxed break-words border rounded-lg'>
-              {user.profile}
+              {profile.bio}
             </div>
           ) : (
             <div className='h-14 py-4 px-6 mt-4 mb-8 leading-relaxed break-words border rounded-lg text-gray-500'>
-              自己紹介文がありません
+              No bio yet
             </div>
           )}
         </div>
-        <div className='lg:w-5/12'>
-          <div className=''>
-            <h2 className='py-2 px-4 lg:bg-white bg-black lg:text-black text-white lg:border-b lg:border-black lg:text-base text-sm font-bold '>
-              最近の募集
-            </h2>
-            {posts !== undefined && posts.length !== 0 ? (
-              <div className='pb-5 px-6'>
-                <PostsList posts={posts} display={'list'} />
-              </div>
-            ) : (
-              <p className='text-center mt-4 text-gray-500'>
-                まだ募集がありません
-              </p>
-            )}
+
+        <h2 className='mb-2 py-2 px-4 bg-white text-black border-b text-base font-bold '>
+          Recent Posts
+        </h2>
+        {posts.length ? (
+          <div className='pb-5 px-6'>
+            <UserCardList posts={posts} />
           </div>
-        </div>
+        ) : (
+          <p className='text-center mt-4 text-gray-500'>Not yet</p>
+        )}
       </div>
-    </Layout>
+    </>
   );
 };
 

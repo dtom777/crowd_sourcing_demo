@@ -1,48 +1,43 @@
-import { ChangeEvent, useState } from 'react';
-import { useRouter } from 'next/router';
-import { successToast } from '@/lib/toast';
+import { useState } from 'react';
+import { errorToast, successToast } from '@/lib/toast';
 
-export const useEditProfile = (id, image) => {
-  const router = useRouter();
+type SubmitData = {
+  name: string;
+  profile?: string;
+};
+
+export const useEditProfile = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [img, setImg] = useState<string>(image);
 
-  const updateImg = (e: ChangeEvent<HTMLSelectElement>) =>
-    setImg(e.target.value);
-
-  const reload = () => {
-    router.reload();
-  };
-  const submitData = async (data: {
-    image: string;
-    name: string;
-    profile: string;
-  }): Promise<void> => {
-    setLoading(true);
-    const { name } = data;
-    if (!name) {
-      return;
-    }
+  const updateUser = async (data: SubmitData): Promise<void> => {
+    setLoading((prev) => !prev);
     try {
-      const body: {
-        image: string;
-        name: string;
-        profile: string;
-        id: string;
-      } = { id, ...data };
-      await fetch('/api/user/updateUser', {
+      const isValid = validate(data);
+      if (!isValid) throw new Error('Invalid Data');
+
+      const res = await fetch('/api/user/update', {
         method: 'PUT',
-        body: JSON.stringify(body),
+        body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' },
       });
-      successToast('変更完了😼');
-      setTimeout(reload, 1000);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+      if (!res.ok) throw new Error('Failed');
+
+      successToast('Success!');
+    } catch (err) {
+      console.error(err);
+      errorToast('Failed');
+    } finally {
+      setLoading((prev) => !prev);
     }
   };
 
-  return { loading, img, updateImg, submitData };
+  const validate = (data: SubmitData): boolean => {
+    const { name } = data;
+    if (!name) return false;
+    // TODO　型判定はzod
+
+    return true;
+  };
+
+  return { loading, updateUser };
 };
