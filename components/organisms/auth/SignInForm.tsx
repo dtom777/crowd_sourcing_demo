@@ -49,7 +49,7 @@ const SignInForm: VFC = () => {
               </div>
               {errors.email && (
                 <ErrorMessage
-                  errorMessage='Please Enter.'
+                  errorMessage='Please Enter'
                   className='text-center font-normal'
                 />
               )}

@@ -1,5 +1,4 @@
 import { Session } from 'next-auth';
-import { Prisma } from '@prisma/client';
 
 declare module 'next-auth' {
   interface Session {

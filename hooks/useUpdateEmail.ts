@@ -3,66 +3,76 @@ import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
 import { successToast } from '@/lib/toast';
 
+type ErrorMessage = string | undefined;
+
+type Inputs = {
+  password: string;
+  confirmationPassword: string;
+};
+
 export const useUpdateEmail = () => {
   const router = useRouter();
+
+  // TODO router queryがない場合リダイレクト
 
   // 暗号化されたEmail
   const encryptedEmail = router.query.email;
   const encryptedChangeEmail = router.query.changeEmail;
   const expiration = router.query.expires;
 
+  // TODO changeEmail → changingEmail
+  // const { email, changingEmail, expires } = router.query;
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
-  const submitData = async (data: {
-    password: string;
-    confirmationPassword: string;
-  }): Promise<void> => {
-    setLoading(true);
+  const changeEmail = async (data: Inputs): Promise<void> => {
+    setLoading((prev) => !prev);
+
     const { password, confirmationPassword } = data;
-    if (password !== confirmationPassword) {
-      setLoading(false);
 
-      return setErrorMessage('パスワードが一致していません');
-    }
     try {
-      const body: {
-        encryptedEmail: string | string[];
-        encryptedChangeEmail: string | string[];
-        password: string;
-        expiration: string | string[];
-      } = {
+      const errMsg = validatePassword({ password, confirmationPassword });
+      if (errMsg) throw new Error(errMsg);
+
+      const body = {
         encryptedEmail,
         encryptedChangeEmail,
         password,
         expiration,
       };
-      const response = await fetch('/api/email/change', {
+      const res = await fetch('/api/email/change', {
         method: 'PUT',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
-      const content = await response.json();
-      console.log('CONTENT', content);
-      if (content.message) {
-        setLoading(false);
-
-        return setErrorMessage(content.message);
-      } else {
-        successToast('メールアドレス変更完了!再度ログインしてください');
-        const reSignIn = async () => {
-          await signOut({ callbackUrl: '/auth/signin' });
-        };
-        setTimeout(reSignIn, 1500);
-        setLoading(false);
+      if (!res.ok) {
+        const { message } = await res.json();
+        throw new Error(message);
       }
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
 
-      return setErrorMessage('入力内容に誤りがあります');
+      successToast('Email change complete! Please signin again');
+      const reSignIn = async () => {
+        await signOut({ callbackUrl: '/auth/signin' });
+      };
+      setTimeout(reSignIn, 1500);
+    } catch (err) {
+      console.error(err.message);
+      setErrorMessage(err.message);
+    } finally {
+      setLoading((prev) => !prev);
     }
   };
 
-  return { loading, errorMessage, submitData };
+  const validatePassword = ({
+    password,
+    confirmationPassword,
+  }): ErrorMessage => {
+    if (!password || !confirmationPassword) return 'Incomplete input';
+    if (!password === !confirmationPassword) return 'Password does not match';
+
+    return undefined;
+  };
+
+  return { loading, errorMessage, changeEmail };
 };

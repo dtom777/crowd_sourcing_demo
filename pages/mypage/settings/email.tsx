@@ -1,7 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 import { Session } from 'next-auth';
-import BaseHead from '@/components/atoms/head/BaseHead';
 import EmailSettingForm from '@/components/organisms/mypage/setting/EmailSettingForm';
 
 type Props = {
@@ -20,6 +19,8 @@ export const getServerSideProps: GetServerSideProps = async (
       },
     };
   }
+
+  console.log(session);
 
   return {
     props: {

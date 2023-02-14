@@ -1,9 +1,7 @@
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
 import Loading from '@/components/atoms/loading/Loading';
-import Label from '@/components/atoms/input/Label';
 import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import { defaultInputStyle } from 'constants/defaultInputStyle';
 import { Session } from 'next-auth';
 import { useEmailSetting } from '@/hooks/useEmailSetting';
 
@@ -12,7 +10,7 @@ type Props = {
 };
 
 const EmailSettingForm: VFC<Props> = ({ session }) => {
-  const { id, name, email } = session.user;
+  const { email } = session.user;
 
   const {
     register,
@@ -20,78 +18,92 @@ const EmailSettingForm: VFC<Props> = ({ session }) => {
     formState: { errors },
   } = useForm();
 
-  const { loading, errorMessage, submitData } = useEmailSetting(
-    id,
-    name,
-    email
-  );
+  const { loading, errorMessage, sendConfirmationEmail } =
+    useEmailSetting(email);
 
   return (
     <>
       <Loading loading={loading} />
-      <div className='mb-10 max-w-screen-md mx-auto'>
-        <section>
-          <div className='mt-4 py-2 pl-4 pr-2 bg-black text-white font-bold text-md'>
-            メールアドレスの変更
+      <div className='hero min-h-screen'>
+        <div className='hero-content flex-col'>
+          <div className='text-center'>
+            <h1 className='text-5xl font-bold'>Change Email</h1>
           </div>
-          <div className='px-8 pt-6 pb-8 mb-4'>
-            <div>
-              <Label htmlFor='email' className='mb-2'>
-                現在のメールアドレス
-              </Label>
-              <input
-                name='email'
-                type='email'
-                placeholder='tonoru@Crowd Sourcing'
-                defaultValue={email}
-                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              />
-            </div>
-            <form onSubmit={handleSubmit(submitData)}>
-              <div className='mt-12'>
-                <Label htmlFor='changeEmail' className='mb-2'>
-                  変更後のメールアドレス
-                </Label>
+          <div className='card flex-shrink-0 md:max-w-screen-md md:w-screen w-full shadow-2xl bg-base-100'>
+            <form
+              className='card-body'
+              method='post'
+              action='/api/auth/callback/credentials'
+              onSubmit={handleSubmit(sendConfirmationEmail)}
+            >
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Current Email</span>
+                </label>
                 <input
-                  {...register('changeEmail', {
-                    required: true,
-                    minLength: 2,
-                    maxLength: 20,
-                  })}
                   type='email'
-                  placeholder='tonoru@Crowd Sourcing'
-                  className={`w-full ${defaultInputStyle}`}
-                />
-                {errors.changeEmail && (
-                  <ErrorMessage errorMessage='入力してください。' />
-                )}
-                <Label htmlFor='confirmationChangeEmail' className='my-2'>
-                  確認のため、もう一度入力してください。
-                </Label>
-                <input
-                  {...register('confirmationChangeEmail', {
-                    required: true,
-                    minLength: 2,
-                    maxLength: 20,
-                  })}
-                  type='email'
-                  placeholder='tonoru@Crowd Sourcing'
-                  className={`w-full ${defaultInputStyle}`}
+                  placeholder='email'
+                  defaultValue={email}
+                  className='input input-bordered'
+                  disabled
                 />
               </div>
-              {errors.confirmationChangeEmail && (
-                <ErrorMessage errorMessage='入力してください。' />
+
+              <div className='form-control mt-8'>
+                <label className='label'>
+                  <span className='label-text'>Email after change</span>
+                </label>
+                <input
+                  {...register('changingEmail', {
+                    required: true,
+                    minLength: 2,
+                    maxLength: 20,
+                  })}
+                  type='email'
+                  placeholder='email'
+                  className='input input-bordered'
+                />
+              </div>
+              {errors.changingEmail && (
+                <ErrorMessage errorMessage='Please Enter' />
               )}
-              <ErrorMessage errorMessage={errorMessage} />
-              <div className='flex justify-center mt-8'>
-                {/* comp化できるかも */}
-                <button className='justify-center items-center font-semibold text-white bg-black py-3 md:mr-4 md:mb-0 mb-2 rounded-3xl w-52 hover:opacity-50'>
-                  確認メールを送信する
-                </button>
+
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>
+                    Please enter again to confirm
+                  </span>
+                </label>
+                <input
+                  {...register('confirmationChangingEmail', {
+                    required: true,
+                    minLength: 2,
+                    maxLength: 20,
+                  })}
+                  type='email'
+                  placeholder='email'
+                  className='input input-bordered'
+                />
+              </div>
+              {errors.confirmationChangingEmail && (
+                <ErrorMessage errorMessage='Please Enter' />
+              )}
+
+              <div className='form-control mt-6'>
+                <input
+                  className='btn btn-primary'
+                  type='submit'
+                  value='Send confirmation email'
+                />
               </div>
             </form>
+            <ErrorMessage
+              errorMessage={errorMessage}
+              className='my-4 text-center'
+              testId='errorMessage'
+            />
           </div>
-        </section>
+        </div>
       </div>
     </>
   );

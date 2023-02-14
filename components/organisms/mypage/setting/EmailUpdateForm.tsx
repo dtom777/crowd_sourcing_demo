@@ -1,14 +1,11 @@
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
 import Loading from '@/components/atoms/loading/Loading';
-import Label from '@/components/atoms/input/Label';
 import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import BaseButton from '@/components/atoms/button/BaseButton';
-import { defaultInputStyle } from 'constants/defaultInputStyle';
 import { useUpdateEmail } from '@/hooks/useUpdateEmail';
 
 const EmailUpdateForm: VFC = () => {
-  const { loading, errorMessage, submitData } = useUpdateEmail();
+  const { loading, errorMessage, changeEmail } = useUpdateEmail();
 
   const {
     register,
@@ -19,55 +16,71 @@ const EmailUpdateForm: VFC = () => {
   return (
     <>
       <Loading loading={loading} />
-      <div className='mb-10 max-w-screen-md mx-auto'>
-        <div>
-          {/* comp化できそう */}
-          <div className='mt-4 py-2 pl-4 pr-2 bg-black text-white font-bold text-md'>
-            メールアドレスの変更
+      <div className='hero min-h-screen'>
+        <div className='hero-content flex-col'>
+          <div className='text-center'>
+            <h1 className='text-5xl font-bold'>Change Email</h1>
           </div>
-          <div className='px-8 pb-8 mb-4'>
-            <form onSubmit={handleSubmit(submitData)}>
-              <div className='mt-12'>
-                <Label htmlFor='password' className='mb-2'>
-                  パスワードを入力してください。
-                </Label>
+          <div className='card flex-shrink-0 md:max-w-screen-md md:w-screen w-full shadow-2xl bg-base-100'>
+            <form
+              className='card-body'
+              method='post'
+              action='/api/auth/callback/credentials'
+              onSubmit={handleSubmit(changeEmail)}
+            >
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Password</span>
+                </label>
                 <input
                   {...register('password', {
                     required: true,
-                    minLength: 8,
-                    maxLength: 12,
-                  })}
-                  type='password'
-                  placeholder='*********'
-                  className={`w-full ${defaultInputStyle}`}
-                />
-                {errors.password && (
-                  <ErrorMessage errorMessage='8〜12文字で入力してください。' />
-                )}
-                <Label htmlFor='confirmationPassword' className='my-2'>
-                  確認のため、もう一度入力してください。
-                </Label>
-                <input
-                  {...register('confirmationPassword', {
-                    required: true,
-                    minLength: 8,
-                    maxLength: 12,
+                    minLength: 2,
+                    maxLength: 20,
                   })}
                   type='password'
                   placeholder='***********'
-                  className={`w-full ${defaultInputStyle}`}
+                  className='input input-bordered'
+                />
+              </div>
+              {errors.password && (
+                <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
+              )}
+
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>
+                    Please enter again to confirm
+                  </span>
+                </label>
+                <input
+                  {...register('confirmationPassword', {
+                    required: true,
+                    minLength: 2,
+                    maxLength: 20,
+                  })}
+                  type='password'
+                  placeholder='***********'
+                  className='input input-bordered'
                 />
               </div>
               {errors.confirmationPassword && (
-                <ErrorMessage errorMessage='8〜12文字で入力してください。' />
+                <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
               )}
-              <ErrorMessage errorMessage={errorMessage} />
-              <div className='flex justify-center mt-8'>
-                <BaseButton className='font-semibold  py-3 md:mr-4 md:mb-0 mb-2 rounded-3xl w-40'>
-                  登録する
-                </BaseButton>
+
+              <div className='form-control mt-6'>
+                <input
+                  className='btn btn-primary'
+                  type='submit'
+                  value='Change Email'
+                />
               </div>
             </form>
+            <ErrorMessage
+              errorMessage={errorMessage}
+              className='my-4 text-center'
+              testId='errorMessage'
+            />
           </div>
         </div>
       </div>

@@ -1,40 +1,66 @@
 import { useState } from 'react';
 import { successToast } from '@/lib/toast';
 
-export const useEmailSetting = (id, name, email) => {
+type ErrorMessage = string | undefined;
+
+type Inputs = {
+  changingEmail: string;
+  confirmationChangingEmail: string;
+};
+
+type ReqBody = {
+  email: string;
+  changingEmail: string;
+};
+
+export const useEmailSetting = (email) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
-  const submitData = async (data: {
-    changeEmail: string;
-    confirmationChangeEmail: string;
-  }): Promise<void> => {
-    setLoading(true);
-    const { changeEmail, confirmationChangeEmail } = data;
-    if (changeEmail !== confirmationChangeEmail) {
-      setLoading(false);
+  const sendConfirmationEmail = async (data: Inputs): Promise<void> => {
+    setLoading((prev) => !prev);
 
-      return setErrorMessage('メールアドレスが一致していません');
-    }
+    const { changingEmail, confirmationChangingEmail } = data;
+
     try {
-      const body: {
-        id: string;
-        name: string;
-        email: string;
-        changeEmail: string;
-      } = { id, name, email, changeEmail };
-      await fetch('/api/email/change', {
+      const errMsg = validateEmail({
+        changingEmail,
+        confirmationChangingEmail,
+      });
+      if (errMsg) throw new Error(errMsg);
+
+      const body: ReqBody = { email, changingEmail };
+
+      const res = await fetch('/api/email/change', {
         method: 'POST',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
-      successToast('現在のメールアドレスにメッセージを送信しました。');
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+      if (!res.ok) {
+        const { message } = await res.json();
+        throw new Error(message);
+      }
+      successToast(
+        'A confirmation message has been sent to your current email'
+      );
+    } catch (err) {
+      console.error(err.message);
+      setErrorMessage(err.message);
+    } finally {
+      setLoading((prev) => !prev);
     }
   };
 
-  return { loading, errorMessage, submitData };
+  const validateEmail = ({
+    changingEmail,
+    confirmationChangingEmail,
+  }): ErrorMessage => {
+    if (!changingEmail || !confirmationChangingEmail) return 'Incomplete input';
+    if (!changingEmail === !confirmationChangingEmail)
+      return 'Email does not match';
+
+    return undefined;
+  };
+
+  return { loading, errorMessage, sendConfirmationEmail };
 };

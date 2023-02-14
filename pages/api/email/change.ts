@@ -124,14 +124,14 @@ const changeEmailHandler = async (
       if (!isValid)
         throw new Error('メールアドレスまたはパスワードが正しくありません');
 
-      const updateUser: User = await prisma.user.update({
+      await prisma.user.update({
         where: { email },
         data: { email: changeEmail },
       });
-      delete updateUser['password'];
-      res.status(200).json(updateUser);
+      res.status(200).json({ message: 'Updated' });
     } catch (err) {
-      console.log('ERROR:', err.message);
+      console.error(err.message);
+      res.status(500).json(err.message);
     }
   }
 };
