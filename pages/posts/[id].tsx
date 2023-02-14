@@ -80,10 +80,12 @@ const PostPage: NextPage<Props> = ({ post, relationPosts }) => {
     <>
       <div className='lg:flex lg:mx-4'>
         <div className='lg:w-7/12 lg:mr-4'>
-          <PostDetails post={post} />
-          <LikeButton post={post} session={session} />
-          <div className='text-center -mt-3'>
-            {session ? <ApplicationForm post={post} /> : <ApplicationConst />}
+          <div className='border'>
+            <PostDetails post={post} />
+            <LikeButton post={post} session={session} />
+            <div className='text-center -mt-3'>
+              {session ? <ApplicationForm post={post} /> : <ApplicationConst />}
+            </div>
           </div>
         </div>
         <div className='lg:w-5/12'>
