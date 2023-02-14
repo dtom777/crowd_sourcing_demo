@@ -1,6 +1,14 @@
 import { ChangeEvent, useState } from 'react';
 import { signIn } from 'next-auth/client';
 
+type Inputs = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type ReqBody = Inputs & { image: string };
+
 export const useSignUp = () => {
   const [image, setImage] = useState<string>('/avatar-default.png');
   const [loading, setLoading] = useState<boolean>(false);
@@ -9,18 +17,15 @@ export const useSignUp = () => {
   const updateImage = (e: ChangeEvent<HTMLSelectElement>) =>
     setImage(e.target.value);
 
-  const submitData = async (data: {
-    name: string;
-    email: string;
-    password: string;
-  }): Promise<void> => {
+  // TODO add validation
+  const submitData = async (data: Inputs): Promise<void> => {
     setLoading(true);
     const { name, email, password } = data;
     if (!image || !name || !email || !password) {
       return;
     }
     try {
-      const body = { image, name, email, password };
+      const body: ReqBody = { image, name, email, password };
       const response = await fetch('/api/user/create', {
         method: 'POST',
         body: JSON.stringify(body),

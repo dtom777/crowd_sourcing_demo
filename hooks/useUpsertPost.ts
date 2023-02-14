@@ -10,26 +10,26 @@ export const useUpsertPost = ({ session, type, post = undefined }) => {
   const upsertPost = async (data): Promise<void> => {
     setLoading((prev) => !prev);
 
-    const reqConfig = {
+    const config = {
       uri: '',
       method: '',
       body: { ...data, reward: Number(data.reward) },
     };
 
     if (type === 'CREATE') {
-      reqConfig.uri = '/api/post/create';
-      reqConfig.method = 'POST';
+      config.uri = '/api/post/create';
+      config.method = 'POST';
     } else if (type === 'UPDATE') {
-      reqConfig.uri = '/api/post/update';
-      reqConfig.method = 'PUT';
-      reqConfig.body = { ...reqConfig.body, id: post.id };
+      config.uri = '/api/post/update';
+      config.method = 'PUT';
+      config.body = { ...config.body, id: post.id };
     }
 
     try {
-      const isValid = validate({ data: reqConfig.body, type });
+      const isValid = validate({ data: config.body, type });
       if (!isValid) throw new Error('Invalid Data');
 
-      const { uri, method, body } = reqConfig;
+      const { uri, method, body } = config;
 
       const res = await fetch(uri, {
         method,

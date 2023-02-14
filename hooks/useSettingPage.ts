@@ -7,15 +7,19 @@ import { data } from 'cypress/types/jquery';
 
 type ErrorMessage = string | undefined;
 
+type Inputs = {
+  email: string;
+  password: string;
+  confirmationPassword: string;
+};
+
+type ReqBody = Omit<Inputs, 'confirmationPassword'>;
+
 export const useSettingPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const deleteUser = async (data: {
-    email: string;
-    password: string;
-    confirmationPassword: string;
-  }) => {
+  const deleteUser = async (data: Inputs) => {
     setLoading((prev) => !prev);
 
     try {
@@ -28,12 +32,14 @@ export const useSettingPage = () => {
       });
       if (passwordErrMsg) throw new Error(passwordErrMsg);
 
+      const body: ReqBody = {
+        email: data.email,
+        password: data.password,
+      };
+
       const res = await fetch('/api/user/delete', {
         method: 'DELETE',
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
+        body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -52,7 +58,7 @@ export const useSettingPage = () => {
     }
   };
 
-  const validateEmail = (email): ErrorMessage => {
+  const validateEmail = (email: string): ErrorMessage => {
     if (!email || !email.includes('@')) return 'Invalid Data';
 
     return undefined;
@@ -61,6 +67,9 @@ export const useSettingPage = () => {
   const validatePassword = ({
     password,
     confirmationPassword,
+  }: {
+    password: string;
+    confirmationPassword: string;
   }): ErrorMessage => {
     if (password !== confirmationPassword) return 'Password not matched';
     if (password.length < 8 || password.length > 12) return 'Password is short';
