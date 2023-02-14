@@ -3,38 +3,45 @@ import { hash } from 'bcryptjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@prisma/client';
 
-const changePasswordHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
-  const { password, passwordToken } = req.body;
+type ReqBody = {
+  password: string;
+  token: string;
+};
 
-  const findUser: User = await prisma.user.findFirst({
-    where: {
-      resetToken: passwordToken,
-    },
-  });
-
-  if (!findUser) {
-    res.json({ message: 'URLが間違っています。' });
-
-    return;
-  }
-
-  // 有効期限の確認
-  const isExpired: boolean = findUser.resetTokenExpiration > Date.now();
-  if (!isExpired) {
-    res.json({ message: 'このURLは有効期限切れです' });
-
-    return;
-  }
-
-  const hashedPassword = await hash(password, 10);
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { password, token }: ReqBody = req.body;
 
   try {
-    const updateUser: User = await prisma.user.update({
+    const user: User | null = await prisma.user.findFirst({
       where: {
-        email: findUser.email,
+        resetToken: token,
+      },
+    });
+    if (!user) {
+      res.status(404).json({ message: 'Not found' });
+
+      return;
+    }
+
+    if (!user.resetTokenExpiration) {
+      res.status(400).json({ message: 'Bad Request' });
+
+      return;
+    }
+
+    // 有効期限の確認
+    const isExpired: boolean = user.resetTokenExpiration > Date.now();
+    if (!isExpired) {
+      res.status(422).json({ message: 'Invalid Data' });
+
+      return;
+    }
+
+    const hashedPassword = await hash(password, 10);
+
+    await prisma.user.update({
+      where: {
+        email: user.email,
       },
       data: {
         password: hashedPassword,
@@ -42,11 +49,11 @@ const changePasswordHandler = async (
         resetTokenExpiration: null,
       },
     });
-    delete updateUser['password'];
-    res.status(200).json(updateUser);
+    res.status(200).json({ message: 'Password Reset' });
   } catch (err) {
     console.log(err);
+    res.status(500).json(err.message);
   }
 };
 
-export default changePasswordHandler;
+export default handler;

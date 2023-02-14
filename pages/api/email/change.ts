@@ -5,12 +5,13 @@ import crypto from 'crypto-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@prisma/client';
 
+// TODO 処理を整理
 const changeEmailHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
   if (req.method === 'POST') {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
     const {
       name,
       email,

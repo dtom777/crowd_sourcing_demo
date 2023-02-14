@@ -2,19 +2,36 @@ import { prisma } from '@/lib/prisma';
 import { compare } from 'bcryptjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@prisma/client';
+import { Session } from 'next-auth';
+import { getSession } from 'next-auth/client';
+
+type ReqBody = {
+  email: string;
+  password: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email, password } = req.body;
+  const { email, password }: ReqBody = req.body;
 
   try {
-    if (!email || !email.includes('@') || !password) {
+    const session: Session | null = await getSession({ req });
+    if (!session) res.status(401).json({ message: 'Unauthorized' });
+
+    if (
+      !email ||
+      !email.includes('@') ||
+      !password ||
+      password.trim().length < 7
+    ) {
       res.status(422).json({ message: 'Invalid Data' });
 
       return;
     }
 
-    const user: User = await prisma.user.findUnique({
-      where: { email },
+    const user: User | null = await prisma.user.findUnique({
+      where: {
+        email,
+      },
     });
 
     if (!user) {
@@ -23,7 +40,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
-    const isValid: boolean = await compare(password, user.password);
+    const isValid = await compare(password, user.password);
 
     if (!isValid) {
       res.status(400).json({ message: 'Email or password is incorrect' });
@@ -32,7 +49,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     await prisma.user.delete({
-      where: { email },
+      where: {
+        email,
+      },
     });
 
     res.status(200).json({ message: 'Deleted' });

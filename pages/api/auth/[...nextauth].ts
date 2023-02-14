@@ -2,10 +2,7 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 import Adapters from 'next-auth/adapters';
 import { prisma } from '@/lib/prisma';
-import { compare } from 'bcryptjs';
 import { verifyPassword } from 'utils/auth';
-import password from 'pages/auth/password';
-import { email } from 'react-admin';
 
 const options = {
   session: {
@@ -15,21 +12,18 @@ const options = {
   providers: [
     Providers.Credentials({
       authorize: async (credentials) => {
-        console.log(credentials);
-
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-        if (!user) throw new Error('ユーザが存在しません');
+        if (!user) throw new Error('User does not exist');
 
-        if (!user.active) throw new Error('このユーザーは使用できません');
+        if (!user.active) throw new Error('This user is unavailable');
 
         const isValid = await verifyPassword(
           credentials.password,
           user.password
         );
-        if (!isValid)
-          throw new Error('メールアドレスまたはパスワードが正しくありません');
+        if (!isValid) throw new Error('Email or password is incorrect');
 
         return Promise.resolve(user);
       },
@@ -47,4 +41,4 @@ const options = {
   },
 };
 
-export default (req, res) => NextAuth(req, res, options);
+export default NextAuth(options);
