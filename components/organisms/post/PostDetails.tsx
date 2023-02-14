@@ -14,8 +14,8 @@ const PostDetails: VFC<Props> = ({ post }) => {
   const { id, name, image, createdAt } = post.user;
 
   return (
-    <>
-      <div className='rounded-none lg:card w-full bg-success text-neutral-content shadow-2xl'>
+    <div>
+      <div className='rounded-none w-full bg-primary text-neutral-content'>
         <div className='card-body'>
           <h2 className='card-title text-2xl mb-4'>{post.title}</h2>
           <p className='mb-4'>{post.content}</p>
@@ -48,7 +48,7 @@ const PostDetails: VFC<Props> = ({ post }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

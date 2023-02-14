@@ -110,7 +110,7 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
               </p>
               <Link href='/mypage/profile'>
                 <a className='text-gray-500 text-sm ml-4 hover:opacity-50'>
-                  Edit Profile
+                  Profile
                 </a>
               </Link>
             </div>

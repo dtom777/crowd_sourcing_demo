@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '@/components/atoms/loading/Loading';
 import ErrorMessage from '@/components/atoms/error/ErrorMessage';
 import { categories } from 'constants/category';
-import { useUpsertPost } from '@/hooks/useCreatePost';
+import { useUpsertPost } from '@/hooks/useUpsertPost';
 import { VFC } from 'react';
 import { Post } from '@prisma/client';
 

@@ -20,55 +20,55 @@ const PasswordChangeForm: VFC = () => {
     <>
       <Loading loading={loading} />
       <div className='md:w-96 text-center md:mx-auto my-12'>
-        <h1 className='mb-6 font-bold text-xl'>
-          ユーザーIDの確認・パスワードの再設定
-        </h1>
+        <h1 className='mb-6 font-bold text-2xl'>Reset password</h1>
         <form
           method='post'
           action='/api/auth/callback/credentials'
           onSubmit={handleSubmit(changePassword)}
         >
-          <Label htmlFor='password' className='md:ml-0 ml-6 text-left mt-4'>
-            パスワード
-          </Label>
-          <input
-            {...register('password', {
-              required: true,
-              minLength: 8,
-              maxLength: 12,
-            })}
-            type='password'
-            placeholder='***********'
-            className={`md:w-96 w-11/12 ${defaultInputStyle}`}
-          />
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text'>Password</span>
+            </label>
+            <input
+              {...register('password', {
+                required: true,
+                minLength: 8,
+                maxLength: 12,
+              })}
+              type='password'
+              placeholder='***********'
+              className='input input-bordered'
+            />
+          </div>
           {errors.password && (
-            <ErrorMessage
-              errorMessage='8〜12文字で入力してください。'
-              className='text-center font-normal'
-            />
+            <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
           )}
-          <Label htmlFor='confirmationPassword' className='text-left my-2'>
-            確認のため、もう一度入力してください。
-          </Label>
-          <input
-            {...register('confirmationPassword', {
-              required: true,
-              minLength: 8,
-              maxLength: 12,
-            })}
-            type='password'
-            placeholder='***********'
-            className={`md:w-96 w-11/12 ${defaultInputStyle}`}
-          />
+          <div className='form-control'>
+            <label className='label'>
+              <span className='label-text'>Confirmation password</span>
+            </label>
+            <input
+              {...register('confirmationPassword', {
+                required: true,
+                minLength: 8,
+                maxLength: 12,
+              })}
+              type='password'
+              placeholder='***********'
+              className='input input-bordered'
+            />
+          </div>
           {errors.confirmationPassword && (
-            <ErrorMessage
-              errorMessage='8〜12文字で入力してください。'
-              className='text-center font-normal'
-            />
+            <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
           )}
-          <SubmitButton className='w-60 font-semibold mt-4 px-4 py-3 md:text-base text-sm rounded-3xl'>
-            パスワードを再設定する
-          </SubmitButton>
+          <div className='form-control mt-6'>
+            <input
+              className='btn btn-primary'
+              type='submit'
+              value='Reset Password'
+            />
+          </div>
         </form>
         <ErrorMessage errorMessage={errorMessage} className='my-4' />
       </div>

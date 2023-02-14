@@ -15,7 +15,7 @@ const LikeButton: FC<Props> = ({ handler, like }) => {
 
   return (
     <button
-      className={`flex justify-center items-center p-2 rounded-full hover:opacity-50 border focus:outline-none ${activeLikeClassName}`}
+      className={`flex justify-center items-center p-2 mr-2 rounded-full hover:opacity-50 border focus:outline-none ${activeLikeClassName}`}
       onClick={handler}
     >
       <BaseIcon icon={faHeart} className={activeLikeIconClassName} />

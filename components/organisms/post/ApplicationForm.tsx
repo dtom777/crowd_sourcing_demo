@@ -45,7 +45,7 @@ const ApplicationForm: VFC<Props> = ({ post }) => {
           )}
         </div>
         <div className='flex justify-center items-center'>
-          <button className='btn btn-success'>Send Message</button>
+          <button className='btn btn-primary'>Send Message</button>
         </div>
       </form>
     </>

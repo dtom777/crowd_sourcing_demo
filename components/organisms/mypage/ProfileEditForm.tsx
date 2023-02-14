@@ -73,7 +73,7 @@ const ProfileEditForm: VFC<Props> = () => {
                   placeholder='profile'
                   id='content'
                   rows={6}
-                  defaultValue={data?.user.bio}
+                  defaultValue={data?.user.profile.bio}
                 ></textarea>
                 {errors.profile && (
                   <ErrorMessage errorMessage='Please enter 1 to 255 characters' />

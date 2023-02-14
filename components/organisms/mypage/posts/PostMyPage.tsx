@@ -17,19 +17,17 @@ import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
 import BaseIcon from '@/components/atoms/icon/BaseIcon';
 import { usePostMyPage } from '@/hooks/usePostMyPage';
 import Link from 'next/link';
-import { post } from 'cypress/types/jquery';
 
 type Props = {
   posts: Array<PostWithComment>;
 };
 
 const PostMyPage: VFC<Props> = ({ posts }) => {
-  const { localData, loading, handleTogglePublished, handleDeletePost } =
+  const { localData, handleTogglePublished, handleDeletePost } =
     usePostMyPage(posts);
 
   return (
     <>
-      <Loading loading={loading} />
       <div className='overflow-x-auto'>
         <table className='table w-full'>
           <thead>

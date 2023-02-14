@@ -41,7 +41,6 @@ const SignInForm: VFC = () => {
                   {...register('email', {
                     required: true,
                   })}
-                  id='email'
                   type='email'
                   placeholder='email'
                   className='input input-bordered'
