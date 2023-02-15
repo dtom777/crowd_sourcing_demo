@@ -1,7 +1,9 @@
 import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
 import Adapters from 'next-auth/adapters';
-import { prisma } from '@/lib/prisma';
+import Providers from 'next-auth/providers';
+
+import { prisma } from '@/libs/prisma';
+
 import { verifyPassword } from 'utils/auth';
 
 const options = {

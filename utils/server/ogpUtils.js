@@ -1,7 +1,7 @@
 import { createCanvas, registerFont, loadImage } from 'canvas';
 import path from 'path';
 import fs from 'fs';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/libs/prisma';
 
 const createTextLine = (canvas, text) => {
   const context = canvas.getContext('2d');

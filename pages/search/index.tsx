@@ -1,10 +1,13 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import { prisma } from '@/lib/prisma';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import Const from '@/components/atoms/const/Const';
-import PostsListWithPagination from '@/components/organisms/post/PostsListWithPagination';
-import { PostWithUser } from 'types/post.type';
+
+import { prisma } from '@/libs/prisma';
+
 import { useSearchPage } from '@/hooks/useSearchPage';
+
+import Const from '@/components/elements/const/ConstMessage';
+import Posts from '@/components/elements/post/Posts';
+
+import { PostWithUser } from 'types/post.type';
 
 type Query = {
   query?: string;
@@ -66,7 +69,7 @@ const SearchPage: NextPage<Props> = ({ posts }) => {
         <div className='lg:ml-0 ml-2 mt-4'>
           {posts.length ? (
             <div className='mb-8'>
-              <PostsListWithPagination posts={posts} />
+              <Posts posts={posts} />
             </div>
           ) : (
             <Const message='Not yet' />

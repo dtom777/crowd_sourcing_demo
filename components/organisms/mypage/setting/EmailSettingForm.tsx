@@ -1,9 +1,11 @@
+import { Session } from 'next-auth';
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
-import Loading from '@/components/atoms/loading/Loading';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import { Session } from 'next-auth';
+
 import { useEmailSetting } from '@/hooks/useEmailSetting';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
 
 type Props = {
   session: Session;
@@ -23,7 +25,7 @@ const EmailSettingForm: VFC<Props> = ({ session }) => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='hero min-h-screen'>
         <div className='hero-content flex-col'>
           <div className='text-center'>

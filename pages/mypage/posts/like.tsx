@@ -1,14 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
-import { PostWithUserAndLikeAndComment } from 'types/post.type';
 import { getSession, GetSessionOptions } from 'next-auth/client';
-import { useState, useEffect, useCallback } from 'react';
-import { prisma } from '@/lib/prisma';
+import { useState } from 'react';
+
+import { prisma } from '@/libs/prisma';
+
+import Const from '@/components/elements/const/ConstMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
 import PostsLikeList from '@/components/organisms/mypage/posts/PostsLikeList';
-import Pagination from '@/components/molecules/pagination/Pagination';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import Loading from '@/components/atoms/loading/Loading';
-import Const from '@/components/atoms/const/Const';
+
+import { PostWithUserAndLikeAndComment } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithUserAndLikeAndComment>;
@@ -63,7 +64,7 @@ const LikePostsListPage: NextPage<Props> = ({ posts, user }) => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <h1 className='text-2xl font-bold pl-4 pt-10'>Like Posts</h1>
       <div className='mt-4 mb-8'>
         {posts.length ? (

@@ -1,12 +1,15 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { Session } from 'next-auth';
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
-import Loading from '@/components/atoms/loading/Loading';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import { Session } from 'next-auth';
+
 import { useEditProfile } from '@/hooks/useEditProfile';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
+
 import { useFetch } from '../../../hooks/useFetch';
-import Link from 'next/link';
-import Image from 'next/image';
 
 type Props = {
   session: Session;
@@ -27,7 +30,7 @@ const ProfileEditForm: VFC<Props> = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='hero min-h-screen'>
         <div className='hero-content flex-col'>
           <div className='text-center'>

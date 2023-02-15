@@ -1,8 +1,10 @@
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
-import Loading from '@/components/atoms/loading/Loading';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
+
 import { useUpdateEmail } from '@/hooks/useUpdateEmail';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
 
 const EmailUpdateForm: VFC = () => {
   const { loading, errorMessage, changeEmail } = useUpdateEmail();
@@ -15,7 +17,7 @@ const EmailUpdateForm: VFC = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='hero min-h-screen'>
         <div className='hero-content flex-col'>
           <div className='text-center'>

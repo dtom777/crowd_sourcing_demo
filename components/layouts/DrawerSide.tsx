@@ -1,7 +1,9 @@
-import { categories } from 'constants/category';
-import { FC } from 'react';
 import Link from 'next/link';
-import SearchForm from '../elements/SearchForm';
+import { FC } from 'react';
+
+import { categories } from 'constants/category';
+
+import SearchForm from '../form/search/SearchForm';
 
 const DrawerSide: FC = () => {
   return (

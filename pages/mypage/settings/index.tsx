@@ -1,14 +1,16 @@
-import { GetServerSideProps, NextPage } from 'next';
-import { Session } from 'next-auth';
-import { signOut, getSession, GetSessionOptions } from 'next-auth/client';
-import Modal from 'react-modal';
-import { useForm } from 'react-hook-form';
 import { faEnvelope, faUserSlash } from '@fortawesome/free-solid-svg-icons';
-import Loading from '@/components/atoms/loading/Loading';
-import BaseIcon from '@/components/atoms/icon/BaseIcon';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import { useSettingPage } from '@/hooks/useSettingPage';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
+import { Session } from 'next-auth';
+import { getSession, GetSessionOptions } from 'next-auth/client';
+import { useForm } from 'react-hook-form';
+import Modal from 'react-modal';
+
+import { useSettingPage } from '@/hooks/useSettingPage';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Icon from '@/components/elements/icon/Icon';
+import Spinner from '@/components/elements/spinner/Spinner';
 
 Modal.setAppElement('#__next');
 
@@ -45,7 +47,7 @@ const SettingPage: NextPage = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <h1 className='text-2xl font-bold pl-4 pt-10'>Settings</h1>
       <div className='mt-8 mb-12'>
         <div className='flex flex-col w-full'>
@@ -53,7 +55,7 @@ const SettingPage: NextPage = () => {
             <p className='text-xl font-bold mr-4'>Email</p>
             <Link href='/mypage/settings/email'>
               <a className='btn bg-white hover:bg-white flex justify-center items-center py-3 md:ml-4 rounded-3xl text-blue-500 border border-blue-500 focus:outline-none hover:opacity-50 w-48'>
-                <BaseIcon icon={faEnvelope} className='text-blue-500 mr-2' />
+                <Icon icon={faEnvelope} className='text-blue-500 mr-2' />
                 Change Email
               </a>
             </Link>
@@ -65,7 +67,7 @@ const SettingPage: NextPage = () => {
               htmlFor='my-modal-4'
               className='btn flex justify-center items-center py-3 md:ml-4 rounded-3xl text-red-500 border border-red-500 focus:outline-none hover:opacity-50 w-48  bg-white hover:bg-white'
             >
-              <BaseIcon icon={faUserSlash} className='text-red-500 mr-2' />
+              <Icon icon={faUserSlash} className='text-red-500 mr-2' />
               Delete Account
             </label>
 

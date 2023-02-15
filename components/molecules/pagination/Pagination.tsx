@@ -1,8 +1,10 @@
-import ReactPaginate from 'react-paginate';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import BaseIcon from '@/components/atoms/icon/BaseIcon';
-import styles from './Pagination.module.css';
 import { memo, VFC } from 'react';
+import ReactPaginate from 'react-paginate';
+
+import Icon from '@/components/elements/icon/Icon';
+
+import styles from './Pagination.module.css';
 
 type Props = {
   pageCount: number;
@@ -12,8 +14,8 @@ type Props = {
 const Pagination: VFC<Props> = ({ pageCount, onPageChange }) => {
   return (
     <ReactPaginate
-      previousLabel={<BaseIcon icon={faAngleLeft} />}
-      nextLabel={<BaseIcon icon={faAngleRight} />}
+      previousLabel={<Icon icon={faAngleLeft} />}
+      nextLabel={<Icon icon={faAngleRight} />}
       breakLabel={'...'}
       breakClassName={'break-me'}
       pageCount={pageCount}

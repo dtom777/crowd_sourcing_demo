@@ -1,10 +1,11 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
-import { useSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
-import Loading from '@/components/atoms/loading/Loading';
-import SignUpForm from '@/components/organisms/auth/SignUpForm';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/client';
+import { useState } from 'react';
+
+import Spinner from '@/components/elements/spinner/Spinner';
+import SignUpForm from '@/components/organisms/auth/SignUpForm';
 
 const SignUpPage: NextPage = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const SignUpPage: NextPage = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <SignUpForm />
       <div className='my-4'>
         <p className='text-sm text-gray-400'>

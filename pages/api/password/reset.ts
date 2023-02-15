@@ -1,8 +1,12 @@
 import crypto from 'crypto';
-import { prisma } from '@/lib/prisma';
-import sgMail from '@sendgrid/mail';
-import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { User } from '@prisma/client';
+import sgMail from '@sendgrid/mail';
+
+import { prisma } from '@/libs/prisma';
+
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 
 type ReqBody = {
   email: string;

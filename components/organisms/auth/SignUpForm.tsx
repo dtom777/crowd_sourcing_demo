@@ -1,16 +1,14 @@
+import Link from 'next/link';
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
-import Loading from '@/components/atoms/loading/Loading';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import Label from '@/components/atoms/input/Label';
-import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
-import SubmitButton from '@/components/atoms/button/SubmitButton';
-import { defaultInputStyle } from 'constants/defaultInputStyle';
-import { useSignUp } from '@/hooks/useSignUp';
-import { avatars } from 'constants/auth';
-import Image from 'next/image';
 
-import Link from 'next/link';
+import { useSignUp } from '@/hooks/useSignUp';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
+import Avatar from '@/components/elements/avatar/Avatar';
+
+import { avatars } from 'constants/auth';
 
 const SignUpForm: VFC = () => {
   const {
@@ -23,7 +21,7 @@ const SignUpForm: VFC = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='hero min-h-screen'>
         <div className='hero-content flex-col'>
           <div className='text-center'>
@@ -36,13 +34,11 @@ const SignUpForm: VFC = () => {
               action='/api/auth/callback/credentials'
               onSubmit={handleSubmit(submitData)}
             >
-              <div className='flex flex-col w-full items-center justify-center'>
-                <div className='avatar'>
-                  <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
-                    <Image src={image} width={120} height={120} />
-                  </div>
-                </div>
-              </div>
+              <Avatar
+                src={image}
+                size={120}
+                className='w-24 ring ring-primary ring-offset-base-100 ring-offset-2'
+              />
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'>Avatar</span>

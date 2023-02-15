@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { errorToast, successToast } from '@/lib/toast';
+import { errorToast, successToast } from '@/libs/toast';
 import { Message } from 'react-hook-form';
 
 type RequestBody = {

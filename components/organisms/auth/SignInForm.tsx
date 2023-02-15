@@ -1,13 +1,11 @@
+import Link from 'next/link';
 import { memo, VFC } from 'react';
 import { useForm } from 'react-hook-form';
-import Loading from '@/components/atoms/loading/Loading';
-import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import Label from '@/components/atoms/input/Label';
-import NextAuthButton from '@/components/atoms/button/NextAuthButton';
-import { defaultInputStyle } from 'constants/defaultInputStyle';
+
 import { useSignIn } from '@/hooks/useSignIn';
-import Link from 'next/link';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
 
 const SignInForm: VFC = () => {
   const {
@@ -20,7 +18,7 @@ const SignInForm: VFC = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='hero min-h-screen'>
         <div className='hero-content flex-col'>
           <div className='text-center'>

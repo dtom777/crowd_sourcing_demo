@@ -1,8 +1,9 @@
-import { VFC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/client';
-import SearchForm from '../elements/SearchForm';
+import { VFC } from 'react';
+
+import SearchForm from '../form/search/SearchForm';
 
 const Navbar: VFC = () => {
   const [session, loading] = useSession();

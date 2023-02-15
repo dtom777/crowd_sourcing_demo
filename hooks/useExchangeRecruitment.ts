@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { successToast, errorToast } from '@/lib/toast';
+import { successToast, errorToast } from '@/libs/toast';
 
 export const useExchangeRecruitment = (session, post, user) => {
   const router = useRouter();

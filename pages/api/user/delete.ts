@@ -1,9 +1,11 @@
-import { prisma } from '@/lib/prisma';
-import { compare } from 'bcryptjs';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@prisma/client';
+import { compare } from 'bcryptjs';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
+
+import { prisma } from '@/libs/prisma';
+
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ReqBody = {
   email: string;

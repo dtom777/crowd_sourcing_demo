@@ -1,4 +1,3 @@
-import BaseHead from '@/components/atoms/head/BaseHead';
 import { NextPage } from 'next';
 
 const HelpPage: NextPage = () => {

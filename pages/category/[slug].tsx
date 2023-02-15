@@ -1,13 +1,15 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { Category } from '@prisma/client';
-import { useRouter } from 'next/router';
-import { prisma } from '@/lib/prisma';
-import Const from '@/components/atoms/const/Const';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import PostsListWithPagination from '@/components/organisms/post/PostsListWithPagination';
-import { PostWithUser } from 'types/post.type';
 import { ParsedUrlQuery } from 'node:querystring';
-import CategoryLabel from '@/components/CategoryLabel';
+
+import { Category } from '@prisma/client';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+
+import { prisma } from '@/libs/prisma';
+
+import CategoryTitle from '@/components/elements/category/CategoryTitle';
+import Const from '@/components/elements/const/ConstMessage';
+import Posts from '@/components/elements/post/Posts';
+
+import { PostWithUser } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithUser>;
@@ -64,11 +66,11 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 const CategorySlugPage: NextPage<Props> = ({ posts }) => {
   return (
     <>
-      <CategoryLabel />
+      <CategoryTitle />
       <div className='lg:ml-0 ml-2 mt-4'>
         {posts.length ? (
           <div className='mb-8'>
-            <PostsListWithPagination posts={posts} />
+            <Posts posts={posts} />
           </div>
         ) : (
           <Const message='No posts yet' />

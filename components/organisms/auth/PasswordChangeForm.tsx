@@ -1,11 +1,10 @@
-import { useForm } from 'react-hook-form';
 import { memo, VFC } from 'react';
-import Loading from '@/components/atoms/loading/Loading';
-import ErrorMessage from '@/components/atoms/error/ErrorMessage';
-import Label from '@/components/atoms/input/Label';
-import SubmitButton from '@/components/atoms/button/SubmitButton';
-import { defaultInputStyle } from 'constants/defaultInputStyle';
+import { useForm } from 'react-hook-form';
+
 import { usePasswordChange } from '@/hooks/usePasswordChange';
+
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
+import Spinner from '@/components/elements/spinner/Spinner';
 
 const PasswordChangeForm: VFC = () => {
   const {
@@ -18,7 +17,7 @@ const PasswordChangeForm: VFC = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      <Spinner loading={loading} />
       <div className='md:w-96 text-center md:mx-auto my-12'>
         <h1 className='mb-6 font-bold text-2xl'>Reset password</h1>
         <form

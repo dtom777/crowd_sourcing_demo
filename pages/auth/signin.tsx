@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
-import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import BaseHead from '@/components/atoms/head/BaseHead';
+import { useSession } from 'next-auth/client';
+
 import SignInForm from '@/components/organisms/auth/SignInForm';
 
 const SignInPage: NextPage = () => {

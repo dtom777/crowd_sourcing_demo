@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
-import { successToast } from '@/lib/toast';
+import { successToast } from '@/libs/toast';
 
 type ErrorMessage = string | undefined;
 

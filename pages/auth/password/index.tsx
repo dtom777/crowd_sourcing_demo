@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import PasswordResetForm from '@/components/organisms/auth/PasswordResetForm';
-import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/client';
+
+import PasswordResetForm from '@/components/organisms/auth/PasswordResetForm';
+
 
 const PasswordResetPage: NextPage = () => {
   const router = useRouter();

@@ -1,14 +1,12 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { PostWithComment } from 'types/post.type';
 import { Session } from 'next-auth';
-import { useState } from 'react';
 import { getSession } from 'next-auth/client';
-import Image from 'next/image';
-import { prisma } from '@/lib/prisma';
-import SearchFormMyPage from '@/components/organisms/mypage/SearchFormMyPage';
-import BaseHead from '@/components/atoms/head/BaseHead';
+
+import { prisma } from '@/libs/prisma';
+
 import PostsListWithPaginationMyPage from '@/components/organisms/mypage/posts/PostsListWithPaginationMyPage';
-import { ParsedUrlQuery } from 'node:querystring';
+
+import { PostWithComment } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithComment>;

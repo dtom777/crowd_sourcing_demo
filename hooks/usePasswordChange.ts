@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { successToast } from '@/lib/toast';
+import { successToast } from '@/libs/toast';
 import { getAsString } from 'utils/getAsString';
 
 type ErrorMessage = string | undefined;

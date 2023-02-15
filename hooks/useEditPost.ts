@@ -1,7 +1,7 @@
 import { PostWithTags } from 'types/post.type';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { successToast, errorToast } from '@/lib/toast';
+import { successToast, errorToast } from '@/libs/toast';
 
 export const useEditPost = (session, rewardFree) => {
   const router = useRouter();

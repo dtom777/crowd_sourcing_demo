@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { successToast } from '@/lib/toast';
+import { successToast } from '@/libs/toast';
 import { response } from 'msw';
 
 type ErrorMessage = string | undefined;

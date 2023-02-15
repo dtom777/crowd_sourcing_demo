@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { successToast, errorToast } from '@/lib/toast';
+import { successToast, errorToast } from '@/libs/toast';
 
 type ReqBody = {
   id: string;

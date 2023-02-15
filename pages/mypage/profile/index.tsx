@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession, GetSessionOptions } from 'next-auth/client';
 import { Session } from 'next-auth';
-import BaseHead from '@/components/atoms/head/BaseHead';
+import { getSession, GetSessionOptions } from 'next-auth/client';
+
 import ProfileEditForm from '@/components/organisms/mypage/ProfileEditForm';
 
 type Props = {

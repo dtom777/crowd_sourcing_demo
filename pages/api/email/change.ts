@@ -1,9 +1,11 @@
+import { User } from '@prisma/client';
 import sgMail from '@sendgrid/mail';
-import { prisma } from '@/lib/prisma';
 import { compare } from 'bcryptjs';
 import crypto from 'crypto-js';
+
+import { prisma } from '@/libs/prisma';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '@prisma/client';
 
 // TODO 処理を整理
 const changeEmailHandler = async (

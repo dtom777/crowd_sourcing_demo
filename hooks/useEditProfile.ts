@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { errorToast, successToast } from '@/lib/toast';
+import { errorToast, successToast } from '@/libs/toast';
 
 type SubmitData = {
   name: string;

@@ -1,8 +1,10 @@
-import { PostWithComment } from 'types/post.type';
-import { useEffect, useState, memo, useCallback, VFC } from 'react';
 import { useRouter } from 'next/router';
-import PostMyPage from '@/components/organisms/mypage/posts/PostMyPage';
+import { useEffect, useState, memo, useCallback, VFC } from 'react';
+
 import Pagination from '@/components/molecules/pagination/Pagination';
+import PostMyPage from '@/components/organisms/mypage/posts/PostMyPage';
+
+import { PostWithComment } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithComment>;

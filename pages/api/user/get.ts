@@ -1,8 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { Session, User } from 'next-auth';
-import { getSession } from 'next-auth/client';
-import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { Session } from 'next-auth';
+import { getSession } from 'next-auth/client';
+
+import { prisma } from '@/libs/prisma';
+
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 
 const userWithProfile = Prisma.validator<Prisma.UserArgs>()({
   include: { profile: true },

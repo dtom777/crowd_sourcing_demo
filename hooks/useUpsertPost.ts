@@ -1,13 +1,27 @@
-import { CreatePost } from 'types/post.type';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { successToast, errorToast } from '@/lib/toast';
+import { SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form';
 
-export const useUpsertPost = ({ session, type, post = undefined }) => {
+import { successToast, errorToast } from '@/libs/toast';
+
+type Inputs = {
+  title: string;
+  content: string;
+  categorySlug: string;
+  reward: number;
+};
+
+export const usePost = ({ session, type, post = undefined }) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const upsertPost = async (data): Promise<void> => {
+  const {
+    register,
+    handleSubmit: originalHandleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const upsertPost: SubmitHandler<Inputs> = async (data) => {
     setLoading((prev) => !prev);
 
     const config = {
@@ -51,7 +65,6 @@ export const useUpsertPost = ({ session, type, post = undefined }) => {
   };
 
   const validate = ({ data, type }): boolean => {
-    console.log(data, type);
     const { title, content, categorySlug, reward, id = undefined } = data;
 
     if (type === 'UPDATE') if (!id) return false;
@@ -73,5 +86,32 @@ export const useUpsertPost = ({ session, type, post = undefined }) => {
     }
   }, [router, session]);
 
-  return { loading, upsertPost };
+  console.log(errors);
+
+  return {
+    loading,
+    handleSubmit: originalHandleSubmit(upsertPost),
+    fieldValues: {
+      title: convert(register('title', { required: true })),
+      content: convert(
+        register('content', {
+          required: true,
+          minLength: 1,
+          maxLength: 255,
+        })
+      ),
+      categorySlug: convert(register('categorySlug', { required: true })),
+      reward: convert(register('reward', { required: true })),
+    },
+    errors: {
+      title: errors.title,
+      content: errors.content,
+      categorySlug: errors.categorySlug,
+      reward: errors.reward,
+    },
+  };
 };
+
+function convert({ ref, ...others }: UseFormRegisterReturn) {
+  return { inputRef: ref, ...others };
+}

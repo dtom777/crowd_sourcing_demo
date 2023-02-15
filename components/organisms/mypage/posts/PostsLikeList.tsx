@@ -1,11 +1,13 @@
-import { PostWithUserAndLikeAndComment } from 'types/post.type';
-import { Session } from 'next-auth';
 import { faHeartBroken } from '@fortawesome/free-solid-svg-icons';
-import BaseIcon from '@/components/atoms/icon/BaseIcon';
-import { memo, useEffect, useState, VFC } from 'react';
-import { errorToast } from '@/lib/toast';
-import { session } from 'next-auth/client';
 import Link from 'next/link';
+import { Session } from 'next-auth';
+import { memo, useEffect, useState, VFC } from 'react';
+
+import { errorToast } from '@/libs/toast';
+
+import BaseIcon from '@/components/elements/icon/Icon';
+
+import { PostWithUserAndLikeAndComment } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithUserAndLikeAndComment>;

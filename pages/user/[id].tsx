@@ -1,15 +1,13 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { prisma } from '@/lib/prisma';
-import PostsList from '@/components/organisms/post/PostsList';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
-import SnsLinkButton from '@/components/atoms/button/SnsLinkButton';
-import { PostWithUser } from 'types/post.type';
-import { UserWithPost } from 'types/user.type';
 import { ParsedUrlQuery } from 'node:querystring';
+
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
-import CardList from '@/components/elements/card/CardList';
-import UserCardList from '@/components/elements/card/UserCardList';
+
+import { prisma } from '@/libs/prisma';
+
+import Cards from '@/components/elements/card/Cards';
+
+import { UserWithPost } from 'types/user.type';
 
 type Props = {
   user: UserWithPost;
@@ -104,7 +102,7 @@ const UserPage: NextPage<Props> = ({ user }) => {
         </h2>
         {posts.length ? (
           <div className='pb-5 px-6'>
-            <UserCardList posts={posts} />
+            <Cards posts={posts} className='grid gap-4 md:grid-cols-2' />
           </div>
         ) : (
           <p className='text-center mt-4 text-gray-500'>Not yet</p>

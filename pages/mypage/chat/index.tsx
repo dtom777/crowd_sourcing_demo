@@ -1,13 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import { getSession, GetSessionOptions } from 'next-auth/client';
-import { prisma } from '@/lib/prisma';
+
+import getRelativeTime from '@/libs/days';
+import { prisma } from '@/libs/prisma';
+
 import {
   CommentWithPostWithUser,
   CommentWithUserAndPost,
 } from 'types/comment.type';
-import getRelativeTime from '@/lib/days';
-import Image from 'next/image';
-import Link from 'next/link';
 
 type Props = {
   myPosts: Array<CommentWithUserAndPost>;

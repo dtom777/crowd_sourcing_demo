@@ -1,8 +1,10 @@
-import { prisma } from '@/lib/prisma';
 import { User } from '@prisma/client';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
+
+import { prisma } from '@/libs/prisma';
+
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ReqBody = {
   name: string;

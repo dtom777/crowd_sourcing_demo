@@ -1,22 +1,16 @@
-import { PostWithComment } from 'types/post.type';
-import {
-  faHeartBroken,
-  faLock,
-  faLockOpen,
-  faMoneyBillAlt,
-} from '@fortawesome/free-solid-svg-icons';
 import {
   faComments,
   faEdit,
   faTrashAlt,
 } from '@fortawesome/free-regular-svg-icons';
-import { memo, useEffect, useState, VFC } from 'react';
-import getRelativeTime from '@/lib/days';
-import Loading from '@/components/atoms/loading/Loading';
-import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
-import BaseIcon from '@/components/atoms/icon/BaseIcon';
-import { usePostMyPage } from '@/hooks/usePostMyPage';
 import Link from 'next/link';
+import { memo, VFC } from 'react';
+
+import { usePostMyPage } from '@/hooks/usePostMyPage';
+
+import Icon from '@/components/elements/icon/Icon';
+
+import { PostWithComment } from 'types/post.type';
 
 type Props = {
   posts: Array<PostWithComment>;
@@ -50,7 +44,7 @@ const PostMyPage: VFC<Props> = ({ posts }) => {
                 <td>
                   {post.comments.length ? (
                     <p className='text-red-400'>
-                      <BaseIcon icon={faComments} className='mr-1' />
+                      <Icon icon={faComments} className='mr-1' />
                       {post.comments.length} application received
                     </p>
                   ) : (
@@ -74,7 +68,7 @@ const PostMyPage: VFC<Props> = ({ posts }) => {
                 <td>
                   <Link href={`/mypage/posts/edit/${post.id}`}>
                     <a className='mr-2 text-blue-500 hover:opacity-50 focus:outline-none'>
-                      <BaseIcon icon={faEdit} className='mr-1' />
+                      <Icon icon={faEdit} className='mr-1' />
                     </a>
                   </Link>
                 </td>
@@ -83,7 +77,7 @@ const PostMyPage: VFC<Props> = ({ posts }) => {
                     className='px-2 py-1 text-red-500 rounded-sm focus:outline-none hover:opacity-50'
                     onClick={() => handleDeletePost(post.id)}
                   >
-                    <BaseIcon icon={faTrashAlt} className='mr-1' />
+                    <Icon icon={faTrashAlt} className='mr-1' />
                   </button>
                 </td>
               </tr>

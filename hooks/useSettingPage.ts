@@ -1,7 +1,7 @@
 import { signOut } from 'next-auth/client';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { User } from '@prisma/client';
-import { successToast } from '@/lib/toast';
+import { successToast } from '@/libs/toast';
 import { Session } from 'next-auth';
 import { data } from 'cypress/types/jquery';
 

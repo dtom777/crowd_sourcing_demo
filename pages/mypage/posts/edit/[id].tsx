@@ -1,12 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
-import { PostWithTags } from 'types/post.type';
 import { getSession } from 'next-auth/client';
-import { prisma } from '@/lib/prisma';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import PostEditForm from '@/components/organisms/mypage/posts/PostEditForm';
+
+import { prisma } from '@/libs/prisma';
+
+import { PostWithTags } from 'types/post.type';
 import { getAsString } from 'utils/getAsString';
-import PostForm from '../../../../components/elements/post/Form';
+
+import PostForm from '../../../../components/form/post/Form';
 
 type Props = {
   session: Session;

@@ -1,21 +1,18 @@
-import { GetServerSideProps, NextPage } from 'next';
-import { getSession, GetSessionOptions } from 'next-auth/client';
-import { Session } from 'next-auth';
 import { faCog, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faComments } from '@fortawesome/free-regular-svg-icons';
-import { prisma } from '@/lib/prisma';
-import getRelativeTime from '@/lib/days';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import BaseLinkButton from '@/components/atoms/button/BaseLinkButton';
-import CreatedAt from '@/components/atoms/time/CreatedAt';
-import BaseIcon from '@/components/atoms/icon/BaseIcon';
-import BaseAvatar from '@/components/atoms/avatar/BaseAvatar';
-import styles from './index.module.css';
-import { PostWithCommentAndLike } from 'types/post.type';
-import { CommentWithUserAndPostWithCategoryAndUser } from 'types/comment.type';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
+import { Session } from 'next-auth';
+import { getSession, GetSessionOptions } from 'next-auth/client';
+
+import getRelativeTime from '@/libs/days';
+import { prisma } from '@/libs/prisma';
+
+import Icon from '@/components/elements/icon/Icon';
+import Avatar from '@/components/elements/avatar/Avatar';
 import Card from '@/components/elements/card/Card';
+
+import { CommentWithUserAndPostWithCategoryAndUser } from 'types/comment.type';
+import { PostWithCommentAndLike } from 'types/post.type';
 
 type Props = {
   session: Session;
@@ -96,13 +93,11 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
         <div className='mr-2'>
           <div className='flex items-center'>
             {session && (
-              <div className='flex flex-col w-full items-center justify-center'>
-                <div className='avatar'>
-                  <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
-                    <Image src={session.user.image} width={120} height={120} />
-                  </div>
-                </div>
-              </div>
+              <Avatar
+                src={session.user.image}
+                size={120}
+                className='w-24 ring ring-primary ring-offset-base-100 ring-offset-2'
+              />
             )}
             <div>
               <p className='text-gray-900 font-semibold md:text-3xl text-2xl ml-4'>
@@ -120,7 +115,7 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
           <div className='mr-4 text-red-500'>
             <Link href={'/mypage/posts/like'}>
               <a>
-                <BaseIcon icon={faHeart} className='mr-1' />
+                <Icon icon={faHeart} className='mr-1' />
                 Like Posts
               </a>
             </Link>
@@ -128,7 +123,7 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
           <div className='text-gray-700'>
             <Link href='/mypage/settings'>
               <a>
-                <BaseIcon icon={faCog} className='mr-1' />
+                <Icon icon={faCog} className='mr-1' />
                 Settings
               </a>
             </Link>
@@ -144,27 +139,19 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
               <a className='text-gray-400 text-sm hover:opacity-50'>View all</a>
             </Link>
           </div>
+          {/* TODO コンポーネント化 */}
           {comments.length ? (
             <ul>
-              {/* TODO　カード化 */}
               {comments.map((comment) => (
                 <li key={comment.id} className='bg-white my-4 p-4'>
                   <Link href={`/posts/${comment.post.id}`}>
                     <a className='flex justify-between hover:opacity-50'>
                       <div className='flex'>
-                        {/* avatar */}
-                        <div className='flex flex-col w-full items-center justify-center'>
-                          <div className='avatar'>
-                            <div className='w-14 rounded-full'>
-                              <Image
-                                src={comment.post.user.image}
-                                width={100}
-                                height={100}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        {/* avatar */}
+                        <Avatar
+                          src={comment.post.user.image}
+                          size={100}
+                          className='w-14'
+                        />
                         <div className='ml-6'>
                           <p className='w-40 truncate text-gray-900 text-md font-bold'>
                             {comment.post.title}

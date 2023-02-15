@@ -1,16 +1,17 @@
+import { ParsedUrlQuery } from 'node:querystring';
+
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useSession } from 'next-auth/client';
-import { prisma } from '@/lib/prisma';
-import BaseHead from '@/components/atoms/head/BaseHead';
-import ApplicationInformation from '@/components/atoms/const/ApplicationInformation';
-import RelationPostList from '@/components/organisms/post/RelationPostList';
-import LinkAvatarWithNameAndCreatedAt from '@/components/molecules/avatar/LinkAvatarWithNameAndCreatedAt';
-import ApplicationForm from '@/components/organisms/post/ApplicationForm';
-import ApplicationConst from '@/components/atoms/const/ApplicationConst';
-import LikeButton from '@/components/organisms/post/LikeButton';
-import PostDetails from '@/components/organisms/post/PostDetails';
+
+import { prisma } from '@/libs/prisma';
+
+import LikeButton from '@/components/elements/button/LikeButton';
+import ConstApllicaiton from '@/components/elements/const/ConstApplication';
+import PostDetails from '@/components/elements/post/PostDetails';
+import RelatedPosts from '@/components/elements/post/RelatedPosts';
+import ApplyForm from '@/components/form/post/ApplyForm';
+
 import { PostWithUserAndCategoryAndTags, PostWithUser } from 'types/post.type';
-import { ParsedUrlQuery } from 'node:querystring';
 
 type Props = {
   post: PostWithUserAndCategoryAndTags;
@@ -84,12 +85,12 @@ const PostPage: NextPage<Props> = ({ post, relationPosts }) => {
             <PostDetails post={post} />
             <LikeButton post={post} session={session} />
             <div className='text-center -mt-3'>
-              {session ? <ApplicationForm post={post} /> : <ApplicationConst />}
+              {session ? <ApplyForm post={post} /> : <ConstApllicaiton />}
             </div>
           </div>
         </div>
         <div className='lg:w-5/12'>
-          <RelationPostList posts={relationPosts} />
+          <RelatedPosts posts={relationPosts} />
         </div>
       </div>
     </>
