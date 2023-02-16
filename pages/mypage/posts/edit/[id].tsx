@@ -7,7 +7,7 @@ import { prisma } from '@/libs/prisma';
 import { PostWithTags } from 'types/post.type';
 import { getAsString } from 'utils/getAsString';
 
-import PostForm from '../../../../components/form/post/Form';
+import PostForm from '../../../../components/form/posts/Form';
 
 type Props = {
   session: Session;

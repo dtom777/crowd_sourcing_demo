@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
-import PostsListWithPaginationMyPage from '@/components/organisms/mypage/posts/PostsListWithPaginationMyPage';
+import MyPosts from '@/components/elements/post/MyPosts';
 
 import { PostWithComment } from 'types/post.type';
 
@@ -45,12 +45,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const PostsListPage: NextPage<Props> = ({ posts }) => {
   return (
     <>
-      <h1 className='text-2xl font-bold pl-4 pt-10'>Like Posts</h1>
+      <h1 className='text-2xl font-bold pl-4 pt-10'>My Posts</h1>
 
       <div className='mt-4 mb-8'>
         <div className='lg:w-full lg:mx-0 md:mx-16 mx-4'>
           {posts.length ? (
-            <PostsListWithPaginationMyPage posts={posts} />
+            <MyPosts posts={posts} />
           ) : (
             <p className='md:text-xl text-sm text-gray-500 text-center my-10'>
               Not posts

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/client';
 import { VFC } from 'react';
 
-import SearchForm from '../form/search/SearchForm';
+import SearchForm from '../form/search/Form';
 
 const Navbar: VFC = () => {
   const [session, loading] = useSession();

@@ -1,15 +1,11 @@
 import { ParsedUrlQuery } from 'node:querystring';
 
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { useSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
-import LikeButton from '@/components/elements/button/LikeButton';
-import ConstApllicaiton from '@/components/elements/const/ConstApplication';
-import PostDetails from '@/components/elements/post/PostDetails';
+import PostDetails from '@/components/elements/post/Details';
 import RelatedPosts from '@/components/elements/post/RelatedPosts';
-import ApplyForm from '@/components/form/post/ApplyForm';
 
 import { PostWithUserAndCategoryAndTags, PostWithUser } from 'types/post.type';
 
@@ -75,19 +71,11 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 };
 
 const PostPage: NextPage<Props> = ({ post, relationPosts }) => {
-  const [session] = useSession();
-
   return (
     <>
       <div className='lg:flex lg:mx-4'>
         <div className='lg:w-7/12 lg:mr-4'>
-          <div className='border'>
-            <PostDetails post={post} />
-            <LikeButton post={post} session={session} />
-            <div className='text-center -mt-3'>
-              {session ? <ApplyForm post={post} /> : <ConstApllicaiton />}
-            </div>
-          </div>
+          <PostDetails post={post} />
         </div>
         <div className='lg:w-5/12'>
           <RelatedPosts posts={relationPosts} />

@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { categories } from 'constants/category';
 
-import SearchForm from '../form/search/SearchForm';
+import SearchForm from '../form/search/Form';
 
 const DrawerSide: FC = () => {
   return (

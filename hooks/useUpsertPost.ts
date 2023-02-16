@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { successToast, errorToast } from '@/libs/toast';
+
+import { convert } from 'utils/helper';
 
 type Inputs = {
   title: string;
@@ -86,8 +88,6 @@ export const usePost = ({ session, type, post = undefined }) => {
     }
   }, [router, session]);
 
-  console.log(errors);
-
   return {
     loading,
     handleSubmit: originalHandleSubmit(upsertPost),
@@ -111,7 +111,3 @@ export const usePost = ({ session, type, post = undefined }) => {
     },
   };
 };
-
-function convert({ ref, ...others }: UseFormRegisterReturn) {
-  return { inputRef: ref, ...others };
-}

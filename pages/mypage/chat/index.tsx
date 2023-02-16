@@ -107,7 +107,7 @@ const Chat: NextPage<Props> = ({ myPosts, applicationPosts }) => {
                   <div className='chat chat-start'>
                     <div className='chat-image avatar'>
                       <div className='w-10 rounded-full'>
-                        <Link href={`/user/${post.comments[0].user.id}`}>
+                        <Link href={`/users/${post.comments[0].user.id}`}>
                           <a className='hover:opacity-50'>
                             <Image
                               src={post.comments[0].user.image}
@@ -151,7 +151,7 @@ const Chat: NextPage<Props> = ({ myPosts, applicationPosts }) => {
                   <div className='chat chat-end'>
                     <div className='chat-image avatar'>
                       <div className='w-10 rounded-full'>
-                        <Link href={`/user/${post.comments[0].userId}`}>
+                        <Link href={`/users/${post.comments[0].userId}`}>
                           <a className='hover:opacity-50'>
                             <Image
                               src={post.comments[0].user.image}

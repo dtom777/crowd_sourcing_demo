@@ -1,12 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 
-import ProfileEditForm from '@/components/organisms/mypage/ProfileEditForm';
-
-type Props = {
-  session: Session;
-};
+import ProfileEditForm from '@/components/form/mypage/profile/EditForm';
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetSessionOptions
@@ -22,16 +17,14 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 };
 
-const ProfilePage: NextPage<Props> = ({ session }) => {
+const ProfilePage: NextPage = () => {
   return (
     <>
-      <ProfileEditForm session={session} />
+      <ProfileEditForm />
     </>
   );
 };

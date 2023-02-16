@@ -4,15 +4,12 @@ import Link from 'next/link';
 import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 import { useForm } from 'react-hook-form';
-import Modal from 'react-modal';
 
 import { useSettingPage } from '@/hooks/useSettingPage';
 
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import Icon from '@/components/elements/icon/Icon';
 import Spinner from '@/components/elements/spinner/Spinner';
-
-Modal.setAppElement('#__next');
 
 type Props = {
   session: Session;
@@ -36,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (
   };
 };
 
-const SettingPage: NextPage = () => {
+const SettingsPage: NextPage = () => {
   const {
     register,
     handleSubmit,
@@ -75,8 +72,12 @@ const SettingPage: NextPage = () => {
             <input type='checkbox' id='my-modal-4' className='modal-toggle' />
             <label htmlFor='my-modal-4' className='modal cursor-pointer'>
               <label className='modal-box relative' htmlFor=''>
-                <h3 className='text-lg font-bold'>Delete you account</h3>
-                <p className='py-4'>Enter your email and password</p>
+                <h3 className='text-lg font-bold text-center'>
+                  Delete you account
+                </h3>
+                <p className='py-4 text-center'>
+                  Enter your email and password
+                </p>
                 <form
                   method='post'
                   action='/api/auth/callback/credentials'
@@ -145,4 +146,4 @@ const SettingPage: NextPage = () => {
   );
 };
 
-export default SettingPage;
+export default SettingsPage;

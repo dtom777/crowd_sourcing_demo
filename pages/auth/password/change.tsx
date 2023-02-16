@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-import PasswordChangeForm from '@/components/organisms/auth/PasswordChangeForm';
+import PasswordChangeForm from '@/components/form/auth/password/ChangeForm';
 
 const PasswordChangePage: NextPage = () => {
   return (

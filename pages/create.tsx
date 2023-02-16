@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 
-import PostForm from '@/components/form/post/Form';
+import PostForm from '@/components/form/posts/Form';
 
 type Props = {
   session: Session;

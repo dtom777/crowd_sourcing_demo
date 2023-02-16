@@ -13,6 +13,7 @@ type ReqBody = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, profile }: ReqBody = req.body;
+
   if (!name) {
     res.status(422).json({ message: 'Invalid Data' });
 

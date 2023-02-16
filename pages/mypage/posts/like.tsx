@@ -1,13 +1,11 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
-import { useState } from 'react';
 
 import { prisma } from '@/libs/prisma';
 
 import Const from '@/components/elements/const/ConstMessage';
-import Spinner from '@/components/elements/spinner/Spinner';
-import PostsLikeList from '@/components/organisms/mypage/posts/PostsLikeList';
+import LikePostList from '@/components/elements/post/LikeList';
 
 import { PostWithUserAndLikeAndComment } from 'types/post.type';
 
@@ -60,15 +58,12 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 const LikePostsListPage: NextPage<Props> = ({ posts, user }) => {
-  const [loading] = useState<boolean>(false);
-
   return (
     <>
-      <Spinner loading={loading} />
       <h1 className='text-2xl font-bold pl-4 pt-10'>Like Posts</h1>
       <div className='mt-4 mb-8'>
         {posts.length ? (
-          <PostsLikeList posts={posts} user={user} />
+          <LikePostList posts={posts} user={user} />
         ) : (
           <Const message='Not yet' />
         )}

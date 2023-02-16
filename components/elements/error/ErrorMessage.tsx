@@ -1,7 +1,7 @@
 import { memo, VFC } from 'react';
 
 type Props = {
-  errorMessage: string;
+  errorMessage?: string;
   className?: string;
   testId?: string;
 };

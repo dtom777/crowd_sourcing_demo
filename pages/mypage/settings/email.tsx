@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 
-import EmailSettingForm from '@/components/organisms/mypage/setting/EmailSettingForm';
+import EmailSettingForm from '@/components/form/mypage/setting/Form';
 
 type Props = {
   session: Session;

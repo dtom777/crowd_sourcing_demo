@@ -79,6 +79,7 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.18",
     "@types/react": "^17.0.39",
+    "@types/react-paginate": "^7.1.1",
     "autoprefixer": "^10.2.5",
     "babel-jest": "^27.4.6",
     "babel-plugin-react-remove-properties": "^0.3.0",

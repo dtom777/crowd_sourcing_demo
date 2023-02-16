@@ -1,21 +1,20 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState, memo, useCallback, VFC } from 'react';
 
-import Cards from '@/components/elements/card/Cards';
 import Pagination from '@/components/elements/pagination/Pagination';
+import MyPostList from '@/components/elements/post/MyList';
 
-import { PostWithUser } from 'types/post.type';
+import { PostWithComment } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithUser>;
+  posts: Array<PostWithComment>;
 };
 
-const Posts: VFC<Props> = ({ posts }) => {
+const MyPosts: VFC<Props> = ({ posts }) => {
   const router = useRouter();
-  const { asPath } = useRouter();
   const [offset, setOffset] = useState<number>(0);
-  const [slice, setSlice] = useState<Array<PostWithUser>>([]);
-  const [perPage, setPerPage] = useState<number>(8);
+  const [slice, setSlice] = useState<Array<PostWithComment>>([]);
+  const [perPage] = useState<number>(10);
   const [pageCount, setPageCount] = useState<number>(0);
 
   const handlePageClick = useCallback(
@@ -28,22 +27,19 @@ const Posts: VFC<Props> = ({ posts }) => {
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
-      const postData = posts?.slice(offset, offset + perPage);
-      setSlice(postData);
+      const postsData = posts.slice(offset, offset + perPage);
+      setSlice(postsData);
       setPageCount(Math.ceil(posts.length / perPage));
     };
     getData();
-  }, [offset, router.query, perPage, asPath, posts]);
+  }, [offset, perPage, posts, router.query]);
 
   return (
     <>
-      <Cards
-        posts={slice}
-        className='grid md:grid-cols-2 grid-cols-1 gap-4 mr-2 lg:mr-0'
-      />
+      <MyPostList posts={slice} />
       <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
     </>
   );
 };
 
-export default memo(Posts);
+export default memo(MyPosts);

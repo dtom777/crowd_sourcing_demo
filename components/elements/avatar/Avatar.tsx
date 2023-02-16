@@ -9,11 +9,9 @@ type Props = {
 
 const Avatar: VFC<Props> = ({ src, size, className }) => {
   return (
-    <div className='flex flex-col w-full items-center justify-center'>
-      <div className='avatar'>
-        <div className={`rounded-full ${className}`}>
-          <Image src={src} width={size} height={size} />
-        </div>
+    <div className='avatar'>
+      <div className={`rounded-full ${className}`}>
+        <Image src={src} width={size} height={size} />
       </div>
     </div>
   );

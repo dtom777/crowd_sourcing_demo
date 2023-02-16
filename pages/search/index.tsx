@@ -1,8 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { useRouter } from 'next/router';
 
 import { prisma } from '@/libs/prisma';
-
-import { useSearchPage } from '@/hooks/useSearchPage';
 
 import Const from '@/components/elements/const/ConstMessage';
 import Posts from '@/components/elements/post/Posts';
@@ -11,7 +10,6 @@ import { PostWithUser } from 'types/post.type';
 
 type Query = {
   query?: string;
-  categorySlug?: string;
 };
 
 type Props = {
@@ -57,13 +55,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 };
 
 const SearchPage: NextPage<Props> = ({ posts }) => {
-  const { show, query, categoryName, toggleModal } = useSearchPage();
+  const router = useRouter();
+  const { query }: Query = router.query;
 
   return (
     <>
       <div className='mb-6'>
         <h1 className='text-2xl font-bold pl-4 pt-4 flex items-center'>
-          {query && <h2>Search results for {query}</h2>}
+          {query ? (
+            <h2>Search results for &quot;{query}&quot;</h2>
+          ) : (
+            <h2>Recommend Posts</h2>
+          )}
           <p className='ml-6 lg:text-lg'>{posts.length} posts</p>
         </h1>
         <div className='lg:ml-0 ml-2 mt-4'>

@@ -1,16 +1,38 @@
 import { signIn } from 'next-auth/client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { convert } from 'utils/helper';
+
+type ErrorMessage = string | undefined;
+
+type Inputs = {
+  email: string;
+  password: string;
+};
 
 export const useSignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const signInByEmailAndPassword = async (data: {
-    email: string;
-    password: string;
-  }): Promise<void> => {
-    setLoading(true);
+  const {
+    register,
+    handleSubmit: originalHandleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const signInByCredentials: SubmitHandler<Inputs> = async (data) => {
+    setLoading((prev) => !prev);
+
+    const errMsg = validate(data);
+    if (errMsg) {
+      setErrorMessage(errMsg);
+
+      return;
+    }
+
     const { email, password } = data;
+
     Promise.resolve(
       signIn('credentials', {
         redirect: false,
@@ -19,22 +41,52 @@ export const useSignIn = () => {
       })
     )
       .then((res) => {
-        setLoading(false);
-        setErrorMessage(res.error);
+        if (res?.error) setErrorMessage(res.error);
       })
       .catch((res) => {
-        setLoading(false);
-        setErrorMessage(res.error);
+        console.error(res);
+      })
+      .finally(() => {
+        setLoading((prev) => !prev);
       });
   };
 
-  // error解決
-  // Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-  useEffect(() => {
-    return () => {
-      setLoading(false);
-    };
-  }, []);
+  const validate = (data: Inputs): ErrorMessage => {
+    const { email, password } = data;
 
-  return { loading, errorMessage, signInByEmailAndPassword };
+    if (
+      !email ||
+      !email.includes('@') ||
+      !password ||
+      password.trim().length < 7
+    ) {
+      return 'Invalid Data';
+    }
+
+    return undefined;
+  };
+
+  return {
+    loading,
+    errorMessage,
+    handleSubmit: originalHandleSubmit(signInByCredentials),
+    fieldValues: {
+      email: convert(
+        register('email', {
+          required: true,
+        })
+      ),
+      password: convert(
+        register('password', {
+          required: true,
+          minLength: 8,
+          maxLength: 12,
+        })
+      ),
+    },
+    errors: {
+      email: errors.email,
+      password: errors.password,
+    },
+  };
 };

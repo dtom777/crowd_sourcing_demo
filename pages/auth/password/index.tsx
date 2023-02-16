@@ -2,8 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/client';
 
-import PasswordResetForm from '@/components/organisms/auth/PasswordResetForm';
-
+import PasswordResetForm from '@/components/form/auth/password/ResetForm';
 
 const PasswordResetPage: NextPage = () => {
   const router = useRouter();
