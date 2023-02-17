@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/client';
 import { useState, useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { successToast } from '@/libs/toast';
 
-import { getAsString } from 'utils/getAsString';
 import { convert } from 'utils/helper';
+
+import { getAsString } from '../utils/getAsString';
 
 type ErrorMessage = string | undefined;
 
@@ -15,21 +17,26 @@ type Inputs = {
 };
 
 type ReqBody = {
+  encryptedEmail: string;
+  encryptedChangingEmail: string;
   password: string;
-  token: string;
+  expires: string;
 };
 
-export const useChangePassword = () => {
+export const useChangeEmail = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   const router = useRouter();
-  const token = getAsString(router.query.token || '');
-  // TODO validate token
+  const encryptedEmail = getAsString(router.query.email || '');
+  const encryptedChangingEmail = getAsString(router.query.changingEmail || '');
+  const expires = getAsString(router.query.expires || '');
 
   useEffect(() => {
-    if (!token) setErrorMessage('This URL is invalid');
-  }, [token]);
+    if (!encryptedEmail || !encryptedChangingEmail || !expires) {
+      setErrorMessage('This page is invalid');
+    }
+  }, [encryptedChangingEmail, encryptedEmail, expires]);
 
   const {
     register,
@@ -37,19 +44,25 @@ export const useChangePassword = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const changePassword: SubmitHandler<Inputs> = async (data) => {
+  const changeEmail = async (data: Inputs): Promise<void> => {
     setLoading((prev) => !prev);
 
     const { password, confirmationPassword } = data;
 
     try {
+      // TODO validate !encryptedEmail || !encryptedChangingEmail || !expires
+
       const errMsg = validatePassword({ password, confirmationPassword });
       if (errMsg) throw new Error(errMsg);
 
-      const body: ReqBody = { password, token };
-
-      const res = await fetch('/api/password/change', {
-        method: 'POST',
+      const body: ReqBody = {
+        encryptedEmail,
+        encryptedChangingEmail,
+        password,
+        expires,
+      };
+      const res = await fetch('/api/email/change', {
+        method: 'PUT',
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
@@ -57,9 +70,12 @@ export const useChangePassword = () => {
         const { message } = await res.json();
         throw new Error(message);
       }
-      await router.push('/auth/signin');
-      successToast('Password reset');
-      setErrorMessage('');
+
+      successToast('Email change complete! Please signin again');
+      const reSignIn = async () => {
+        await signOut({ callbackUrl: '/auth/signin' });
+      };
+      setTimeout(reSignIn, 1500);
     } catch (err) {
       console.error(err.message);
       setErrorMessage(err.message);
@@ -81,7 +97,7 @@ export const useChangePassword = () => {
   return {
     loading,
     errorMessage,
-    handleSubmit: originalHandleSubmit(changePassword),
+    handleSubmit: originalHandleSubmit(changeEmail),
     fieldValues: {
       password: convert(
         register('password', {

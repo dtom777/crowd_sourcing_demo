@@ -1,12 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { Session } from 'next-auth';
 import { getSession, GetSessionOptions } from 'next-auth/client';
 
-import EmailSettingForm from '@/components/form/mypage/setting/Form';
-
-type Props = {
-  session: Session;
-};
+import EmailSendForm from '@/components/form/mypage/settings/EmailSendForm';
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetSessionOptions
@@ -22,16 +17,14 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 };
 
-const EmailSettingPage: NextPage<Props> = ({ session }) => {
+const EmailSettingPage: NextPage = () => {
   return (
     <>
-      <EmailSettingForm session={session} />
+      <EmailSendForm />
     </>
   );
 };

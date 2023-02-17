@@ -25,7 +25,7 @@ const SignUpForm: VFC = () => {
 
   return (
     <FormWrapper title='Sign Up'>
-      <form className='card-body' method='post' onSubmit={handleSubmit}>
+      <form className='card-body' onSubmit={handleSubmit}>
         <div className='flex flex-col w-full items-center justify-center'>
           <Avatar
             src={image}

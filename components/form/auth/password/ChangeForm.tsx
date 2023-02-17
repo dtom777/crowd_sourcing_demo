@@ -1,63 +1,38 @@
 import { memo, VFC } from 'react';
-import { useForm } from 'react-hook-form';
 
 import { useChangePassword } from '@/hooks/useChangePassword';
 
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
-import Spinner from '@/components/elements/spinner/Spinner';
+import InputField from '@/components/elements/field/InputField';
 
 const PasswordChangeForm: VFC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const { loading, errorMessage, changePassword } = useChangePassword();
+  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
+    useChangePassword();
 
   return (
     <>
-      <Spinner loading={loading} />
       <div className='md:w-96 text-center md:mx-auto my-12'>
         <h1 className='mb-6 font-bold text-2xl'>Reset password</h1>
-        <form method='post' onSubmit={handleSubmit(changePassword)}>
-          <div className='form-control'>
-            <label className='label'>
-              <span className='label-text'>Password</span>
-            </label>
-            <input
-              {...register('password', {
-                required: true,
-                minLength: 8,
-                maxLength: 12,
-              })}
-              type='password'
-              placeholder='***********'
-              className='input input-bordered'
-            />
-          </div>
-          {errors.password && (
-            <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
-          )}
-          <div className='form-control'>
-            <label className='label'>
-              <span className='label-text'>Confirmation password</span>
-            </label>
-            <input
-              {...register('confirmationPassword', {
-                required: true,
-                minLength: 8,
-                maxLength: 12,
-              })}
-              type='password'
-              placeholder='***********'
-              className='input input-bordered'
-            />
-          </div>
-          {errors.confirmationPassword && (
-            <ErrorMessage errorMessage='Please enter 8 to 12 characters' />
-          )}
-          <div className='form-control mt-6'>
+        <form onSubmit={handleSubmit}>
+          <InputField
+            {...fieldValues.password}
+            errorMessage='Please enter 8 to 12 characters'
+            errors={errors.password}
+            label='Password'
+            type='password'
+            placeholder='***********'
+          />
+
+          <InputField
+            {...fieldValues.confirmationPassword}
+            errorMessage='Please enter 8 to 12 characters'
+            errors={errors.confirmationPassword}
+            label='Confirmation Password'
+            type='password'
+            placeholder='***********'
+          />
+          <ErrorMessage errorMessage={errorMessage} className='mt-2' />
+          <div className='form-control mt-2'>
             <input
               className='btn btn-primary'
               type='submit'
@@ -65,7 +40,6 @@ const PasswordChangeForm: VFC = () => {
             />
           </div>
         </form>
-        <ErrorMessage errorMessage={errorMessage} className='my-4' />
       </div>
     </>
   );

@@ -1,9 +1,10 @@
 import { signOut } from 'next-auth/client';
-import { useState, useEffect, ChangeEvent } from 'react';
-import { User } from '@prisma/client';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
 import { successToast } from '@/libs/toast';
-import { Session } from 'next-auth';
-import { data } from 'cypress/types/jquery';
+
+import { convert } from 'utils/helper';
 
 type ErrorMessage = string | undefined;
 
@@ -15,11 +16,17 @@ type Inputs = {
 
 type ReqBody = Omit<Inputs, 'confirmationPassword'>;
 
-export const useSettingPage = () => {
+export const useSettings = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const deleteUser = async (data: Inputs) => {
+  const {
+    register,
+    handleSubmit: originalHandleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const deleteUser: SubmitHandler<Inputs> = async (data) => {
     setLoading((prev) => !prev);
 
     try {
@@ -82,6 +89,28 @@ export const useSettingPage = () => {
   return {
     loading,
     errorMessage,
-    deleteUser,
+    handleSubmit: originalHandleSubmit(deleteUser),
+    fieldValues: {
+      email: convert(register('email', { required: true })),
+      password: convert(
+        register('password', {
+          required: true,
+          minLength: 8,
+          maxLength: 12,
+        })
+      ),
+      confirmationPassword: convert(
+        register('confirmationPassword', {
+          required: true,
+          minLength: 8,
+          maxLength: 12,
+        })
+      ),
+    },
+    errors: {
+      email: errors.email,
+      password: errors.password,
+      confirmationPassword: errors.confirmationPassword,
+    },
   };
 };

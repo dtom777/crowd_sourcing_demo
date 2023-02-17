@@ -133,7 +133,7 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
         </div>
       </div>
 
-      <div className='md:flex justify-between bg-base-200 md:mb-20 mb-4 pb-4'>
+      <div className='md:flex justify-between bg-base-200 md:mb-20 mb-4 pb-4 md:px-4 md:max-w-screen-lg md:w-screen'>
         <RecentActivity comments={comments} />
         <RecentPost post={post} />
       </div>

@@ -11,7 +11,7 @@ type Props = {
 
 const RecentPost: VFC<Props> = ({ post }) => {
   return (
-    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
+    <div className='md:w-1/2 w-full py-4 lg:px-2 px-4'>
       <div className='flex justify-between items-baseline'>
         <h2 className='text-lg font-bold'>Your recent post</h2>
         <Link href='/mypage/posts'>

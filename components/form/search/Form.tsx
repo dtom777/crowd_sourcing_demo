@@ -1,14 +1,20 @@
 import { useRouter } from 'next/router';
 import { VFC } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type Inputs = {
+  query?: string;
+};
 
 const SearchForm: VFC = () => {
   const router = useRouter();
-  const { query } = router.query;
+  const { query }: Inputs = router.query;
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<Inputs>({
+    defaultValues: { query },
+  });
 
-  const searchPosts = async (data: { query: string }): Promise<void> => {
+  const searchPosts: SubmitHandler<Inputs> = async (data) => {
     router.push({
       pathname: '/search',
       query: { ...data },
@@ -20,7 +26,6 @@ const SearchForm: VFC = () => {
       <div className='input-group'>
         <input
           {...register('query')}
-          defaultValue={query}
           type='search'
           placeholder='Search…'
           className='input input-bordered'

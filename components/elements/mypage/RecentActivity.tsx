@@ -13,7 +13,7 @@ type Props = {
 
 const RecentActivity: VFC<Props> = ({ comments }) => {
   return (
-    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
+    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4 lg:mr-20'>
       <div className='flex justify-between items-baseline'>
         <h2 className='text-lg font-bold'>Recent Activity</h2>
         <Link href='/mypage/chat'>
@@ -23,8 +23,8 @@ const RecentActivity: VFC<Props> = ({ comments }) => {
 
       {comments.length ? (
         <ul>
-          {comments.map((comment) => (
-            <li key={comment.id} className='bg-white my-4 p-4'>
+          {comments.map((comment, i) => (
+            <li key={i} className='bg-white my-4 p-4'>
               <Link href={`/posts/${comment.post.id}`}>
                 <a className='flex justify-between hover:opacity-50'>
                   <div className='flex'>

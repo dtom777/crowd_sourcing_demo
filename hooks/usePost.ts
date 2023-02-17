@@ -21,7 +21,14 @@ export const usePost = ({ session, type, post = undefined }) => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      title: post?.title,
+      content: post?.content,
+      categorySlug: post?.categorySlug,
+      reward: post?.reward,
+    },
+  });
 
   const upsertPost: SubmitHandler<Inputs> = async (data) => {
     setLoading((prev) => !prev);

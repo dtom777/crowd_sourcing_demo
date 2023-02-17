@@ -7,7 +7,6 @@ import { prisma } from '@/libs/prisma';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
 type ReqBody = {
   email: string;
 };
@@ -43,7 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
     const content = {
-      from: 'douke@fbl.jp',
+      from: 'no-reply@test.jp',
       to: email,
       subject: 'パスワードリセット',
       html: `<p>${updateUser.name}様</p><br/>

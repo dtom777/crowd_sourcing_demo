@@ -21,7 +21,7 @@ const PasswordResetForm: VFC = () => {
           <p>Enter your registered email</p>
           <p>A password reset message will send to your email</p>
         </div>
-        <form method='post' onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <InputField
             {...fieldValues.email}
             errors={errors.email}

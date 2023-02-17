@@ -6,7 +6,6 @@ import { prisma } from '@/libs/prisma';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
 type ReqBody = {
   message: string;
   postId: string;
@@ -30,6 +29,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return;
     }
+
+    console.log(message, postId, user.id);
 
     await prisma.comment.create({
       data: {
