@@ -1,13 +1,19 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/client';
 import { VFC } from 'react';
 
+import Avatar from '../elements/avatar/Avatar';
+import AvatarSkelton from '../elements/avatar/Skelton';
 import SearchForm from '../form/search/Form';
 
 const Navbar: VFC = () => {
-  const [session, loading] = useSession();
-  if (loading) return <div>Loading...</div>;
+  const [session] = useSession();
+
+  const avatar = session ? (
+    <Avatar src={session.user.image} size={100} className='w-10' />
+  ) : (
+    <AvatarSkelton />
+  );
 
   return (
     <div className='w-full navbar bg-base-300'>
@@ -36,20 +42,15 @@ const Navbar: VFC = () => {
           </a>
         </Link>
       </div>
+
       <div className='hidden md:block mr-4'>
         <SearchForm />
       </div>
+
       {session ? (
         <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle avatar'>
-            <div className='w-10 rounded-full'>
-              <Image
-                src={session.user.image}
-                width={300}
-                height={300}
-                alt='main-visual'
-              />
-            </div>
+          <label tabIndex={0} className='btn btn-ghost btn-circle'>
+            {avatar}
           </label>
           <ul
             tabIndex={0}
