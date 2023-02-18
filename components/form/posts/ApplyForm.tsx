@@ -2,6 +2,7 @@ import { memo, VFC } from 'react';
 
 import { useApplyPost } from '@/hooks/useApplyPost';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import TextareaField from '@/components/elements/field/TextareaField';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 };
 
 const ApplyForm: VFC<Props> = ({ post }) => {
-  const { loading, handleSubmit, fieldValues, errors } = useApplyPost(post);
+  const { handleSubmit, fieldValues, errors } = useApplyPost(post);
 
   return (
     <>
@@ -27,9 +28,12 @@ const ApplyForm: VFC<Props> = ({ post }) => {
             rows={6}
           />
         </div>
-        <div className='flex justify-center items-center'>
-          <button className='btn btn-primary'>Send Message</button>
-        </div>
+
+        <SubmitButton
+          className='items-center mt-2'
+          color='primary'
+          value='Send Message'
+        />
       </form>
     </>
   );

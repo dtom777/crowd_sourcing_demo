@@ -2,11 +2,12 @@ import { memo, VFC } from 'react';
 
 import { useChangePassword } from '@/hooks/useChangePassword';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 
 const PasswordChangeForm: VFC = () => {
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
+  const { errorMessage, handleSubmit, fieldValues, errors } =
     useChangePassword();
 
   return (
@@ -32,13 +33,12 @@ const PasswordChangeForm: VFC = () => {
             placeholder='***********'
           />
           <ErrorMessage errorMessage={errorMessage} className='mt-2' />
-          <div className='form-control mt-2'>
-            <input
-              className='btn btn-primary'
-              type='submit'
-              value='Reset Password'
-            />
-          </div>
+
+          <SubmitButton
+            className='mt-2'
+            color='primary'
+            value='Reset Password'
+          />
         </form>
       </div>
     </>

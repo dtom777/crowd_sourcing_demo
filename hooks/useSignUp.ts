@@ -1,6 +1,9 @@
 import { signIn } from 'next-auth/client';
 import { ChangeEvent, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { convert } from 'utils/helper';
 
@@ -15,8 +18,9 @@ type Inputs = {
 
 export const useSignUp = () => {
   const [image, setImage] = useState<string>('/avatar-default.png');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -28,8 +32,8 @@ export const useSignUp = () => {
     setImage(e.target.value);
 
   // TODO add validation
-  const signUp = async (data: Inputs): Promise<void> => {
-    setLoading(true);
+  const signUp: SubmitHandler<Inputs> = async (data) => {
+    dispatch(loadingToggled());
     const { name, email, password } = data;
     if (!image || !name || !email || !password) {
       return;
@@ -56,13 +60,12 @@ export const useSignUp = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
   return {
     image,
-    loading,
     errorMessage,
     updateImage,
     handleSubmit: originalHandleSubmit(signUp),

@@ -5,6 +5,7 @@ import { memo, VFC } from 'react';
 import { useEditProfile } from '@/hooks/useEditProfile';
 import { useFetch } from '@/hooks/useFetch';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import InputField from '@/components/elements/field/InputField';
 import TextareaField from '@/components/elements/field/TextareaField';
 import FormWrapper from '@/components/form/common/Wrapper';
@@ -12,8 +13,7 @@ import FormWrapper from '@/components/form/common/Wrapper';
 const ProfileEditForm: VFC = () => {
   const { data, isLoading } = useFetch('/api/user/get');
 
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
-    useEditProfile();
+  const { errorMessage, handleSubmit, fieldValues, errors } = useEditProfile();
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -46,9 +46,7 @@ const ProfileEditForm: VFC = () => {
           rows={6}
           defaultValue={data?.user?.profile?.bio}
         />
-        <div className='form-control mt-6'>
-          <input className='btn btn-primary' type='submit' value='Save' />
-        </div>
+        <SubmitButton className='mt-6' color='primary' value='Save' />
       </form>
       <div className='text-center mb-4'>
         <Link href={`/users/${data?.user.id}`}>

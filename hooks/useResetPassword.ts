@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
@@ -12,8 +15,9 @@ type Inputs = {
 };
 
 export const useResetPassword = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -21,8 +25,8 @@ export const useResetPassword = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const resetPassword = async (data: Inputs): Promise<void> => {
-    setLoading((prev) => !prev);
+  const resetPassword: SubmitHandler<Inputs> = async (data) => {
+    dispatch(loadingToggled());
 
     const { email } = data;
 
@@ -45,7 +49,7 @@ export const useResetPassword = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -57,7 +61,6 @@ export const useResetPassword = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(resetPassword),
     fieldValues: {

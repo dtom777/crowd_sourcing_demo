@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { errorToast, successToast } from '@/libs/toast';
 
@@ -17,7 +19,7 @@ type RequestBody = {
 
 export const useApplyPost = (post: { id: string }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -25,8 +27,8 @@ export const useApplyPost = (post: { id: string }) => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const applyPost = async (data: { message: string }) => {
-    setLoading((prev) => !prev);
+  const applyPost: SubmitHandler<Inputs> = async (data) => {
+    dispatch(loadingToggled());
     const body: RequestBody = {
       ...data,
       postId: post.id,
@@ -44,12 +46,11 @@ export const useApplyPost = (post: { id: string }) => {
       console.error(err);
       errorToast('Failed');
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
   return {
-    loading,
     handleSubmit: originalHandleSubmit(applyPost),
     fieldValues: {
       message: convert(

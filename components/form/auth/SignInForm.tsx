@@ -3,14 +3,14 @@ import { memo, VFC } from 'react';
 
 import { useSignIn } from '@/hooks/useSignIn';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 
 import FormWrapper from '../common/Wrapper';
 
 const SignInForm: VFC = () => {
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
-    useSignIn();
+  const { errorMessage, handleSubmit, fieldValues, errors } = useSignIn();
 
   return (
     <FormWrapper title='Sign In'>
@@ -47,9 +47,9 @@ const SignInForm: VFC = () => {
           className='text-center'
           testId='errorMessage'
         />
-        <div className='form-control mt-2'>
-          <input className='btn btn-primary' type='submit' value='Sign In' />
-        </div>
+
+        <SubmitButton className='mt-2' color='primary' value='Sign In' />
+
         <div className='mt-4'>
           <p className='text-sm text-gray-400'>
             Do you have an account yet?

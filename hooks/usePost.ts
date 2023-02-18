@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast, errorToast } from '@/libs/toast';
 
@@ -15,7 +18,8 @@ type Inputs = {
 
 export const usePost = ({ session, type, post = undefined }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -31,7 +35,7 @@ export const usePost = ({ session, type, post = undefined }) => {
   });
 
   const upsertPost: SubmitHandler<Inputs> = async (data) => {
-    setLoading((prev) => !prev);
+    dispatch(loadingToggled());
 
     const config = {
       uri: '',
@@ -69,7 +73,7 @@ export const usePost = ({ session, type, post = undefined }) => {
       console.error(err);
       errorToast('Failed');
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -96,7 +100,6 @@ export const usePost = ({ session, type, post = undefined }) => {
   }, [router, session]);
 
   return {
-    loading,
     handleSubmit: originalHandleSubmit(upsertPost),
     fieldValues: {
       title: convert(register('title', { required: true })),

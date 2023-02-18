@@ -2,19 +2,14 @@ import { memo, VFC } from 'react';
 
 import { useSendEmail } from '@/hooks/useSendEmail';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 import FormWrapper from '@/components/form/common/Wrapper';
 
 const EmailSendForm: VFC = () => {
-  const {
-    loading,
-    errorMessage,
-    handleSubmit,
-    fieldValues,
-    errors,
-    currentEmail,
-  } = useSendEmail();
+  const { errorMessage, handleSubmit, fieldValues, errors, currentEmail } =
+    useSendEmail();
 
   return (
     <FormWrapper title='Change Email'>
@@ -45,13 +40,11 @@ const EmailSendForm: VFC = () => {
           placeholder='email'
         />
 
-        <div className='form-control mt-6'>
-          <input
-            className='btn btn-primary'
-            type='submit'
-            value='Send confirmation email'
-          />
-        </div>
+        <SubmitButton
+          className='mt-6'
+          color='primary'
+          value='Send confirmation email'
+        />
       </form>
       <ErrorMessage
         errorMessage={errorMessage}

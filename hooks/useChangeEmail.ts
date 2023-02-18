@@ -1,7 +1,10 @@
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
@@ -24,8 +27,9 @@ type ReqBody = {
 };
 
 export const useChangeEmail = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
   const encryptedEmail = getAsString(router.query.email || '');
@@ -44,8 +48,8 @@ export const useChangeEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const changeEmail = async (data: Inputs): Promise<void> => {
-    setLoading((prev) => !prev);
+  const changeEmail: SubmitHandler<Inputs> = async (data) => {
+    dispatch(loadingToggled());
 
     const { password, confirmationPassword } = data;
 
@@ -80,7 +84,7 @@ export const useChangeEmail = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -95,7 +99,6 @@ export const useChangeEmail = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(changeEmail),
     fieldValues: {

@@ -4,10 +4,10 @@ import { VFC } from 'react';
 
 import { usePost } from '@/hooks/usePost';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import InputField from '@/components/elements/field/InputField';
 import SelectField from '@/components/elements/field/SelectField';
 import TextareaField from '@/components/elements/field/TextareaField';
-import Spinner from '@/components/elements/spinner/Spinner';
 import FormWrapper from '@/components/form/common/Wrapper';
 
 import { categories } from '@/constants/category';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const PostForm: VFC<Props> = ({ session, type, post }) => {
-  const { loading, handleSubmit, fieldValues, errors } = usePost({
+  const { handleSubmit, fieldValues, errors } = usePost({
     session,
     type,
     post,
@@ -27,8 +27,6 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
 
   return (
     <>
-      <Spinner loading={loading} />
-
       <FormWrapper title={`${type} POST`}>
         <form className='card-body' onSubmit={handleSubmit}>
           <InputField
@@ -39,6 +37,7 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
             type='text'
             placeholder='title'
           />
+
           <TextareaField
             {...fieldValues.content}
             errorMessage='Please enter 1 to 255 characters.'
@@ -47,6 +46,7 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
             placeholder='Description'
             rows={6}
           />
+
           <SelectField
             {...fieldValues.categorySlug}
             errorMessage='Please select'
@@ -64,6 +64,7 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
               );
             })}
           </SelectField>
+
           <InputField
             {...fieldValues.reward}
             errorMessage='Please enter'
@@ -72,9 +73,8 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
             type='number'
             placeholder='0'
           />
-          <div className='form-control mt-6'>
-            <input type='submit' className='btn btn-primary' value={type} />
-          </div>
+
+          <SubmitButton className='mt-6' color='primary' value={type} />
         </form>
       </FormWrapper>
     </>

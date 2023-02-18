@@ -1,6 +1,9 @@
 import { useSession } from 'next-auth/client';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, SubmitHandler, useForm } from 'react-hook-form';
+
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
@@ -19,8 +22,9 @@ type ReqBody = {
 };
 
 export const useSendEmail = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
+
+  const dispatch = useAppDispatch();
 
   const [session] = useSession();
   const email = session?.user.email;
@@ -31,8 +35,8 @@ export const useSendEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const sendConfirmationEmail = async (data: Inputs): Promise<void> => {
-    setLoading((prev) => !prev);
+  const sendConfirmationEmail: SubmitHandler<Inputs> = async (data) => {
+    dispatch(loadingToggled());
 
     const { changingEmail, confirmationChangingEmail } = data;
 
@@ -67,7 +71,7 @@ export const useSendEmail = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -83,7 +87,6 @@ export const useSendEmail = () => {
   };
 
   return {
-    loading,
     currentEmail: email,
     errorMessage,
     handleSubmit: originalHandleSubmit(sendConfirmationEmail),

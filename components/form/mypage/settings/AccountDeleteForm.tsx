@@ -1,11 +1,11 @@
 import { useSettings } from '@/hooks/useSettings';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 
 const AccountDeleteForm = () => {
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
-    useSettings();
+  const { errorMessage, handleSubmit, fieldValues, errors } = useSettings();
 
   return (
     <>
@@ -44,9 +44,11 @@ const AccountDeleteForm = () => {
 
             <ErrorMessage errorMessage={errorMessage} className='text-center' />
 
-            <div className='flex justify-center mt-2'>
-              <input className='btn btn-error' type='submit' value='Delete' />
-            </div>
+            <SubmitButton
+              className='items-center mt-2'
+              color='error'
+              value='Delete'
+            />
           </form>
         </label>
       </label>

@@ -2,6 +2,9 @@ import { signOut } from 'next-auth/client';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
+
 import { successToast } from '@/libs/toast';
 
 import { convert } from 'utils/helper';
@@ -17,8 +20,9 @@ type Inputs = {
 type ReqBody = Omit<Inputs, 'confirmationPassword'>;
 
 export const useSettings = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -27,7 +31,7 @@ export const useSettings = () => {
   } = useForm<Inputs>();
 
   const deleteUser: SubmitHandler<Inputs> = async (data) => {
-    setLoading((prev) => !prev);
+    dispatch(loadingToggled());
 
     try {
       const emailErrMsg = validateEmail(data.email);
@@ -61,7 +65,7 @@ export const useSettings = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -87,7 +91,6 @@ export const useSettings = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(deleteUser),
     fieldValues: {

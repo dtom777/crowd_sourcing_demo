@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
+
 import { errorToast, successToast } from '@/libs/toast';
 
 import { convert } from 'utils/helper';
@@ -13,8 +16,9 @@ type Inputs = {
 };
 
 export const useEditProfile = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -23,7 +27,7 @@ export const useEditProfile = () => {
   } = useForm<Inputs>();
 
   const editProfile: SubmitHandler<Inputs> = async (data) => {
-    setLoading((prev) => !prev);
+    dispatch(loadingToggled());
 
     const errMsg = validate(data);
     if (errMsg) {
@@ -45,7 +49,7 @@ export const useEditProfile = () => {
       console.error(err);
       errorToast('Failed');
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -57,7 +61,6 @@ export const useEditProfile = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(editProfile),
     fieldValues: {

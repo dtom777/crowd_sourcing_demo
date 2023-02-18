@@ -2,6 +2,9 @@ import { signIn } from 'next-auth/client';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
+
 import { convert } from 'utils/helper';
 
 type ErrorMessage = string | undefined;
@@ -12,8 +15,9 @@ type Inputs = {
 };
 
 export const useSignIn = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -22,7 +26,7 @@ export const useSignIn = () => {
   } = useForm<Inputs>();
 
   const signInByCredentials: SubmitHandler<Inputs> = async (data) => {
-    setLoading((prev) => !prev);
+    dispatch(loadingToggled());
 
     const errMsg = validate(data);
     if (errMsg) {
@@ -47,7 +51,7 @@ export const useSignIn = () => {
         console.error(res);
       })
       .finally(() => {
-        setLoading((prev) => !prev);
+        dispatch(loadingToggled());
       });
   };
 
@@ -67,7 +71,6 @@ export const useSignIn = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(signInByCredentials),
     fieldValues: {

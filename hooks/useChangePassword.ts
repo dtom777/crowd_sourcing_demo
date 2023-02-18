@@ -2,6 +2,9 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { useAppDispatch } from '@/stores/hooks';
+import { loadingToggled } from '@/stores/loading-slice';
+
 import { successToast } from '@/libs/toast';
 
 import { getAsString } from 'utils/getAsString';
@@ -20,8 +23,8 @@ type ReqBody = {
 };
 
 export const useChangePassword = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
   const token = getAsString(router.query.token || '');
@@ -38,7 +41,7 @@ export const useChangePassword = () => {
   } = useForm<Inputs>();
 
   const changePassword: SubmitHandler<Inputs> = async (data) => {
-    setLoading((prev) => !prev);
+    dispatch(loadingToggled());
 
     const { password, confirmationPassword } = data;
 
@@ -64,7 +67,7 @@ export const useChangePassword = () => {
       console.error(err.message);
       setErrorMessage(err.message);
     } finally {
-      setLoading((prev) => !prev);
+      dispatch(loadingToggled());
     }
   };
 
@@ -79,7 +82,6 @@ export const useChangePassword = () => {
   };
 
   return {
-    loading,
     errorMessage,
     handleSubmit: originalHandleSubmit(changePassword),
     fieldValues: {

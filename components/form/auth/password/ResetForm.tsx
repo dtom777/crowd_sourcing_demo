@@ -2,17 +2,16 @@ import { memo, VFC } from 'react';
 
 import { useResetPassword } from '@/hooks/useResetPassword';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
-import Spinner from '@/components/elements/spinner/Spinner';
 
 const PasswordResetForm: VFC = () => {
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
+  const { errorMessage, handleSubmit, fieldValues, errors } =
     useResetPassword();
 
   return (
     <>
-      <Spinner loading={loading} />
       <div className='md:w-96 md:mx-auto my-12'>
         <h2 className='font-bold text-2xl text-center'>
           Forgot your password?
@@ -31,13 +30,12 @@ const PasswordResetForm: VFC = () => {
             placeholder='email'
           />
           <ErrorMessage errorMessage={errorMessage} />
-          <div className='form-control mt-2'>
-            <input
-              className='btn btn-primary'
-              type='submit'
-              value='Sent Reset Mail'
-            />
-          </div>
+
+          <SubmitButton
+            className='mt-2'
+            color='primary'
+            value='Sent Reset Mail'
+          />
         </form>
       </div>
     </>

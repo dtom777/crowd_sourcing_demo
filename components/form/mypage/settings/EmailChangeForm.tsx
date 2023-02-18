@@ -2,13 +2,13 @@ import { memo, VFC } from 'react';
 
 import { useChangeEmail } from '@/hooks/useChangeEmail';
 
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 import FormWrapper from '@/components/form/common/Wrapper';
 
 const EmailChangeForm: VFC = () => {
-  const { loading, errorMessage, handleSubmit, fieldValues, errors } =
-    useChangeEmail();
+  const { errorMessage, handleSubmit, fieldValues, errors } = useChangeEmail();
 
   return (
     <FormWrapper title='Change Email'>
@@ -36,13 +36,8 @@ const EmailChangeForm: VFC = () => {
           className='text-center'
           testId='errorMessage'
         />
-        <div className='form-control mt-2'>
-          <input
-            className='btn btn-primary'
-            type='submit'
-            value='Change Email'
-          />
-        </div>
+
+        <SubmitButton className='mt-2' color='primary' value='Change Email' />
       </form>
     </FormWrapper>
   );

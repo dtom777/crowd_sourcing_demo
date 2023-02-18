@@ -4,6 +4,7 @@ import { memo, VFC } from 'react';
 import { useSignUp } from '@/hooks/useSignUp';
 
 import Avatar from '@/components/elements/avatar/Avatar';
+import SubmitButton from '@/components/elements/button/SubmitButton';
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 import SelectField from '@/components/elements/field/SelectField';
@@ -76,9 +77,9 @@ const SignUpForm: VFC = () => {
           className='text-center'
           testId='errorMessage'
         />
-        <div className='form-control mt-2'>
-          <input className='btn btn-primary' type='submit' value='Sign Up' />
-        </div>
+
+        <SubmitButton className='mt-2' color='primary' value='Sign Up' />
+
         <div className='mt-4'>
           <p className='text-sm text-gray-400'>
             Do you have an account yet?
