@@ -10,7 +10,7 @@ import { successToast } from '@/libs/toast';
 
 import { convert } from 'utils/helper';
 
-import { getAsString } from '../utils/getAsString';
+import { getAsString } from '../utils/helper';
 
 type ErrorMessage = string | undefined;
 

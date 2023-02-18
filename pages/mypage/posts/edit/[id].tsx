@@ -4,10 +4,10 @@ import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
-import { PostWithTags } from 'types/post.type';
-import { getAsString } from 'utils/getAsString';
+import PostForm from '@/components/form/posts/Form';
 
-import PostForm from '../../../../components/form/posts/Form';
+import { PostWithTags } from 'types/post.type';
+import { getAsString } from 'utils/helper';
 
 type Props = {
   session: Session;
