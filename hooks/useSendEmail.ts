@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/client';
 import { useState } from 'react';
-import { SubmitHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';

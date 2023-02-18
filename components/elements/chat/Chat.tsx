@@ -18,7 +18,7 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
 
   return (
     <div className='lg:w-1/2 mx-2 bg-base-200'>
-      <h3 className='text-lg font-bold p-4'>{title}</h3>
+      <h3 className='text-2xl font-bold p-4 underline'>{title}</h3>
       {/* chat */}
 
       {posts?.some(({ comments }) => comments.length) ? (

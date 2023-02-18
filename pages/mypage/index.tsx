@@ -1,4 +1,5 @@
 import { faCog, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { Post } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { Session } from 'next-auth';
@@ -9,15 +10,13 @@ import { prisma } from '@/libs/prisma';
 import Avatar from '@/components/elements/avatar/Avatar';
 import Icon from '@/components/elements/icon/Icon';
 import RecentActivity from '@/components/elements/mypage/RecentActivity';
+import RecentPosts from '@/components/elements/mypage/RecentPosts';
 
 import { CommentWithUserAndPostWithCategoryAndUser } from 'types/comment.type';
-import { PostWithCommentAndLike } from 'types/post.type';
-
-import RecentPost from '../../components/elements/mypage/RecentPost';
 
 type Props = {
   session: Session;
-  post: Array<PostWithCommentAndLike>;
+  posts: Post[]; //TODO  include fix
   comments: Array<CommentWithUserAndPostWithCategoryAndUser>;
 };
 
@@ -41,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (
   });
 
   // 最近の募集
-  const latestPost = await prisma.post.findFirst({
+  const recentPosts = await prisma.post.findMany({
     where: {
       AND: [
         { userId: userId },
@@ -53,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (
         },
       ],
     },
-    take: 1,
+    take: 2,
     orderBy: {
       createdAt: 'desc',
     },
@@ -61,11 +60,11 @@ export const getServerSideProps: GetServerSideProps = async (
   });
 
   //　応募したもの
-  const latestComment = await prisma.comment.findMany({
+  const recentComments = await prisma.comment.findMany({
     where: {
       userId,
     },
-    take: 3,
+    take: 5,
     orderBy: {
       createdAt: 'desc',
     },
@@ -81,13 +80,13 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     props: {
       session,
-      post: latestPost,
-      comments: latestComment,
+      posts: recentPosts,
+      comments: recentComments,
     },
   };
 };
 
-const MyPage: NextPage<Props> = ({ session, post, comments }) => {
+const MyPage: NextPage<Props> = ({ session, posts, comments }) => {
   return (
     <>
       <div className='flex justify-between md:px-4 px-2 md:mt-16 mt-8 md:mb-10 mb-6'>
@@ -135,7 +134,8 @@ const MyPage: NextPage<Props> = ({ session, post, comments }) => {
 
       <div className='md:flex justify-between bg-base-200 md:mb-20 mb-4 pb-4 md:px-4 md:max-w-screen-lg md:w-screen'>
         <RecentActivity comments={comments} />
-        <RecentPost post={post} />
+        <div className='divider lg:divider-horizontal'></div>
+        <RecentPosts posts={posts} />
       </div>
     </>
   );

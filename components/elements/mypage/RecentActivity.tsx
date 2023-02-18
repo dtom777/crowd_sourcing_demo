@@ -13,7 +13,7 @@ type Props = {
 
 const RecentActivity: VFC<Props> = ({ comments }) => {
   return (
-    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4 lg:mr-20'>
+    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
       <div className='flex justify-between items-baseline'>
         <h2 className='text-lg font-bold'>Recent Activity</h2>
         <Link href='/mypage/chats'>

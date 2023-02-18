@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
         id: params.id,
       },
     },
-    take: 4,
+    take: 3,
     include: {
       user: true,
     },
