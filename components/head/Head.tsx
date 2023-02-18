@@ -1,13 +1,7 @@
-import { Prisma } from '@prisma/client';
 import NextHead from 'next/head';
 import { memo, VFC } from 'react';
 
-type PostWithUser = Prisma.PostGetPayload<{ include: { user: true } }>;
-type Props = {
-  post?: PostWithUser;
-};
-
-const Head: VFC<Props> = () => {
+const Head: VFC = () => {
   return (
     <NextHead>
       <title>Crowd Sourcing Demo</title>

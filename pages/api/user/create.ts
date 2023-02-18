@@ -1,10 +1,9 @@
-import { User } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
 import { prisma } from '@/libs/prisma';
 
+import type { User } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 
 type ReqBody = {
   name: string;

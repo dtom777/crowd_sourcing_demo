@@ -1,12 +1,12 @@
-import { User, Like } from '@prisma/client';
-import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
 import { getAsString } from '../../../utils/helper';
 
+import type { User, Like } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Session } from 'next-auth';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const postId = getAsString(req.query.postId);

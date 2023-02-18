@@ -13,7 +13,7 @@ const options = {
   },
   providers: [
     Providers.Credentials({
-      authorize: async (credentials) => {
+      authorize: async (credentials: { email: string; password: string }) => {
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });

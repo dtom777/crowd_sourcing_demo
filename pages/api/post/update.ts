@@ -1,9 +1,9 @@
-import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Session } from 'next-auth';
 
 type ReqBody = {
   id: string;
