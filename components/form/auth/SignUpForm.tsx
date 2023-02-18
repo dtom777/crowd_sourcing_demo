@@ -16,7 +16,6 @@ import FormWrapper from '../common/Wrapper';
 const SignUpForm: VFC = () => {
   const {
     image,
-    loading,
     errorMessage,
     updateImage,
     handleSubmit,
