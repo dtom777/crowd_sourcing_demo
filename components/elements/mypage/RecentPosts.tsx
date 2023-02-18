@@ -11,11 +11,11 @@ type Props = {
 
 const RecentPosts: VFC<Props> = ({ posts }) => {
   return (
-    <div className='md:w-1/2 w-full py-4 lg:px-8 px-4'>
-      <div className='flex justify-between items-baseline'>
+    <div className='w-full py-4 px-4 md:w-1/2 lg:px-8'>
+      <div className='flex items-baseline justify-between'>
         <h2 className='text-lg font-bold'>Your recent post</h2>
         <Link href='/mypage/posts'>
-          <a className='text-gray-400 text-sm hover:opacity-50'>
+          <a className='text-sm text-gray-400 hover:opacity-50'>
             View all your posts
           </a>
         </Link>

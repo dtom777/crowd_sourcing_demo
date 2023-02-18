@@ -14,19 +14,19 @@ const PostMain: VFC<Props> = ({ post }) => {
 
   return (
     <div>
-      <div className='rounded-none w-full bg-primary text-neutral-content'>
+      <div className='w-full rounded-none bg-primary text-neutral-content'>
         <div className='card-body'>
-          <h2 className='card-title text-2xl mb-4'>{post.title}</h2>
+          <h2 className='card-title mb-4 text-2xl'>{post.title}</h2>
           <p className='mb-4'>{post.content}</p>
           <div className='flex justify-between'>
             <div className='card-actions'>
-              <div className='badge badge-outline'>
+              <div className='badge-outline badge'>
                 <Link href={`/category/${post.categorySlug}`}>
                   <a>{post.categorySlug}</a>
                 </Link>
               </div>
             </div>
-            <div className='card-actions font-bold mb-4'>
+            <div className='card-actions mb-4 font-bold'>
               Reward: {post.reward.toLocaleString()} USD
             </div>
           </div>
@@ -34,7 +34,7 @@ const PostMain: VFC<Props> = ({ post }) => {
             <div className='mr-2'>
               <Link href={`/users/${id}`}>
                 <a className='hover:opacity-50'>
-                  <div className='flex flex-col w-full items-center justify-center'>
+                  <div className='flex w-full flex-col items-center justify-center'>
                     <Avatar src={image} size={60} />
                   </div>
                 </a>

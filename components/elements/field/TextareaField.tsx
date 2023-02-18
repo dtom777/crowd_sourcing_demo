@@ -23,7 +23,7 @@ const TextareaField: VFC<Props> = ({
         <span className='label-text'>{label}</span>
       </label>
       <textarea
-        className='textarea textarea-bordered'
+        className='textarea-bordered textarea'
         {...inputProps}
         ref={inputRef}
       />

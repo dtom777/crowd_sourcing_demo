@@ -16,14 +16,14 @@ const Navbar: VFC = () => {
   );
 
   return (
-    <div className='w-full navbar bg-base-300'>
+    <div className='navbar w-full bg-base-300'>
       <div className='flex-none'>
-        <label htmlFor='my-drawer-3' className='btn btn-square btn-ghost'>
+        <label htmlFor='my-drawer-3' className='btn-ghost btn-square btn'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
-            className='inline-block w-6 h-6 stroke-current'
+            className='inline-block h-6 w-6 stroke-current'
           >
             <path
               strokeLinecap='round'
@@ -37,24 +37,24 @@ const Navbar: VFC = () => {
       {/* title */}
       <div className='flex-1'>
         <Link href='/'>
-          <a className='btn btn-ghost normal-case text-xl'>
+          <a className='btn-ghost btn text-xl normal-case'>
             Crowd Sourcing Demo
           </a>
         </Link>
       </div>
 
-      <div className='hidden md:block mr-4'>
+      <div className='mr-4 hidden md:block'>
         <SearchForm />
       </div>
 
       {session ? (
-        <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle'>
+        <div className='dropdown-end dropdown'>
+          <label tabIndex={0} className='btn-ghost btn-circle btn'>
             {avatar}
           </label>
           <ul
             tabIndex={0}
-            className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
+            className='dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow'
           >
             <li>
               <Link href='/create'>

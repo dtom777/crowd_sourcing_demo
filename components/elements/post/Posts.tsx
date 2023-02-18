@@ -39,7 +39,7 @@ const Posts: VFC<Props> = ({ posts }) => {
     <>
       <Cards
         posts={slice}
-        className='grid md:grid-cols-2 grid-cols-1 gap-4 mr-2 lg:mr-0'
+        className='mr-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:mr-0'
       />
       <Pagination pageCount={pageCount} onPageChange={handlePageClick} />
     </>

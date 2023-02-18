@@ -13,18 +13,18 @@ type Props = {
 
 const RecentActivity: VFC<Props> = ({ comments }) => {
   return (
-    <div className='md:w-1/2 w-full py-4 lg:px-6 px-4'>
-      <div className='flex justify-between items-baseline'>
+    <div className='w-full py-4 px-4 md:w-1/2 lg:px-6'>
+      <div className='flex items-baseline justify-between'>
         <h2 className='text-lg font-bold'>Recent Activity</h2>
         <Link href='/mypage/chats'>
-          <a className='text-gray-400 text-sm hover:opacity-50'>View all</a>
+          <a className='text-sm text-gray-400 hover:opacity-50'>View all</a>
         </Link>
       </div>
 
       {comments.length ? (
         <ul>
           {comments.map((comment, i) => (
-            <li key={i} className='bg-white my-4 p-4'>
+            <li key={i} className='my-4 bg-white p-4'>
               <Link href={`/posts/${comment.post.id}`}>
                 <a className='flex justify-between hover:opacity-50'>
                   <div className='flex'>
@@ -34,18 +34,18 @@ const RecentActivity: VFC<Props> = ({ comments }) => {
                       className='w-14'
                     />
                     <div className='ml-6'>
-                      <p className='w-40 truncate text-gray-900 text-md font-bold'>
+                      <p className='text-md w-40 truncate font-bold text-gray-900'>
                         {comment.post.title}
                       </p>
-                      <p className='text-gray-700 font-medium'>
+                      <p className='font-medium text-gray-700'>
                         {comment.post.user.name}
                       </p>
-                      <p className='text-gray-500 md:text-sm text-xs'>
+                      <p className='text-xs text-gray-500 md:text-sm'>
                         You applied for this post
                       </p>
                     </div>
                   </div>
-                  <p className='text-gray-500 md:text-sm text-xs'>
+                  <p className='text-xs text-gray-500 md:text-sm'>
                     {getRelativeTime(comment)}
                   </p>
                 </a>

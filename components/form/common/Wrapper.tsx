@@ -13,7 +13,7 @@ const FormWrapper: FC<Props> = ({ title, children }) => {
           <div className='text-center'>
             <h1 className='text-5xl font-bold'>{title}</h1>
           </div>
-          <div className='card flex-shrink-0 md:max-w-screen-md md:w-screen w-full shadow-2xl bg-base-100'>
+          <div className='card w-full flex-shrink-0 bg-base-100 shadow-2xl md:w-screen md:max-w-screen-md'>
             {children}
           </div>
         </div>

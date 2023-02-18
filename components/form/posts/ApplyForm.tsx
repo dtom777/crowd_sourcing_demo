@@ -16,7 +16,7 @@ const ApplyForm: VFC<Props> = ({ post }) => {
     <>
       <form
         onSubmit={handleSubmit}
-        className='flex flex-col px-8 pb-8 bg-white rounded'
+        className='flex flex-col rounded bg-white px-8 pb-8'
       >
         <div className='mb-4'>
           <TextareaField
@@ -30,7 +30,7 @@ const ApplyForm: VFC<Props> = ({ post }) => {
         </div>
 
         <SubmitButton
-          className='items-center mt-2'
+          className='mt-2 items-center'
           color='primary'
           value='Send Message'
         />

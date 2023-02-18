@@ -11,7 +11,7 @@ const Card = ({ post }) => {
       <div className='card-body'>
         <h2 className={`card-title ${styles.title}`}>{post.title}</h2>
         <Link href={`/category/${post.categorySlug}`}>
-          <a className='text-blue-500 text-xs'>
+          <a className='text-xs text-blue-500'>
             <Icon icon={faFolder} className='mx-1' />
             {post.categorySlug}
           </a>
@@ -19,7 +19,7 @@ const Card = ({ post }) => {
         <p className={styles.desc}>{post.content}</p>
         <div className='card-actions justify-end'>
           <Link href={`/posts/${post.id}`}>
-            <a className='btn btn-primary'>Apply</a>
+            <a className='btn-primary btn'>Apply</a>
           </Link>
         </div>
       </div>

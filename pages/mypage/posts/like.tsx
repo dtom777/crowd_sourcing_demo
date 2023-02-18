@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (
 const LikePostsListPage: NextPage<Props> = ({ posts, user }) => {
   return (
     <>
-      <h1 className='text-2xl font-bold pl-4 pt-10'>Like Posts</h1>
+      <h1 className='pl-4 pt-10 text-2xl font-bold'>Like Posts</h1>
       <div className='mt-4 mb-8'>
         {posts.length ? (
           <LikePostList posts={posts} user={user} />

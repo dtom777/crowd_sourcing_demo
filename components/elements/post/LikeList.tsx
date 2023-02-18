@@ -61,25 +61,25 @@ const LikePostList: VFC<Props> = ({ posts, user }) => {
                     <a className='hover:opacity-50'>{post.user.name}</a>
                   </Link>
                 </td>
-                <td className='w-2 md:w-10 truncate'>
+                <td className='w-2 truncate md:w-10'>
                   <Link href={`/posts/${post.id}`}>
                     <a className='hover:opacity-50'>{post.title}</a>
                   </Link>
                 </td>
                 <td>
                   {post.comments.find((com) => com.userId == user.id) ? (
-                    <p className='text-sm text-blue-500 font-semibold'>
+                    <p className='text-sm font-semibold text-blue-500'>
                       Applied
                     </p>
                   ) : (
-                    <p className='text-sm text-red-500 font-semibold'>
+                    <p className='text-sm font-semibold text-red-500'>
                       Unrequested
                     </p>
                   )}
                 </td>
                 <td className='flex justify-center'>
                   <button
-                    className='flex justify-center items-center py-1 text-lg text-gray-500 focus:outline-none hover:opacity-50'
+                    className='flex items-center justify-center py-1 text-lg text-gray-500 hover:opacity-50 focus:outline-none'
                     onClick={() => deleteLike(post.id)}
                   >
                     <BaseIcon icon={faHeartBroken} className='mr-2' />

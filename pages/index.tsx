@@ -38,7 +38,7 @@ const Home: NextPage<Props> = ({ posts }) => {
   return (
     <>
       <CategoryTitle />
-      <div className='lg:ml-0 ml-2 mt-4'>
+      <div className='ml-2 mt-4 lg:ml-0'>
         {posts?.length ? (
           <div className='mb-8'>
             <Posts posts={posts} />

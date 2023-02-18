@@ -87,9 +87,9 @@ export const getServerSideProps: GetServerSideProps = async (
 const Chats: NextPage<Props> = ({ myPosts, applicationPosts }) => {
   return (
     <>
-      <h1 className='text-2xl font-bold pl-4 pt-10'>Chat</h1>
+      <h1 className='pl-4 pt-10 text-2xl font-bold'>Chat</h1>
 
-      <div className='mt-4 mb-8 lg:flex md:max-w-screen-md w-screen'>
+      <div className='mt-4 mb-8 w-screen md:max-w-screen-md lg:flex'>
         <Chat
           title='Application for your posts'
           posts={myPosts}

@@ -39,7 +39,7 @@ const MyPostList: VFC<Props> = ({ posts }) => {
             {localData.map((post, index) => (
               <tr key={post.id}>
                 <th>{index + 1}</th>
-                <td className='w-2 md:w-10 truncate'>{post.title}</td>
+                <td className='w-2 truncate md:w-10'>{post.title}</td>
                 <td>{post.reward.toLocaleString()} USD</td>
                 <td>
                   {post.comments.length ? (
@@ -53,10 +53,10 @@ const MyPostList: VFC<Props> = ({ posts }) => {
                 </td>
                 <td>
                   <div className='form-control'>
-                    <label className='cursor-pointer label'>
+                    <label className='label cursor-pointer'>
                       <input
                         type='checkbox'
-                        className='toggle toggle-accent'
+                        className='toggle-accent toggle'
                         defaultChecked={post.published}
                         onClick={() =>
                           handleTogglePublished(post.id, post.published)
@@ -74,7 +74,7 @@ const MyPostList: VFC<Props> = ({ posts }) => {
                 </td>
                 <td>
                   <button
-                    className='px-2 py-1 text-red-500 rounded-sm focus:outline-none hover:opacity-50'
+                    className='rounded-sm px-2 py-1 text-red-500 hover:opacity-50 focus:outline-none'
                     onClick={() => handleDeletePost(post.id)}
                   >
                     <Icon icon={faTrashAlt} className='mr-1' />

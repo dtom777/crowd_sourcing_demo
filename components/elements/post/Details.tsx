@@ -20,7 +20,7 @@ const PostDetails: VFC<Props> = ({ post }) => {
     <div className='border'>
       <PostMain post={post} />
       <LikeButton post={post} session={session} />
-      <div className='text-center -mt-3'>
+      <div className='-mt-3 text-center'>
         {session ? <ApplyForm post={post} /> : <ConstApplication />}
       </div>
     </div>

@@ -12,8 +12,8 @@ const PasswordChangeForm: VFC = () => {
 
   return (
     <>
-      <div className='md:w-96 text-center md:mx-auto my-12'>
-        <h1 className='mb-6 font-bold text-2xl'>Reset password</h1>
+      <div className='my-12 text-center md:mx-auto md:w-96'>
+        <h1 className='mb-6 text-2xl font-bold'>Reset password</h1>
         <form onSubmit={handleSubmit}>
           <InputField
             {...fieldValues.password}

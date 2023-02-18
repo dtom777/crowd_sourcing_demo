@@ -7,7 +7,7 @@ type Props = {
 
 const Const: VFC<Props> = ({ message }) => {
   return (
-    <div className='md:text-xl text-sm text-gray-500 text-center my-10'>
+    <div className='my-10 text-center text-sm text-gray-500 md:text-xl'>
       <Link href='/create'>
         <a className='hover:opacity-50'>{message}</a>
       </Link>

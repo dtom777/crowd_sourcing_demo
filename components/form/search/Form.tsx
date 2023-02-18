@@ -28,9 +28,9 @@ const SearchForm: VFC = () => {
           {...register('query')}
           type='search'
           placeholder='Search…'
-          className='input input-bordered'
+          className='input-bordered input'
         />
-        <button className='btn btn-square' type='submit'>
+        <button className='btn-square btn' type='submit'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6'

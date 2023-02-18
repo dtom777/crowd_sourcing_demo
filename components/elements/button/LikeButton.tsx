@@ -56,9 +56,9 @@ const LikeButton: VFC<Props> = ({ session, post }) => {
   return (
     <>
       {session && (
-        <div className='h-14 flex justify-end items-center'>
+        <div className='flex h-14 items-center justify-end'>
           <button
-            className={`flex justify-center items-center p-2 mr-2 rounded-full hover:opacity-50 border focus:outline-none ${activeLikeClassName}`}
+            className={`mr-2 flex items-center justify-center rounded-full border p-2 hover:opacity-50 focus:outline-none ${activeLikeClassName}`}
             onClick={handleLike}
           >
             <Icon icon={faHeart} className={activeLikeIconClassName} />

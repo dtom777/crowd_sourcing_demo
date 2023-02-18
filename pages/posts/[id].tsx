@@ -73,8 +73,8 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 const PostPage: NextPage<Props> = ({ post, relationPosts }) => {
   return (
     <>
-      <div className='lg:flex lg:mx-4 md:max-w-screen-md w-screen'>
-        <div className='lg:w-7/12 lg:mr-4'>
+      <div className='w-screen md:max-w-screen-md lg:mx-4 lg:flex'>
+        <div className='lg:mr-4 lg:w-7/12'>
           <PostDetails post={post} />
         </div>
         <div className='lg:w-5/12'>

@@ -1,7 +1,7 @@
 const AvatarSkelton = () => {
   return (
     <svg
-      className='text-white w-10 h-10'
+      className='h-10 w-10 text-white'
       aria-hidden='true'
       fill='currentColor'
       viewBox='0 0 20 20'

@@ -39,7 +39,7 @@ const SignInForm: VFC = () => {
         />
         <label className='label'>
           <Link href='/auth/password'>
-            <a className='label-text-alt link link-hover'>Forgot password?</a>
+            <a className='link-hover label-text-alt link'>Forgot password?</a>
           </Link>
         </label>
         <ErrorMessage

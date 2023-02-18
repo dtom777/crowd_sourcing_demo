@@ -45,14 +45,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const PostsListPage: NextPage<Props> = ({ posts }) => {
   return (
     <>
-      <h1 className='text-2xl font-bold pl-4 pt-10'>My Posts</h1>
+      <h1 className='pl-4 pt-10 text-2xl font-bold'>My Posts</h1>
 
       <div className='mt-4 mb-8'>
-        <div className='lg:w-full lg:mx-0 md:mx-16 mx-4'>
+        <div className='mx-4 md:mx-16 lg:mx-0 lg:w-full'>
           {posts.length ? (
             <MyPosts posts={posts} />
           ) : (
-            <p className='md:text-xl text-sm text-gray-500 text-center my-10'>
+            <p className='my-10 text-center text-sm text-gray-500 md:text-xl'>
               Not posts
             </p>
           )}

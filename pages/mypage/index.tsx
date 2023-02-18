@@ -89,22 +89,22 @@ export const getServerSideProps: GetServerSideProps = async (
 const MyPage: NextPage<Props> = ({ session, posts, comments }) => {
   return (
     <>
-      <div className='flex justify-between md:px-4 px-2 md:mt-16 mt-8 md:mb-10 mb-6'>
+      <div className='mt-8 mb-6 flex justify-between px-2 md:mt-16 md:mb-10 md:px-4'>
         <div className='mr-2'>
           <div className='flex items-center'>
             {session && (
               <Avatar
                 src={session.user.image}
                 size={120}
-                className='w-24 ring ring-primary ring-offset-base-100 ring-offset-2'
+                className='w-24 ring ring-primary ring-offset-2 ring-offset-base-100'
               />
             )}
             <div>
-              <p className='text-gray-900 font-semibold md:text-3xl text-2xl ml-4'>
+              <p className='ml-4 text-2xl font-semibold text-gray-900 md:text-3xl'>
                 {session ? session.user.name : ''}
               </p>
               <Link href='/mypage/profile'>
-                <a className='text-gray-500 text-sm ml-4 hover:opacity-50'>
+                <a className='ml-4 text-sm text-gray-500 hover:opacity-50'>
                   Profile
                 </a>
               </Link>
@@ -112,7 +112,7 @@ const MyPage: NextPage<Props> = ({ session, posts, comments }) => {
           </div>
         </div>
 
-        <div className='flex md:justify-center justify-end items-center text-lg md:mt-0 mt-4'>
+        <div className='mt-4 flex items-center justify-end text-lg md:mt-0 md:justify-center'>
           <div className='mr-4 text-red-500'>
             <Link href={'/mypage/posts/like'}>
               <a>
@@ -132,7 +132,7 @@ const MyPage: NextPage<Props> = ({ session, posts, comments }) => {
         </div>
       </div>
 
-      <div className='md:flex justify-between bg-base-200 md:mb-20 mb-4 pb-4 md:px-4 md:max-w-screen-lg md:w-screen'>
+      <div className='mb-4 justify-between bg-base-200 pb-4 md:mb-20 md:flex md:w-screen md:max-w-screen-lg md:px-4'>
         <RecentActivity comments={comments} />
         <div className='divider lg:divider-horizontal'></div>
         <RecentPosts posts={posts} />

@@ -17,8 +17,8 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
   const titleClassName = position === 'left' ? '' : 'text-right';
 
   return (
-    <div className='lg:w-1/2 mx-2 bg-base-200'>
-      <h3 className='text-2xl font-bold p-4 underline'>{title}</h3>
+    <div className='mx-2 bg-base-200 lg:w-1/2'>
+      <h3 className='p-4 text-2xl font-bold underline'>{title}</h3>
       {/* chat */}
 
       {posts?.some(({ comments }) => comments.length) ? (
@@ -28,10 +28,10 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
               {post.comments.length ? (
                 <div
                   key={post.id}
-                  className='bg-bg-post my-4 mx-2 px-4 rounded-md'
+                  className='bg-bg-post my-4 mx-2 rounded-md px-4'
                 >
                   <div
-                    className={`block truncate text-gray-900 font-bold text-xl ${titleClassName}`}
+                    className={`block truncate text-xl font-bold text-gray-900 ${titleClassName}`}
                   >
                     {post.title}
                   </div>
@@ -51,7 +51,7 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
                     </div>
                     <div className='chat-header'>
                       {post.comments[0].user.name}
-                      <time className='text-xs opacity-50 ml-4'>
+                      <time className='ml-4 text-xs opacity-50'>
                         {getRelativeTime(post)}
                       </time>
                     </div>
@@ -60,7 +60,7 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
                     </div>
                   </div>
 
-                  <p className='text-gray-500 text-sm mr-4'></p>
+                  <p className='mr-4 text-sm text-gray-500'></p>
                 </div>
               ) : null}
             </>

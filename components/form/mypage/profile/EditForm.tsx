@@ -20,9 +20,9 @@ const ProfileEditForm: VFC = () => {
   return (
     <FormWrapper title='Edit Profile'>
       <form className='card-body' onSubmit={handleSubmit}>
-        <div className='flex flex-col w-full items-center justify-center'>
+        <div className='flex w-full flex-col items-center justify-center'>
           <div className='avatar'>
-            <div className='w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+            <div className='w-24 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100'>
               <Image src={data?.user.image} width={120} height={120} />
             </div>
           </div>
@@ -48,7 +48,7 @@ const ProfileEditForm: VFC = () => {
         />
         <SubmitButton className='mt-6' color='primary' value='Save' />
       </form>
-      <div className='text-center mb-4'>
+      <div className='mb-4 text-center'>
         <Link href={`/users/${data?.user.id}`}>
           <a className='text-gray-500 hover:opacity-50'>View Profile</a>
         </Link>

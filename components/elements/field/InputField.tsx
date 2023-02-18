@@ -22,7 +22,7 @@ const InputField: VFC<Props> = ({
       <label className='label'>
         <span className='label-text'>{label}</span>
       </label>
-      <input className='input input-bordered' {...inputProps} ref={inputRef} />
+      <input className='input-bordered input' {...inputProps} ref={inputRef} />
       {errors && <ErrorMessage errorMessage={errorMessage} />}
     </div>
   );

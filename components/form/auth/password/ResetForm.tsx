@@ -12,11 +12,11 @@ const PasswordResetForm: VFC = () => {
 
   return (
     <>
-      <div className='md:w-96 md:mx-auto my-12'>
-        <h2 className='font-bold text-2xl text-center'>
+      <div className='my-12 md:mx-auto md:w-96'>
+        <h2 className='text-center text-2xl font-bold'>
           Forgot your password?
         </h2>
-        <div className='text-gray-500 my-6 text-center'>
+        <div className='my-6 text-center text-gray-500'>
           <p>Enter your registered email</p>
           <p>A password reset message will send to your email</p>
         </div>

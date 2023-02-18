@@ -26,11 +26,11 @@ const SignUpForm: VFC = () => {
   return (
     <FormWrapper title='Sign Up'>
       <form className='card-body' onSubmit={handleSubmit}>
-        <div className='flex flex-col w-full items-center justify-center'>
+        <div className='flex w-full flex-col items-center justify-center'>
           <Avatar
             src={image}
             size={120}
-            className='w-24 ring ring-primary ring-offset-base-100 ring-offset-2'
+            className='w-24 ring ring-primary ring-offset-2 ring-offset-base-100'
           />
         </div>
         <SelectField

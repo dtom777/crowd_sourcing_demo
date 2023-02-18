@@ -12,7 +12,7 @@ const AccountDeleteForm = () => {
       <input type='checkbox' id='my-modal-4' className='modal-toggle' />
       <label htmlFor='my-modal-4' className='modal cursor-pointer'>
         <label className='modal-box relative' htmlFor=''>
-          <h3 className='text-lg font-bold text-center'>Delete account</h3>
+          <h3 className='text-center text-lg font-bold'>Delete account</h3>
           <p className='py-4 text-center'>Enter your email and password</p>
           <form onSubmit={handleSubmit}>
             <InputField
@@ -45,7 +45,7 @@ const AccountDeleteForm = () => {
             <ErrorMessage errorMessage={errorMessage} className='text-center' />
 
             <SubmitButton
-              className='items-center mt-2'
+              className='mt-2 items-center'
               color='error'
               value='Delete'
             />

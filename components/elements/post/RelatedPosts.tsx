@@ -12,7 +12,7 @@ type Props = {
 const RelatedPosts: VFC<Props> = ({ posts }) => {
   return (
     <div className='mb-4'>
-      <h2 className='py-2 px-4 mb-4 bg-white text-black border-b-2 font-bold text-sm'>
+      <h2 className='mb-4 border-b-2 bg-white py-2 px-4 text-sm font-bold text-black'>
         Related Posts
       </h2>
       <div className='mx-2 flex justify-center'>

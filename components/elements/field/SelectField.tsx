@@ -25,7 +25,7 @@ const SelectField: FC<Props> = ({
         <span className='label-text'>{label}</span>
       </label>
       <select
-        className='select select-bordered w-full max-w-xs'
+        className='select-bordered select w-full max-w-xs'
         {...inputProps}
         ref={inputRef}
       >

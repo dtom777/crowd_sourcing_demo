@@ -37,12 +37,12 @@ const SettingsPage: NextPage = () => {
           <h1 className='text-5xl font-bold'>Settings</h1>
         </div>
         <div className='mt-8 mb-12'>
-          <div className='flex flex-col w-full'>
-            <div className='flex justify-between px-2 items-center'>
-              <p className='text-xl font-bold mr-4'>Email</p>
+          <div className='flex w-full flex-col'>
+            <div className='flex items-center justify-between px-2'>
+              <p className='mr-4 text-xl font-bold'>Email</p>
               <Link href='/mypage/settings/email'>
-                <a className='btn bg-white hover:bg-white flex justify-center items-center py-3 md:ml-4 rounded-3xl text-blue-500 border border-blue-500 focus:outline-none hover:opacity-50 w-48'>
-                  <Icon icon={faEnvelope} className='text-blue-500 mr-2' />
+                <a className='btn flex w-48 items-center justify-center rounded-3xl border border-blue-500 bg-white py-3 text-blue-500 hover:bg-white hover:opacity-50 focus:outline-none md:ml-4'>
+                  <Icon icon={faEnvelope} className='mr-2 text-blue-500' />
                   Change Email
                 </a>
               </Link>
@@ -50,13 +50,13 @@ const SettingsPage: NextPage = () => {
 
             <div className='divider'></div>
 
-            <div className='flex justify-between px-2 items-center'>
-              <p className='text-xl font-bold mr-4'>Account</p>
+            <div className='flex items-center justify-between px-2'>
+              <p className='mr-4 text-xl font-bold'>Account</p>
               <label
                 htmlFor='my-modal-4'
-                className='btn flex justify-center items-center py-3 md:ml-4 rounded-3xl text-red-500 border border-red-500 focus:outline-none hover:opacity-50 w-48  bg-white hover:bg-white'
+                className='btn flex w-48 items-center justify-center rounded-3xl border border-red-500 bg-white py-3 text-red-500 hover:bg-white hover:opacity-50  focus:outline-none md:ml-4'
               >
-                <Icon icon={faUserSlash} className='text-red-500 mr-2' />
+                <Icon icon={faUserSlash} className='mr-2 text-red-500' />
                 Delete Account
               </label>
 

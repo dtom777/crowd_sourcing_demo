@@ -8,7 +8,7 @@ const CategoryTitle = () => {
   const category = categories.find((l) => l.link === asPath).slug;
 
   return (
-    <h1 className='text-2xl font-bold pl-4 pt-10'>{category.toUpperCase()}</h1>
+    <h1 className='pl-4 pt-10 text-2xl font-bold'>{category.toUpperCase()}</h1>
   );
 };
 

@@ -9,7 +9,7 @@ const DrawerSide: FC = () => {
   return (
     <div className='drawer-side'>
       <label htmlFor='my-drawer-3' className='drawer-overlay'></label>
-      <ul className='menu p-4 w-80 bg-base-100'>
+      <ul className='menu w-80 bg-base-100 p-4'>
         <li className='md:hidden'>
           <SearchForm />
         </li>

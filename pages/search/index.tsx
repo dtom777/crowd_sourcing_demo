@@ -61,7 +61,7 @@ const SearchPage: NextPage<Props> = ({ posts }) => {
   return (
     <>
       <div className='mb-6'>
-        <h1 className='text-2xl font-bold pl-4 pt-4 flex items-center'>
+        <h1 className='flex items-center pl-4 pt-4 text-2xl font-bold'>
           {query ? (
             <h2>Search results for &quot;{query}&quot;</h2>
           ) : (
@@ -69,7 +69,7 @@ const SearchPage: NextPage<Props> = ({ posts }) => {
           )}
           <p className='ml-6 lg:text-lg'>{posts.length} posts</p>
         </h1>
-        <div className='lg:ml-0 ml-2 mt-4'>
+        <div className='ml-2 mt-4 lg:ml-0'>
           {posts.length ? (
             <div className='mb-8'>
               <Posts posts={posts} />
