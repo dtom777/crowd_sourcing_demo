@@ -2,12 +2,15 @@
 // relastion　単数 or 複数
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-1.1.x"]
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User {
@@ -67,6 +70,7 @@ model Category {
 }
 
 model Comment {
+  id        String    @id @default(uuid())
   content   String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
@@ -74,8 +78,6 @@ model Comment {
   postId    String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-
-  @@id([userId, postId])
 }
 
 model Like {
