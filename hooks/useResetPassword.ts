@@ -6,7 +6,7 @@ import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
-import { convert } from 'utils/helper';
+import { convert } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 

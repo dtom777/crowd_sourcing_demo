@@ -2,7 +2,7 @@ import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
-import { getAsString } from '../../../utils/helper';
+import { getAsString } from '@/utils/helper';
 
 import type { User, Like } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';

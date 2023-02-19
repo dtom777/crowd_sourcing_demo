@@ -4,7 +4,7 @@ import Providers from 'next-auth/providers';
 
 import { prisma } from '@/libs/prisma';
 
-import { verifyPassword } from 'utils/auth';
+import { verifyPassword } from '@/utils/auth';
 
 import type { NextAuthOptions } from 'next-auth';
 

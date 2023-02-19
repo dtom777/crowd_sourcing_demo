@@ -9,7 +9,7 @@ import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast, errorToast } from '@/libs/toast';
 
-import { convert } from 'utils/helper';
+import { convert } from '@/utils/helper';
 
 type Props = {
   session: Session;

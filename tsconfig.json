@@ -3,11 +3,12 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/libs/*": ["libs/*"],
-      "@/hooks/*": ["hooks/*"],
-      "@/stores/*": ["stores/*"],
       "@/constants/*": ["constants/*"],
-      "@/types/*": ["types/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/libs/*": ["libs/*"],
+      "@/stores/*": ["stores/*"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
-import { convert } from 'utils/helper';
+import { convert } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 

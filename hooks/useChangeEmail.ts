@@ -8,9 +8,7 @@ import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
-import { convert } from 'utils/helper';
-
-import { getAsString } from '../utils/helper';
+import { getAsString, convert } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 

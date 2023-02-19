@@ -4,9 +4,13 @@ import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
-import { encryptEmail, verifyPassword } from 'utils/auth';
-
-import { getExpires, expiredIsValid, decodeEmail } from '../../../utils/auth';
+import {
+  getExpires,
+  expiredIsValid,
+  decodeEmail,
+  encryptEmail,
+  verifyPassword,
+} from '@/utils/auth';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Session } from 'next-auth';

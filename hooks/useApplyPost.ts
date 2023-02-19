@@ -7,7 +7,7 @@ import { loadingToggled } from '@/stores/loading-slice';
 
 import { errorToast, successToast } from '@/libs/toast';
 
-import { convert } from 'utils/helper';
+import { convert } from '@/utils/helper';
 
 type Inputs = {
   message: string;
