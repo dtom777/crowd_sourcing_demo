@@ -4,11 +4,16 @@ export type CommentWithUserAndPost = Prisma.CommentGetPayload<{
   include: { user: true; post: true };
 }>;
 
-export type CommentWithPostWithUser = Prisma.CommentGetPayload<{
+export type CommentWithPostAndUser = Prisma.CommentGetPayload<{
   include: {
     post: {
       include: {
-        user: true;
+        user: {
+          select: {
+            name: true;
+            image: true;
+          };
+        };
       };
     };
   };

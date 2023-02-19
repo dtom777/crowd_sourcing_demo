@@ -6,14 +6,15 @@ import { prisma } from '@/libs/prisma';
 
 import MyPosts from '@/components/elements/post/MyPosts';
 
-import { PostWithComment } from 'types/post.type';
+import { UserSelectId } from '@/types/user.type';
+import { PostWithComments } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithComment>;
+  posts: Array<PostWithComments>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session: Session = await getSession(context);
+  const session: Session | null = await getSession(context);
   if (!session) {
     return {
       redirect: {
@@ -23,10 +24,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  // TODO delete password
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+  const user: UserSelectId | null = await prisma.user.findUnique({
+    where: {
+      email: session.user.email,
+    },
+    select: {
+      id: true,
+    },
   });
+
+  if (!user) return { props: {} };
 
   const posts = await prisma.post.findMany({
     where: { userId: user.id },

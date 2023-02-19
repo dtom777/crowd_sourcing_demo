@@ -4,16 +4,16 @@ import { useEffect, useState, memo, useCallback, VFC } from 'react';
 import Pagination from '@/components/elements/pagination/Pagination';
 import MyPostList from '@/components/elements/post/MyList';
 
-import { PostWithComment } from 'types/post.type';
+import { PostWithComments } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithComment>;
+  posts: Array<PostWithComments>;
 };
 
 const MyPosts: VFC<Props> = ({ posts }) => {
   const router = useRouter();
   const [offset, setOffset] = useState<number>(0);
-  const [slice, setSlice] = useState<Array<PostWithComment>>([]);
+  const [slice, setSlice] = useState<Array<PostWithComments>>([]);
   const [perPage] = useState<number>(10);
   const [pageCount, setPageCount] = useState<number>(0);
 

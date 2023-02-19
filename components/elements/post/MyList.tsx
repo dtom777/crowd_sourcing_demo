@@ -10,10 +10,10 @@ import { usePostMyPage } from '@/hooks/usePostMyPage';
 
 import Icon from '@/components/elements/icon/Icon';
 
-import { PostWithComment } from 'types/post.type';
+import { PostWithComments } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithComment>;
+  posts: Array<PostWithComments>;
 };
 
 const MyPostList: VFC<Props> = ({ posts }) => {

@@ -1,12 +1,13 @@
-import { Post } from '@prisma/client';
 import Link from 'next/link';
 import { VFC } from 'react';
+
+import { PostWithCommentsAndLike } from '@/types/post.type';
 
 import Card from '../card/Card';
 import ConstMessage from '../const/ConstMessage';
 
 type Props = {
-  posts: Post[]; // TODO fix include
+  posts: Array<PostWithCommentsAndLike>;
 };
 
 const RecentPosts: VFC<Props> = ({ posts }) => {

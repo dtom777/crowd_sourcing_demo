@@ -1,9 +1,8 @@
 import { faCog, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { Post } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { Session } from 'next-auth';
-import { getSession, GetSessionOptions } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
@@ -12,17 +11,17 @@ import Icon from '@/components/elements/icon/Icon';
 import RecentActivity from '@/components/elements/mypage/RecentActivity';
 import RecentPosts from '@/components/elements/mypage/RecentPosts';
 
-import { CommentWithUserAndPostWithCategoryAndUser } from 'types/comment.type';
+import { CommentWithPostAndUser } from '@/types/comment.type';
+import { PostWithCommentsAndLike } from '@/types/post.type';
+import { UserSelectId } from '@/types/user.type';
 
 type Props = {
   session: Session;
-  posts: Post[]; //TODO  include fix
-  comments: Array<CommentWithUserAndPostWithCategoryAndUser>;
+  posts: Array<PostWithCommentsAndLike>;
+  comments: Array<CommentWithPostAndUser>;
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetSessionOptions
-) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   if (!session) {
     return {
@@ -33,17 +32,22 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  const { id: userId } = await prisma.user.findUnique({
+  const user: UserSelectId | null = await prisma.user.findUnique({
     where: {
       email: session.user.email,
     },
+    select: {
+      id: true,
+    },
   });
+
+  if (!user) return { props: {} };
 
   // 最近の募集
   const recentPosts = await prisma.post.findMany({
     where: {
       AND: [
-        { userId: userId },
+        { userId: user.id },
         {
           published: true,
         },
@@ -62,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (
   //　応募したもの
   const recentComments = await prisma.comment.findMany({
     where: {
-      userId,
+      userId: user.id,
     },
     take: 5,
     orderBy: {
@@ -71,7 +75,12 @@ export const getServerSideProps: GetServerSideProps = async (
     include: {
       post: {
         include: {
-          user: true,
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
         },
       },
     },

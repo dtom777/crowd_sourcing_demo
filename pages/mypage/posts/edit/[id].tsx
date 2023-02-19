@@ -1,3 +1,6 @@
+import { ParsedUrlQuery } from 'querystring';
+
+import { Post } from '@prisma/client';
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
@@ -6,16 +9,19 @@ import { prisma } from '@/libs/prisma';
 
 import PostForm from '@/components/form/posts/Form';
 
-import { PostWithTags } from 'types/post.type';
-import { getAsString } from 'utils/helper';
-
 type Props = {
   session: Session;
-  post: PostWithTags;
+  post?: Post;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session: Session = await getSession(context);
+type Params = ParsedUrlQuery & {
+  id: string;
+};
+
+export const getServerSideProps: GetServerSideProps<Props, Params> = async (
+  context
+) => {
+  const session: Session | null = await getSession(context);
   if (!session) {
     return {
       redirect: {
@@ -25,10 +31,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const id = getAsString(context.query.id);
   const post = await prisma.post.findUnique({
     where: {
-      id,
+      id: context.params!.id,
     },
   });
 

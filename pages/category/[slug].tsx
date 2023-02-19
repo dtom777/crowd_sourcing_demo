@@ -1,6 +1,5 @@
 import { ParsedUrlQuery } from 'node:querystring';
 
-import { Category } from '@prisma/client';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 
 import { prisma } from '@/libs/prisma';
@@ -26,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     },
   });
 
-  const paths = categories.map((category: Category) => ({
+  const paths = categories.map((category) => ({
     params: { slug: String(category.slug) },
   }));
 
@@ -47,7 +46,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
       AND: [
         { published: true },
         { draft: false },
-        { categorySlug: params.slug },
+        { categorySlug: params!.slug },
       ],
     },
     include: {

@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
-import { getSession, GetSessionOptions } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 
 import PostForm from '@/components/form/posts/Form';
 
@@ -8,8 +8,8 @@ type Props = {
   session: Session;
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetSessionOptions
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
 ) => {
   const session = await getSession(context);
   if (!session) {

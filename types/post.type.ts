@@ -6,68 +6,62 @@ export type PostWithUser = Prisma.PostGetPayload<{
   };
 }>;
 
-export type PostWithTags = Prisma.PostGetPayload<{
+export type PostWithComments = Prisma.PostGetPayload<{
   include: {
-    tags: {
-      include: {
-        tag: true;
-      };
-    };
-  };
-}>;
-
-export type PostWithComment = Prisma.PostGetPayload<{
-  include: {
-    comment: true;
+    comments: true;
   };
 }>;
 
 export type PostWithUserAndLikeAndComment = Prisma.PostGetPayload<{
   include: {
     user: true;
-    Like: true;
-    comment: true;
+    likes: true;
+    comments: true;
   };
 }>;
 
-export type PostWithCommentAndLike = Prisma.PostGetPayload<{
+export type PostWithCommentsAndLike = Prisma.PostGetPayload<{
   include: {
-    comment: true;
-    Like: true;
+    comments: true;
+    likes: true;
   };
 }>;
 
-export type PostWithUserAndTags = Prisma.PostGetPayload<{
+export type PostWithUserAndCategory = Prisma.PostGetPayload<{
   include: {
+    category: true;
     user: true;
-    tags: {
+  };
+}>;
+
+export type MyPosts = Prisma.PostGetPayload<{
+  include: {
+    comments: {
       include: {
-        tag: true;
+        user: {
+          select: {
+            id: true;
+            name: true;
+            image: true;
+          };
+        };
       };
     };
   };
 }>;
 
-export type PostWithUserAndCategoryAndTags = Prisma.PostGetPayload<{
+export type ApplicationPosts = Prisma.PostGetPayload<{
   include: {
-    Category: true;
-    user: true;
-    tags: {
+    comments: {
       include: {
-        tag: true;
+        user: {
+          select: {
+            id: true;
+            name: true;
+            image: true;
+          };
+        };
       };
     };
   };
 }>;
-
-export type CreatePost = {
-  title: string;
-  content: string;
-  categoryId: number;
-  reward: number;
-  rewardFree: boolean;
-  tags: string;
-  published: boolean;
-  draft: boolean;
-  userId: string;
-};

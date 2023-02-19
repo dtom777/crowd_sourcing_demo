@@ -50,7 +50,7 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
                       </div>
                     </div>
                     <div className='chat-header'>
-                      {post.comments[0].user.name}
+                      {position === 'left' ? post.comments[0].user.name : 'you'}
                       <time className='ml-4 text-xs opacity-50'>
                         {getRelativeTime(post)}
                       </time>

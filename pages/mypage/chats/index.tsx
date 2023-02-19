@@ -1,24 +1,24 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { getSession, GetSessionOptions } from 'next-auth/client';
+import { Session } from 'next-auth';
+import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
 import Chat from '@/components/elements/chat/Chat';
 
-import {
-  CommentWithPostWithUser,
-  CommentWithUserAndPost,
-} from 'types/comment.type';
+import { ApplicationPosts, MyPosts } from '@/types/post.type';
+
+import { UserSelectId } from '../../../types/user.type';
 
 type Props = {
-  myPosts: Array<CommentWithUserAndPost>;
-  applicationPosts: Array<CommentWithPostWithUser>;
+  myPosts: Array<MyPosts>;
+  applicationPosts: Array<ApplicationPosts>;
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetSessionOptions
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
 ) => {
-  const session = await getSession(context);
+  const session: Session | null = await getSession(context);
   if (!session) {
     return {
       redirect: {
@@ -28,17 +28,21 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  // TODO select need data
-  const { id: userId } = await prisma.user.findUnique({
+  const user: UserSelectId | null = await prisma.user.findUnique({
     where: {
       email: session.user.email,
     },
+    select: {
+      id: true,
+    },
   });
+
+  if (!user) return { props: {} };
 
   // 自分の投稿
   const myPosts = await prisma.post.findMany({
     where: {
-      userId,
+      userId: user.id,
     },
     take: 5,
     orderBy: {
@@ -47,17 +51,22 @@ export const getServerSideProps: GetServerSideProps = async (
     include: {
       comments: {
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
         },
       },
-      user: true,
     },
   });
 
   // 自分以外の投稿でコメントした投稿
   const applicationPosts = await prisma.post.findMany({
     where: {
-      NOT: { userId },
+      NOT: { userId: user.id },
     },
     take: 5,
     orderBy: {
@@ -66,13 +75,18 @@ export const getServerSideProps: GetServerSideProps = async (
     include: {
       comments: {
         where: {
-          userId,
+          userId: user.id,
         },
         include: {
-          user: true, // TODO select need data
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
         },
       },
-      user: true,
     },
   });
 

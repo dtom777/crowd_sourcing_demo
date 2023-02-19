@@ -8,17 +8,17 @@ import Avatar from '@/components/elements/avatar/Avatar';
 import Cards from '@/components/elements/card/Cards';
 import ConstMessage from '@/components/elements/const/ConstMessage';
 
-import { UserWithPost } from 'types/user.type';
+import { SpecificUser } from '../../types/user.type';
 
 type Props = {
-  user: UserWithPost;
+  user: SpecificUser;
 };
 
 type Params = ParsedUrlQuery & {
   id: string;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -38,10 +38,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({
   params,
 }) => {
-  // TODO パスワードとってこない select つかう
   const user = await prisma.user.findUnique({
     where: {
-      id: params.id,
+      id: params!.id,
     },
     include: {
       posts: {
@@ -54,13 +53,8 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
       profile: true,
     },
   });
-  console.log(user);
 
-  return {
-    props: {
-      user,
-    },
-  };
+  return user ? { props: { user } } : { notFound: true };
 };
 
 const UserPage: NextPage<Props> = ({ user }) => {

@@ -3,10 +3,10 @@ import { memo, VFC } from 'react';
 
 import Avatar from '@/components/elements/avatar/Avatar';
 
-import { PostWithUserAndCategoryAndTags } from 'types/post.type';
+import { PostWithUserAndCategory } from 'types/post.type';
 
 type Props = {
-  post: PostWithUserAndCategoryAndTags;
+  post: PostWithUserAndCategory;
 };
 
 const PostMain: VFC<Props> = ({ post }) => {

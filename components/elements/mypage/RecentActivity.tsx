@@ -3,12 +3,13 @@ import { VFC } from 'react';
 
 import getRelativeTime from '@/libs/days';
 
+import { CommentWithPostAndUser } from '@/types/comment.type';
+
 import Avatar from '../avatar/Avatar';
 import ConstMessage from '../const/ConstMessage';
 
-// TODO fix type
 type Props = {
-  comments: [];
+  comments: Array<CommentWithPostAndUser>;
 };
 
 const RecentActivity: VFC<Props> = ({ comments }) => {
@@ -21,7 +22,7 @@ const RecentActivity: VFC<Props> = ({ comments }) => {
         </Link>
       </div>
 
-      {comments.length ? (
+      {comments?.length ? (
         <ul>
           {comments.map((comment, i) => (
             <li key={i} className='my-4 bg-white p-4'>

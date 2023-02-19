@@ -1,23 +1,24 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { Session } from 'next-auth';
-import { getSession, GetSessionOptions } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 
 import { prisma } from '@/libs/prisma';
 
 import Const from '@/components/elements/const/ConstMessage';
 import LikePostList from '@/components/elements/post/LikeList';
 
+import { UserSelectId } from '@/types/user.type';
 import { PostWithUserAndLikeAndComment } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithUserAndLikeAndComment>;
-  session: Session;
+  posts?: Array<PostWithUserAndLikeAndComment>;
+  user?: UserSelectId;
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetSessionOptions
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
 ) => {
-  const session = await getSession(context);
+  const session: Session | null = await getSession(context);
   if (!session) {
     return {
       redirect: {
@@ -27,12 +28,16 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  // TODO delete password
   const user = await prisma.user.findUnique({
     where: {
       email: session.user.email,
     },
+    select: {
+      id: true,
+    },
   });
+
+  if (!user) return { props: {} };
 
   const likePosts = await prisma.post.findMany({
     where: {
@@ -62,7 +67,7 @@ const LikePostsListPage: NextPage<Props> = ({ posts, user }) => {
     <>
       <h1 className='pl-4 pt-10 text-2xl font-bold'>Like Posts</h1>
       <div className='mt-4 mb-8'>
-        {posts.length ? (
+        {posts?.length ? (
           <LikePostList posts={posts} user={user} />
         ) : (
           <Const message='Not yet' />

@@ -6,7 +6,9 @@ import { prisma } from '@/libs/prisma';
 
 import { verifyPassword } from 'utils/auth';
 
-const options = {
+import type { NextAuthOptions } from 'next-auth';
+
+const options: NextAuthOptions = {
   session: {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60,

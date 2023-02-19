@@ -7,10 +7,10 @@ import { prisma } from '@/libs/prisma';
 import PostDetails from '@/components/elements/post/Details';
 import RelatedPosts from '@/components/elements/post/RelatedPosts';
 
-import { PostWithUserAndCategoryAndTags, PostWithUser } from 'types/post.type';
+import { PostWithUserAndCategory, PostWithUser } from 'types/post.type';
 
 type Props = {
-  post: PostWithUserAndCategoryAndTags;
+  post: PostWithUserAndCategory;
   relationPosts: Array<PostWithUser>;
 };
 
@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 }) => {
   const post = await prisma.post.findUnique({
     where: {
-      id: params.id,
+      id: params!.id,
     },
     include: {
       category: true,
@@ -50,9 +50,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 
   const relationPosts = await prisma.post.findMany({
     where: {
-      categorySlug: post.categorySlug,
+      categorySlug: post?.categorySlug,
       NOT: {
-        id: params.id,
+        id: params!.id,
       },
     },
     take: 3,
@@ -61,13 +61,15 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     },
   });
 
-  return {
-    props: {
-      post,
-      relationPosts,
-    },
-    revalidate: 20,
-  };
+  return post
+    ? {
+        props: {
+          post,
+          relationPosts,
+        },
+        revalidate: 20,
+      }
+    : { notFound: true };
 };
 
 const PostPage: NextPage<Props> = ({ post, relationPosts }) => {

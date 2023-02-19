@@ -6,14 +6,14 @@ import CategoryTitle from '@/components/elements/category/CategoryTitle';
 import Const from '@/components/elements/const/ConstMessage';
 import Posts from '@/components/elements/post/Posts';
 
-import { PostWithUser } from 'types/post.type';
+import { PostWithUserAndCategory } from '@/types/post.type';
 
 type Props = {
-  posts?: Array<PostWithUser>;
+  posts?: Array<PostWithUserAndCategory>;
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const posts = await prisma.post.findMany({
+  const posts: Props['posts'] = await prisma.post.findMany({
     orderBy: {
       id: 'desc',
     },

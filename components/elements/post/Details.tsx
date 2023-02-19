@@ -3,14 +3,14 @@ import { memo, VFC } from 'react';
 
 import ApplyForm from '@/components/form/posts/ApplyForm';
 
-import { PostWithUserAndCategoryAndTags } from 'types/post.type';
+import { PostWithUserAndCategory } from 'types/post.type';
 
 import PostMain from './Main';
 import LikeButton from '../button/LikeButton';
 import ConstApplication from '../const/ConstApplication';
 
 type Props = {
-  post: PostWithUserAndCategoryAndTags;
+  post: PostWithUserAndCategory;
 };
 
 const PostDetails: VFC<Props> = ({ post }) => {
