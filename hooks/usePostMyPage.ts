@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import { successToast, errorToast } from '@/libs/toast';
 
@@ -41,7 +41,7 @@ export const usePostMyPage = (posts: Posts) => {
     }
   };
 
-  const handleDeletePost = async (id: string): Promise<void> => {
+  const handleDeletePost = useCallback(async (id: string): Promise<void> => {
     try {
       const res = await fetch('/api/post/delete', {
         method: 'PUT',
@@ -58,7 +58,7 @@ export const usePostMyPage = (posts: Posts) => {
       console.error(err.message);
       errorToast(err.message);
     }
-  };
+  }, []);
 
   return {
     localData,

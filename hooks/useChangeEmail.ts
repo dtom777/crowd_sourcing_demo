@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -48,45 +48,48 @@ export const useChangeEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const changeEmail: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    const { password, confirmationPassword } = data;
-
-    try {
-      // TODO validate !encryptedEmail || !encryptedChangingEmail || !expires
-
-      const errMsg = validatePassword({ password, confirmationPassword });
-      if (errMsg) throw new Error(errMsg);
-
-      const body: ReqBody = {
-        encryptedEmail,
-        encryptedChangingEmail,
-        password,
-        expires,
-      };
-      const res = await fetch('/api/email/change', {
-        method: 'PUT',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-
-      successToast('Email change complete! Please signin again');
-      const reSignIn = async () => {
-        await signOut({ callbackUrl: '/auth/signin' });
-      };
-      setTimeout(reSignIn, 1500);
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const changeEmail: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      const { password, confirmationPassword } = data;
+
+      try {
+        // TODO validate !encryptedEmail || !encryptedChangingEmail || !expires
+
+        const errMsg = validatePassword({ password, confirmationPassword });
+        if (errMsg) throw new Error(errMsg);
+
+        const body: ReqBody = {
+          encryptedEmail,
+          encryptedChangingEmail,
+          password,
+          expires,
+        };
+        const res = await fetch('/api/email/change', {
+          method: 'PUT',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+
+        successToast('Email change complete! Please signin again');
+        const reSignIn = async () => {
+          await signOut({ callbackUrl: '/auth/signin' });
+        };
+        setTimeout(reSignIn, 1500);
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch, encryptedChangingEmail, encryptedEmail, expires]
+  );
 
   const validatePassword = ({
     password,

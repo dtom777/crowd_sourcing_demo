@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/client';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -25,35 +25,38 @@ export const useSignIn = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const signInByCredentials: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
+  const signInByCredentials: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
+      dispatch(loadingToggled());
 
-    const errMsg = validate(data);
-    if (errMsg) {
-      setErrorMessage(errMsg);
+      const errMsg = validate(data);
+      if (errMsg) {
+        setErrorMessage(errMsg);
 
-      return;
-    }
+        return;
+      }
 
-    const { email, password } = data;
+      const { email, password } = data;
 
-    Promise.resolve(
-      signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-      })
-    )
-      .then((res) => {
-        if (res?.error) setErrorMessage(res.error);
-      })
-      .catch((res) => {
-        console.error(res);
-      })
-      .finally(() => {
-        dispatch(loadingToggled());
-      });
-  };
+      Promise.resolve(
+        signIn('credentials', {
+          redirect: false,
+          email,
+          password,
+        })
+      )
+        .then((res) => {
+          if (res?.error) setErrorMessage(res.error);
+        })
+        .catch((res) => {
+          console.error(res);
+        })
+        .finally(() => {
+          dispatch(loadingToggled());
+        });
+    },
+    [dispatch]
+  );
 
   const validate = (data: Inputs): ErrorMessage => {
     const { email, password } = data;

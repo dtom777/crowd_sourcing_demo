@@ -1,5 +1,5 @@
 import { signIn } from 'next-auth/client';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -32,37 +32,40 @@ export const useSignUp = () => {
     setImage(e.target.value);
 
   // TODO add validation
-  const signUp: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-    const { name, email, password } = data;
-    if (!image || !name || !email || !password) {
-      return;
-    }
-    try {
-      const body = { image, name, email, password };
-      const res = await fetch('/api/user/create', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-
-      setErrorMessage('');
-      await signIn('credentials', {
-        callbackUrl: '/',
-        email,
-        password,
-      });
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const signUp: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+      const { name, email, password } = data;
+      if (!image || !name || !email || !password) {
+        return;
+      }
+      try {
+        const body = { image, name, email, password };
+        const res = await fetch('/api/user/create', {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+
+        setErrorMessage('');
+        await signIn('credentials', {
+          callbackUrl: '/',
+          email,
+          password,
+        });
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch, image]
+  );
 
   return {
     image,

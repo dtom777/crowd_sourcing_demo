@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -25,33 +25,38 @@ export const useResetPassword = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const resetPassword: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    const { email } = data;
-
-    try {
-      const errMsg = validateEmail(email);
-      if (errMsg) throw new Error(errMsg);
-
-      const res = await fetch('/api/password/reset', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-      successToast('A password reset message was sent to your email address.');
-      setErrorMessage('');
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const resetPassword: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      const { email } = data;
+
+      try {
+        const errMsg = validateEmail(email);
+        if (errMsg) throw new Error(errMsg);
+
+        const res = await fetch('/api/password/reset', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+        successToast(
+          'A password reset message was sent to your email address.'
+        );
+        setErrorMessage('');
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch]
+  );
 
   const validateEmail = (email: Inputs['email']): ErrorMessage => {
     if (!email) return 'Please enter';

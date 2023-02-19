@@ -1,5 +1,5 @@
 import { signOut } from 'next-auth/client';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -30,44 +30,47 @@ export const useSettings = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const deleteUser: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    try {
-      const emailErrMsg = validateEmail(data.email);
-      if (emailErrMsg) throw new Error(emailErrMsg);
-
-      const passwordErrMsg = validatePassword({
-        password: data.password,
-        confirmationPassword: data.confirmationPassword,
-      });
-      if (passwordErrMsg) throw new Error(passwordErrMsg);
-
-      const body: ReqBody = {
-        email: data.email,
-        password: data.password,
-      };
-
-      const res = await fetch('/api/user/delete', {
-        method: 'DELETE',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-
-      successToast('We hope to see you again!');
-      setTimeout(signOut, 2000);
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const deleteUser: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      try {
+        const emailErrMsg = validateEmail(data.email);
+        if (emailErrMsg) throw new Error(emailErrMsg);
+
+        const passwordErrMsg = validatePassword({
+          password: data.password,
+          confirmationPassword: data.confirmationPassword,
+        });
+        if (passwordErrMsg) throw new Error(passwordErrMsg);
+
+        const body: ReqBody = {
+          email: data.email,
+          password: data.password,
+        };
+
+        const res = await fetch('/api/user/delete', {
+          method: 'DELETE',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+
+        successToast('We hope to see you again!');
+        setTimeout(signOut, 2000);
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch]
+  );
 
   const validateEmail = (email: string): ErrorMessage => {
     if (!email || !email.includes('@')) return 'Invalid Data';

@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/client';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -35,45 +35,48 @@ export const useSendEmail = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const sendConfirmationEmail: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    const { changingEmail, confirmationChangingEmail } = data;
-
-    if (!email) {
-      setErrorMessage('Email is required');
-
-      return;
-    }
-
-    try {
-      const errMsg = validateEmail({
-        changingEmail,
-        confirmationChangingEmail,
-      });
-      if (errMsg) throw new Error(errMsg);
-
-      const body: ReqBody = { email, changingEmail };
-
-      const res = await fetch('/api/email/change', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-      successToast(
-        'A confirmation message has been sent to your current email'
-      );
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const sendConfirmationEmail: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      const { changingEmail, confirmationChangingEmail } = data;
+
+      if (!email) {
+        setErrorMessage('Email is required');
+
+        return;
+      }
+
+      try {
+        const errMsg = validateEmail({
+          changingEmail,
+          confirmationChangingEmail,
+        });
+        if (errMsg) throw new Error(errMsg);
+
+        const body: ReqBody = { email, changingEmail };
+
+        const res = await fetch('/api/email/change', {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+        successToast(
+          'A confirmation message has been sent to your current email'
+        );
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch, email]
+  );
 
   const validateEmail = ({
     changingEmail,

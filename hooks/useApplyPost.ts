@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -27,28 +28,31 @@ export const useApplyPost = (post: { id: string }) => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const applyPost: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-    const body: RequestBody = {
-      ...data,
-      postId: post.id,
-    };
-
-    try {
-      await fetch('/api/post/apply', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      await router.push('/mypage');
-      successToast('Success!');
-    } catch (err) {
-      console.error(err);
-      errorToast('Failed');
-    } finally {
+  const applyPost: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+      const body: RequestBody = {
+        ...data,
+        postId: post.id,
+      };
+
+      try {
+        await fetch('/api/post/apply', {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        await router.push('/mypage');
+        successToast('Success!');
+      } catch (err) {
+        console.error(err);
+        errorToast('Failed');
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch, post.id, router]
+  );
 
   return {
     handleSubmit: originalHandleSubmit(applyPost),

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -26,32 +26,35 @@ export const useEditProfile = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const editProfile: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    const errMsg = validate(data);
-    if (errMsg) {
-      setErrorMessage(errMsg);
-
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/user/update', {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) throw new Error('Failed');
-
-      successToast('Success!');
-    } catch (err) {
-      console.error(err);
-      errorToast('Failed');
-    } finally {
+  const editProfile: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      const errMsg = validate(data);
+      if (errMsg) {
+        setErrorMessage(errMsg);
+
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/user/update', {
+          method: 'PUT',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) throw new Error('Failed');
+
+        successToast('Success!');
+      } catch (err) {
+        console.error(err);
+        errorToast('Failed');
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch]
+  );
 
   const validate = (data: Inputs): ErrorMessage => {
     const { name } = data;

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAppDispatch } from '@/stores/hooks';
@@ -40,36 +40,39 @@ export const useChangePassword = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const changePassword: SubmitHandler<Inputs> = async (data) => {
-    dispatch(loadingToggled());
-
-    const { password, confirmationPassword } = data;
-
-    try {
-      const errMsg = validatePassword({ password, confirmationPassword });
-      if (errMsg) throw new Error(errMsg);
-
-      const body: ReqBody = { password, token };
-
-      const res = await fetch('/api/password/change', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        const { message } = await res.json();
-        throw new Error(message);
-      }
-      await router.push('/auth/signin');
-      successToast('Password reset');
-      setErrorMessage('');
-    } catch (err) {
-      console.error(err.message);
-      setErrorMessage(err.message);
-    } finally {
+  const changePassword: SubmitHandler<Inputs> = useCallback(
+    async (data) => {
       dispatch(loadingToggled());
-    }
-  };
+
+      const { password, confirmationPassword } = data;
+
+      try {
+        const errMsg = validatePassword({ password, confirmationPassword });
+        if (errMsg) throw new Error(errMsg);
+
+        const body: ReqBody = { password, token };
+
+        const res = await fetch('/api/password/change', {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        if (!res.ok) {
+          const { message } = await res.json();
+          throw new Error(message);
+        }
+        await router.push('/auth/signin');
+        successToast('Password reset');
+        setErrorMessage('');
+      } catch (err) {
+        console.error(err.message);
+        setErrorMessage(err.message);
+      } finally {
+        dispatch(loadingToggled());
+      }
+    },
+    [dispatch, router, token]
+  );
 
   const validatePassword = ({
     password,
