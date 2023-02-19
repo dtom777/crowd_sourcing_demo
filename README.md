@@ -20,6 +20,8 @@
 
 ## 構成図
 
+![crowd_sourcing_demo drawio](https://user-images.githubusercontent.com/73740965/219951461-1c4c6524-651e-442d-9493-0aa1a5fd4e05.png)
+
 ## 機能一覧
 
 - ユーザー登録、編集、削除機能
