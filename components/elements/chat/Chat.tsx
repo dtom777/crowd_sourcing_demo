@@ -4,11 +4,14 @@ import { VFC } from 'react';
 
 import getRelativeTime from '@/libs/days';
 
+import { ApplicationPosts, MyPosts } from '@/types/post.type';
+
+import AvatarSkelton from '../avatar/Skelton';
 import ConstMessage from '../const/ConstMessage';
 
 type Props = {
   title: string;
-  posts: []; // TODO fix
+  posts?: Array<MyPosts> | Array<ApplicationPosts>;
   position: 'left' | 'right';
 };
 
@@ -40,11 +43,15 @@ const Chat: VFC<Props> = ({ title, posts, position }) => {
                       <div className='w-10 rounded-full'>
                         <Link href={`/users/${post.comments[0].user.id}`}>
                           <a className='hover:opacity-50'>
-                            <Image
-                              src={post.comments[0].user.image}
-                              width={60}
-                              height={60}
-                            />
+                            {post.comments[0].user.image ? (
+                              <Image
+                                src={post.comments[0].user.image}
+                                width={60}
+                                height={60}
+                              />
+                            ) : (
+                              <AvatarSkelton />
+                            )}
                           </a>
                         </Link>
                       </div>

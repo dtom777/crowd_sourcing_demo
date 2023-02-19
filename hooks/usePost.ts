@@ -1,4 +1,6 @@
+import { Post } from '@prisma/client';
 import { useRouter } from 'next/router';
+import { Session } from 'next-auth';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -9,6 +11,12 @@ import { successToast, errorToast } from '@/libs/toast';
 
 import { convert } from 'utils/helper';
 
+type Props = {
+  session: Session;
+  type: 'CREATE' | 'UPDATE';
+  post?: Post;
+};
+
 type Inputs = {
   title: string;
   content: string;
@@ -16,7 +24,15 @@ type Inputs = {
   reward: number;
 };
 
-export const usePost = ({ session, type, post = undefined }) => {
+type ReqBody = Inputs & { id?: string };
+
+type ReqConfig = {
+  uri: string;
+  method: 'POST' | 'PUT' | '';
+  body: ReqBody;
+};
+
+export const usePost = ({ session, type, post = undefined }: Props) => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -37,7 +53,7 @@ export const usePost = ({ session, type, post = undefined }) => {
   const upsertPost: SubmitHandler<Inputs> = async (data) => {
     dispatch(loadingToggled());
 
-    const config = {
+    const config: ReqConfig = {
       uri: '',
       method: '',
       body: { ...data, reward: Number(data.reward) },
@@ -49,7 +65,7 @@ export const usePost = ({ session, type, post = undefined }) => {
     } else if (type === 'UPDATE') {
       config.uri = '/api/post/update';
       config.method = 'PUT';
-      config.body = { ...config.body, id: post.id };
+      config.body = { ...config.body, id: post?.id };
     }
 
     try {
@@ -77,13 +93,19 @@ export const usePost = ({ session, type, post = undefined }) => {
     }
   };
 
-  const validate = ({ data, type }): boolean => {
+  const validate = ({
+    data,
+    type,
+  }: {
+    data: ReqBody;
+    type: Props['type'];
+  }): boolean => {
     const { title, content, categorySlug, reward, id = undefined } = data;
 
     if (type === 'UPDATE') if (!id) return false;
     if (!title || !content || !categorySlug || !reward) return false;
     if (isNaN(Number(reward))) return false;
-    // TODO　型判定はzod
+    // TODO　型判定はzodを追加
 
     return true;
   };

@@ -11,8 +11,8 @@ import { ApplicationPosts, MyPosts } from '@/types/post.type';
 import { UserSelectId } from '../../../types/user.type';
 
 type Props = {
-  myPosts: Array<MyPosts>;
-  applicationPosts: Array<ApplicationPosts>;
+  myPosts?: Array<MyPosts>;
+  applicationPosts?: Array<ApplicationPosts>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (

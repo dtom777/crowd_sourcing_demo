@@ -1,21 +1,21 @@
 import { faHeartBroken } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 import { memo, useEffect, useState, VFC } from 'react';
 
 import { errorToast } from '@/libs/toast';
 
 import BaseIcon from '@/components/elements/icon/Icon';
 
+import { UserSelectId } from '@/types/user.type';
 import { PostWithUserAndLikeAndComment } from 'types/post.type';
 
 type Props = {
-  posts: Array<PostWithUserAndLikeAndComment>;
-  session: Session;
+  posts?: Array<PostWithUserAndLikeAndComment>;
+  user?: UserSelectId;
 };
 
 const LikePostList: VFC<Props> = ({ posts, user }) => {
-  const [localData, setLocalData] = useState([]);
+  const [localData, setLocalData] = useState<Props['posts']>([]);
 
   useEffect(() => {
     setLocalData(posts);
@@ -32,7 +32,7 @@ const LikePostList: VFC<Props> = ({ posts, user }) => {
         body: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       });
-      setLocalData((prev) => prev.filter((post) => post.id !== id));
+      setLocalData((prev) => prev?.filter((post) => post.id !== id));
     } catch (error) {
       errorToast(error.message);
     }
@@ -52,7 +52,7 @@ const LikePostList: VFC<Props> = ({ posts, user }) => {
             </tr>
           </thead>
           <tbody>
-            {localData.map((post, index) => (
+            {localData?.map((post, index) => (
               <tr key={post.id}>
                 <th>{index + 1}</th>
 
@@ -67,7 +67,7 @@ const LikePostList: VFC<Props> = ({ posts, user }) => {
                   </Link>
                 </td>
                 <td>
-                  {post.comments.find((com) => com.userId == user.id) ? (
+                  {post.comments.find((com) => com.userId == user?.id) ? (
                     <p className='text-sm font-semibold text-blue-500'>
                       Applied
                     </p>

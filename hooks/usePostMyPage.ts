@@ -2,19 +2,26 @@ import { useEffect, useState } from 'react';
 
 import { successToast, errorToast } from '@/libs/toast';
 
+import { PostWithComments } from '@/types/post.type';
+
 type ReqBody = {
   id: string;
   published: boolean;
 };
 
-export const usePostMyPage = (posts) => {
-  const [localData, setLocalData] = useState([]);
+type Posts = Array<PostWithComments>;
+
+export const usePostMyPage = (posts: Posts) => {
+  const [localData, setLocalData] = useState<Posts>([]);
 
   useEffect(() => {
     setLocalData(posts);
   }, [posts]);
 
-  const handleTogglePublished = async (id, published): Promise<void> => {
+  const handleTogglePublished = async (
+    id: string,
+    published: boolean
+  ): Promise<void> => {
     const body: ReqBody = { id, published: !published };
     setLocalData((prev) =>
       prev.map((post) => {
@@ -46,7 +53,7 @@ export const usePostMyPage = (posts) => {
         throw new Error(message);
       }
       successToast('Delete post');
-      setLocalData((prev) => prev.filter((post) => post.id !== id));
+      setLocalData((prev) => prev?.filter((post) => post.id !== id));
     } catch (err) {
       console.error(err.message);
       errorToast(err.message);

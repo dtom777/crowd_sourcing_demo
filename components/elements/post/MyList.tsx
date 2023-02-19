@@ -10,7 +10,7 @@ import { usePostMyPage } from '@/hooks/usePostMyPage';
 
 import Icon from '@/components/elements/icon/Icon';
 
-import { PostWithComments } from 'types/post.type';
+import { PostWithComments } from '@/types/post.type';
 
 type Props = {
   posts: Array<PostWithComments>;
@@ -36,7 +36,7 @@ const MyPostList: VFC<Props> = ({ posts }) => {
             </tr>
           </thead>
           <tbody>
-            {localData.map((post, index) => (
+            {localData?.map((post, index) => (
               <tr key={post.id}>
                 <th>{index + 1}</th>
                 <td className='w-2 truncate md:w-10'>{post.title}</td>

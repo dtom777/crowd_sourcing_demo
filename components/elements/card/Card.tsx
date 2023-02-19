@@ -1,11 +1,17 @@
 import { faFolder } from '@fortawesome/free-solid-svg-icons';
+import { Post } from '@prisma/client';
 import Link from 'next/link';
+import { FC } from 'react';
 
 import Icon from '@/components/elements/icon/Icon';
 
 import styles from './Card.module.css';
 
-const Card = ({ post }) => {
+type Props = {
+  post: Post;
+};
+
+const Card: FC<Props> = ({ post }) => {
   return (
     <div className='card w-96 bg-base-100 shadow-xl'>
       <div className='card-body'>

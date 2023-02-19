@@ -1,15 +1,10 @@
 import { faEnvelope, faUserSlash } from '@fortawesome/free-solid-svg-icons';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 import { getSession } from 'next-auth/client';
 
 import Icon from '@/components/elements/icon/Icon';
 import AccountDeleteForm from '@/components/form/mypage/settings/AccountDeleteForm';
-
-type Props = {
-  session: Session;
-};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

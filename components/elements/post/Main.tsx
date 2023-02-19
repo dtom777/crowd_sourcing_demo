@@ -3,7 +3,9 @@ import { memo, VFC } from 'react';
 
 import Avatar from '@/components/elements/avatar/Avatar';
 
-import { PostWithUserAndCategory } from 'types/post.type';
+import { PostWithUserAndCategory } from '@/types/post.type';
+
+import AvatarSkelton from '../avatar/Skelton';
 
 type Props = {
   post: PostWithUserAndCategory;
@@ -35,7 +37,11 @@ const PostMain: VFC<Props> = ({ post }) => {
               <Link href={`/users/${id}`}>
                 <a className='hover:opacity-50'>
                   <div className='flex w-full flex-col items-center justify-center'>
-                    <Avatar src={image} size={60} />
+                    {image ? (
+                      <Avatar src={image} size={60} />
+                    ) : (
+                      <AvatarSkelton />
+                    )}
                   </div>
                 </a>
               </Link>

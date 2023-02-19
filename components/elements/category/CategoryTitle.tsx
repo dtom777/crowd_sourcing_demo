@@ -5,10 +5,10 @@ import { categories } from 'constants/category';
 
 const CategoryTitle = () => {
   const { asPath } = useRouter();
-  const category = categories.find((l) => l.link === asPath).slug;
+  const category = categories.find((l) => l.link === asPath)?.slug;
 
   return (
-    <h1 className='pl-4 pt-10 text-2xl font-bold'>{category.toUpperCase()}</h1>
+    <h1 className='pl-4 pt-10 text-2xl font-bold'>{category?.toUpperCase()}</h1>
   );
 };
 
