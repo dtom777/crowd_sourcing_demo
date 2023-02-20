@@ -23,7 +23,13 @@ const ProfileEditForm: VFC = () => {
         <div className='flex w-full flex-col items-center justify-center'>
           <div className='avatar'>
             <div className='w-24 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100'>
-              <Image src={data?.user.image} width={120} height={120} />
+              <Image
+                src={
+                  data?.user.image ? data?.user.image : '/avatar-default.png'
+                }
+                width={120}
+                height={120}
+              />
             </div>
           </div>
         </div>

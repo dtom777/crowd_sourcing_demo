@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 
-import { categories } from 'constants/category';
+import { categories } from '@/constants/category';
 
 const CategoryTitle = () => {
   const { asPath } = useRouter();

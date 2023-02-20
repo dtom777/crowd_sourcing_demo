@@ -1,0 +1,22 @@
+[
+  {
+    "id": "36dffdcf-a650-a16c-7493-2a6226e55144",
+    "title": "Software Engineer Node",
+    "content": "Our web apps run on Node's Nestjs framework, so you will spent most of your time Writing in Node",
+    "reward": 1000,
+    "published": true,
+    "draft": false,
+    "userId": "8de0f61b-aece-4165-8c38-971e209fed1b",
+    "user": {
+      "id": "8de0f61b-aece-4165-8c38-971e209fed1b",
+      "name": "Ellen",
+      "image": "/avatar-2.jpg"
+    },
+    "categorySlug": "music",
+    "category": {
+      "id": "011f1c70-c91d-4c9e-a899-089646109e72",
+      "name": "音楽",
+      "slug": "music"
+    }
+  }
+]

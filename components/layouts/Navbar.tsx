@@ -73,7 +73,7 @@ const Navbar: VFC = () => {
             </li>
             <li>
               <a onClick={() => signOut({ callbackUrl: '/auth/signin' })}>
-                Logout
+                Sign Out
               </a>
             </li>
           </ul>
