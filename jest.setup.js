@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom/extend-expect';
 
-import { server } from './__tests__/__mocks__/msw/server';
+import { TextDecoder, TextEncoder } from 'util';
+import 'isomorphic-fetch';
+
+import { server } from '@/__tests__/__mocks__/msw/server';
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());
 

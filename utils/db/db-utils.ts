@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-import { UserWithPost } from '@/types/user.type';
+import { UserWithProfile } from '@/types/user.type';
 
 import type { PostWithUserAndCategory } from '@/types/post.type';
 
@@ -14,7 +14,7 @@ export const getDbPath = (): string => {
   return process.env.DB_PATH;
 };
 
-type JsonDataType = PostWithUserAndCategory | UserWithPost;
+type JsonDataType = PostWithUserAndCategory | UserWithProfile;
 
 export enum filenames {
   posts = 'posts.json',

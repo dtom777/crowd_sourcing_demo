@@ -115,10 +115,10 @@ export const usePost = ({ session, type, post = undefined }: Props) => {
 
   useEffect(() => {
     if (!session) {
-      errorToast('募集するには、会員登録が必要です');
+      errorToast('Signin required');
 
       const redirect = () => {
-        router.push('/mypage/settings');
+        router.push('/auth/signin');
       };
       setTimeout(redirect, 2000);
     }
