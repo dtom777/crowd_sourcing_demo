@@ -14,9 +14,9 @@
 - React Hook Form 7.6.6
 - Prisma 3.1.1
 - Tailwind CSS 3.2.6
-- Jest
-- React Testing Library
-- Cypress
+- Jest 27.4.7
+- React Testing Library 12.1.2
+- Cypress 9.7.0
 
 ## 構成図
 
@@ -33,6 +33,10 @@
 - 検索機能
 
 ## テスト
+
+- Unit test
+- Integration test
+- E2E test
 
 ## Build Setup
 
