@@ -1,20 +1,29 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/client';
 import { ChangeEvent, useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  image: string;
-  name: string;
-  email: string;
-  password: string;
-};
+const schema = z
+  .object({
+    image: z.string().min(1),
+    name: z.string().min(1),
+    email: z.string().min(1),
+    password: z.string().min(8).max(12),
+  })
+  .refine((data) => data.email.includes('@'), {
+    message: 'Please enter email',
+    path: ['email'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 export const useSignUp = () => {
   const [image, setImage] = useState<string>('/avatar-default.png');
@@ -26,21 +35,19 @@ export const useSignUp = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const updateImage = (e: ChangeEvent<HTMLSelectElement>) =>
     setImage(e.target.value);
 
-  // TODO add validation
   const signUp: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
-      const { name, email, password } = data;
-      if (!image || !name || !email || !password) {
-        return;
-      }
+
       try {
-        const body = { image, name, email, password };
+        const body = { ...data, image };
         const res = await fetch('/api/user/create', {
           method: 'POST',
           body: JSON.stringify(body),
@@ -54,8 +61,8 @@ export const useSignUp = () => {
         setErrorMessage('');
         await signIn('credentials', {
           callbackUrl: '/',
-          email,
-          password,
+          email: data.email,
+          password: data.password,
         });
       } catch (err) {
         console.error(err.message);
@@ -73,36 +80,16 @@ export const useSignUp = () => {
     updateImage,
     handleSubmit: originalHandleSubmit(signUp),
     fieldValues: {
-      image: convert(
-        register('image', {
-          required: true,
-        })
-      ),
-      name: convert(
-        register('name', {
-          required: true,
-          minLength: 2,
-          maxLength: 20,
-        })
-      ),
-      email: convert(
-        register('email', {
-          required: true,
-        })
-      ),
-      password: convert(
-        register('password', {
-          required: true,
-          minLength: 8,
-          maxLength: 12,
-        })
-      ),
+      image: convert(register('image')),
+      name: convert(register('name')),
+      email: convert(register('email')),
+      password: convert(register('password')),
     },
     errors: {
-      image: errors.image,
-      name: errors.name,
-      email: errors.email,
-      password: errors.password,
+      image: resolve(errors.image),
+      name: resolve(errors.name),
+      email: resolve(errors.email),
+      password: resolve(errors.password),
     },
   };
 };

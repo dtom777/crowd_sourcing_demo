@@ -24,7 +24,6 @@ const PasswordResetForm: VFC = () => {
           <InputField
             {...fieldValues.email}
             errors={errors.email}
-            errorMessage='Please enter'
             label='Email'
             type='email'
             placeholder='email'

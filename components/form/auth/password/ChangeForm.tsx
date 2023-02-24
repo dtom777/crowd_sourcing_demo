@@ -17,7 +17,6 @@ const PasswordChangeForm: VFC = () => {
         <form onSubmit={handleSubmit}>
           <InputField
             {...fieldValues.password}
-            errorMessage='Please enter 8 to 12 characters'
             errors={errors.password}
             label='Password'
             type='password'
@@ -26,7 +25,6 @@ const PasswordChangeForm: VFC = () => {
 
           <InputField
             {...fieldValues.confirmationPassword}
-            errorMessage='Please enter 8 to 12 characters'
             errors={errors.confirmationPassword}
             label='Confirmation Password'
             type='password'

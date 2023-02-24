@@ -1,18 +1,27 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/client';
 import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  email: string;
-  password: string;
-};
+const schema = z
+  .object({
+    email: z.string().min(1),
+    password: z.string().min(8).max(12),
+  })
+  .refine((data) => data.email.includes('@'), {
+    message: 'Please enter email',
+    path: ['email'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 export const useSignIn = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
@@ -23,18 +32,13 @@ export const useSignIn = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const signInByCredentials: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
-
-      const errMsg = validate(data);
-      if (errMsg) {
-        setErrorMessage(errMsg);
-
-        return;
-      }
 
       const { email, password } = data;
 
@@ -58,41 +62,16 @@ export const useSignIn = () => {
     [dispatch]
   );
 
-  const validate = (data: Inputs): ErrorMessage => {
-    const { email, password } = data;
-
-    if (
-      !email ||
-      !email.includes('@') ||
-      !password ||
-      password.trim().length < 7
-    ) {
-      return 'Invalid Data';
-    }
-
-    return undefined;
-  };
-
   return {
     errorMessage,
     handleSubmit: originalHandleSubmit(signInByCredentials),
     fieldValues: {
-      email: convert(
-        register('email', {
-          required: true,
-        })
-      ),
-      password: convert(
-        register('password', {
-          required: true,
-          minLength: 8,
-          maxLength: 12,
-        })
-      ),
+      email: convert(register('email')),
+      password: convert(register('password')),
     },
     errors: {
-      email: errors.email,
-      password: errors.password,
+      email: resolve(errors.email),
+      password: resolve(errors.password),
     },
   };
 };

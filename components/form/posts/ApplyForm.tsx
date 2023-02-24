@@ -22,7 +22,6 @@ const ApplyForm: VFC<Props> = ({ post }) => {
           <TextareaField
             {...fieldValues.message}
             label='Message'
-            errorMessage='Please enter between 1 to 1000 characters.'
             errors={errors.message}
             placeholder='message'
             rows={6}

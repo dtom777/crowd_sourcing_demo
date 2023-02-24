@@ -35,7 +35,6 @@ const SignUpForm: VFC = () => {
         </div>
         <SelectField
           {...fieldValues.image}
-          errorMessage='Please select'
           errors={errors.image}
           label='Avatar'
           onChange={updateImage}
@@ -49,7 +48,6 @@ const SignUpForm: VFC = () => {
         </SelectField>
         <InputField
           {...fieldValues.name}
-          errorMessage='Please enter 2 to 20 characters'
           errors={errors.name}
           label='Name'
           type='text'
@@ -57,7 +55,6 @@ const SignUpForm: VFC = () => {
         />
         <InputField
           {...fieldValues.email}
-          errorMessage='Please Enter'
           errors={errors.email}
           label='Email'
           type='email'
@@ -65,7 +62,6 @@ const SignUpForm: VFC = () => {
         />
         <InputField
           {...fieldValues.password}
-          errorMessage='Please enter 8 to 12 characters'
           errors={errors.password}
           label='Password'
           type='password'

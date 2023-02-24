@@ -6,6 +6,7 @@ import { useEditProfile } from '@/hooks/useEditProfile';
 import { useFetch } from '@/hooks/useFetch';
 
 import SubmitButton from '@/components/elements/button/SubmitButton';
+import ErrorMessage from '@/components/elements/error/ErrorMessage';
 import InputField from '@/components/elements/field/InputField';
 import TextareaField from '@/components/elements/field/TextareaField';
 import FormWrapper from '@/components/form/common/Wrapper';
@@ -35,16 +36,15 @@ const ProfileEditForm: VFC = () => {
         </div>
         <InputField
           {...fieldValues.name}
-          errorMessage='Please enter 1 to 20 characters'
           errors={errors.name}
           label='Name'
           type='text'
           placeholder='name'
           defaultValue={data?.user.name}
         />
+
         <TextareaField
           {...fieldValues.profile}
-          errorMessage='Please enter 1 to 255 characters'
           errors={errors.profile}
           label='Profile'
           placeholder='profile'
@@ -52,9 +52,15 @@ const ProfileEditForm: VFC = () => {
           rows={6}
           defaultValue={data?.user?.profile?.bio}
         />
+
+        <ErrorMessage
+          errorMessage={errorMessage}
+          className='text-center'
+          testId='errorMessage'
+        />
         <SubmitButton className='mt-6' color='primary' value='Save' />
       </form>
-      <div className='mb-4 text-center'>
+      <div className='mb-8 text-center'>
         <Link href={`/users/${data?.user.id}`}>
           <a className='text-gray-500 hover:opacity-50'>View Profile</a>
         </Link>

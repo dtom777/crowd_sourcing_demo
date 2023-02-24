@@ -15,7 +15,6 @@ const EmailSendForm: VFC = () => {
     <FormWrapper title='Change Email'>
       <form className='card-body' onSubmit={handleSubmit}>
         <InputField
-          errorMessage=''
           label='Current Email'
           type='email'
           defaultValue={currentEmail}
@@ -24,7 +23,6 @@ const EmailSendForm: VFC = () => {
 
         <InputField
           {...fieldValues.changingEmail}
-          errorMessage='Please enter'
           errors={errors.changingEmail}
           label='Email after change'
           type='email'
@@ -33,7 +31,6 @@ const EmailSendForm: VFC = () => {
 
         <InputField
           {...fieldValues.confirmationChangingEmail}
-          errorMessage='Please enter'
           errors={errors.confirmationChangingEmail}
           label='Please enter again to confirm'
           type='email'

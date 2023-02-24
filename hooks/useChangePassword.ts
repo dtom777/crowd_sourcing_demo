@@ -1,20 +1,29 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
-import { getAsString, convert } from '@/utils/helper';
+import { getAsString, convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  password: string;
-  confirmationPassword: string;
-};
+const schema = z
+  .object({
+    password: z.string().min(8).max(12),
+    confirmationPassword: z.string().min(8).max(12),
+  })
+  .refine((data) => data.password === data.confirmationPassword, {
+    message: 'Password does not match',
+    path: ['confirmationPassword'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 type ReqBody = {
   password: string;
@@ -22,7 +31,7 @@ type ReqBody = {
 };
 
 export const useChangePassword = () => {
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -37,18 +46,17 @@ export const useChangePassword = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const changePassword: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
 
-      const { password, confirmationPassword } = data;
+      const { password } = data;
 
       try {
-        const errMsg = validatePassword({ password, confirmationPassword });
-        if (errMsg) throw new Error(errMsg);
-
         const body: ReqBody = { password, token };
 
         const res = await fetch('/api/password/change', {
@@ -73,38 +81,16 @@ export const useChangePassword = () => {
     [dispatch, router, token]
   );
 
-  const validatePassword = ({
-    password,
-    confirmationPassword,
-  }: Inputs): ErrorMessage => {
-    if (!password || !confirmationPassword) return 'Incomplete input';
-    if (!password === !confirmationPassword) return 'Password does not match';
-
-    return undefined;
-  };
-
   return {
     errorMessage,
     handleSubmit: originalHandleSubmit(changePassword),
     fieldValues: {
-      password: convert(
-        register('password', {
-          required: true,
-          minLength: 8,
-          maxLength: 12,
-        })
-      ),
-      confirmationPassword: convert(
-        register('confirmationPassword', {
-          required: true,
-          minLength: 8,
-          maxLength: 12,
-        })
-      ),
+      password: convert(register('password')),
+      confirmationPassword: convert(register('confirmationPassword')),
     },
     errors: {
-      password: errors.password,
-      confirmationPassword: errors.confirmationPassword,
+      password: resolve(errors.password),
+      confirmationPassword: resolve(errors.confirmationPassword),
     },
   };
 };

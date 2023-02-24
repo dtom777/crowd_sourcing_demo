@@ -17,7 +17,6 @@ const AccountDeleteForm = () => {
           <form onSubmit={handleSubmit}>
             <InputField
               {...fieldValues.email}
-              errorMessage='Please enter'
               errors={errors.email}
               label='Email'
               type='email'
@@ -26,7 +25,6 @@ const AccountDeleteForm = () => {
 
             <InputField
               {...fieldValues.password}
-              errorMessage='Please enter 8 to 12 characters'
               errors={errors.password}
               label='Password'
               type='password'
@@ -35,7 +33,6 @@ const AccountDeleteForm = () => {
 
             <InputField
               {...fieldValues.confirmationPassword}
-              errorMessage='Please enter 8 to 12 characters'
               errors={errors.confirmationPassword}
               label='Confirmation Password'
               type='password'

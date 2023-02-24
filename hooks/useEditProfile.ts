@@ -1,19 +1,23 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
-import { errorToast, successToast } from '@/libs/toast';
+import { successToast } from '@/libs/toast';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  name: string;
-  profile?: string;
-};
+const schema = z.object({
+  name: z.string().min(1),
+  profile: z.string().optional(),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 export const useEditProfile = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>('');
@@ -24,18 +28,13 @@ export const useEditProfile = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const editProfile: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
-
-      const errMsg = validate(data);
-      if (errMsg) {
-        setErrorMessage(errMsg);
-
-        return;
-      }
 
       try {
         const res = await fetch('/api/user/update', {
@@ -48,7 +47,7 @@ export const useEditProfile = () => {
         successToast('Success!');
       } catch (err) {
         console.error(err);
-        errorToast('Failed');
+        setErrorMessage(err.message);
       } finally {
         dispatch(loadingToggled());
       }
@@ -56,33 +55,16 @@ export const useEditProfile = () => {
     [dispatch]
   );
 
-  const validate = (data: Inputs): ErrorMessage => {
-    const { name } = data;
-    if (!name) return 'Please enter';
-
-    return undefined;
-  };
-
   return {
     errorMessage,
     handleSubmit: originalHandleSubmit(editProfile),
     fieldValues: {
-      name: convert(
-        register('name', {
-          required: true,
-          minLength: 2,
-          maxLength: 20,
-        })
-      ),
-      profile: convert(
-        register('profile', {
-          maxLength: 255,
-        })
-      ),
+      name: convert(register('name')),
+      profile: convert(register('profile')),
     },
     errors: {
-      name: errors.name,
-      profile: errors.profile,
+      name: resolve(errors.name),
+      profile: resolve(errors.profile),
     },
   };
 };

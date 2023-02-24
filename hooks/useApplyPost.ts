@@ -1,17 +1,21 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
 import { errorToast, successToast } from '@/libs/toast';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
-type Inputs = {
-  message: string;
-};
+const schema = z.object({
+  message: z.string().min(1).max(255),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 type RequestBody = {
   message: string;
@@ -26,7 +30,9 @@ export const useApplyPost = (post: { id: string }) => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const applyPost: SubmitHandler<Inputs> = useCallback(
     async (data) => {
@@ -57,15 +63,10 @@ export const useApplyPost = (post: { id: string }) => {
   return {
     handleSubmit: originalHandleSubmit(applyPost),
     fieldValues: {
-      message: convert(
-        register('message', {
-          required: true,
-          maxLength: 1000,
-        })
-      ),
+      message: convert(register('message')),
     },
     errors: {
-      message: errors.message,
+      message: resolve(errors.message),
     },
   };
 };

@@ -1,15 +1,17 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Post } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { Session } from 'next-auth';
 import { useEffect, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast, errorToast } from '@/libs/toast';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type Props = {
   session: Session;
@@ -17,12 +19,14 @@ type Props = {
   post?: Post;
 };
 
-type Inputs = {
-  title: string;
-  content: string;
-  categorySlug: string;
-  reward: number;
-};
+const schema = z.object({
+  title: z.string().min(1),
+  content: z.string().min(1).max(255),
+  categorySlug: z.string().min(1, { message: 'Please select' }),
+  reward: z.number().min(1),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 type ReqBody = Inputs & { id?: string };
 
@@ -42,6 +46,7 @@ export const usePost = ({ session, type, post = undefined }: Props) => {
     handleSubmit: originalHandleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
+    resolver: zodResolver(schema),
     defaultValues: {
       title: post?.title,
       content: post?.content,
@@ -105,12 +110,8 @@ export const usePost = ({ session, type, post = undefined }: Props) => {
     data: ReqBody;
     type: Props['type'];
   }): boolean => {
-    const { title, content, categorySlug, reward, id = undefined } = data;
-
+    const { id } = data;
     if (type === 'UPDATE') if (!id) return false;
-    if (!title || !content || !categorySlug || !reward) return false;
-    if (isNaN(Number(reward))) return false;
-    // TODO　型判定はzodを追加
 
     return true;
   };
@@ -129,22 +130,16 @@ export const usePost = ({ session, type, post = undefined }: Props) => {
   return {
     handleSubmit: originalHandleSubmit(upsertPost),
     fieldValues: {
-      title: convert(register('title', { required: true })),
-      content: convert(
-        register('content', {
-          required: true,
-          minLength: 1,
-          maxLength: 255,
-        })
-      ),
-      categorySlug: convert(register('categorySlug', { required: true })),
-      reward: convert(register('reward', { required: true })),
+      title: convert(register('title')),
+      content: convert(register('content')),
+      categorySlug: convert(register('categorySlug')),
+      reward: convert(register('reward', { valueAsNumber: true })),
     },
     errors: {
-      title: errors.title,
-      content: errors.content,
-      categorySlug: errors.categorySlug,
-      reward: errors.reward,
+      title: resolve(errors.title),
+      content: resolve(errors.content),
+      categorySlug: resolve(errors.categorySlug),
+      reward: resolve(errors.reward),
     },
   };
 };

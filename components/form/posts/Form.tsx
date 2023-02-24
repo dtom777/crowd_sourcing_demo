@@ -31,7 +31,6 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
         <form className='card-body' onSubmit={handleSubmit}>
           <InputField
             {...fieldValues.title}
-            errorMessage='Please enter'
             errors={errors.title}
             label='Title'
             type='text'
@@ -40,7 +39,6 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
 
           <TextareaField
             {...fieldValues.content}
-            errorMessage='Please enter 1 to 255 characters.'
             errors={errors.content}
             label='Description'
             placeholder='Description'
@@ -49,7 +47,6 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
 
           <SelectField
             {...fieldValues.categorySlug}
-            errorMessage='Please select'
             errors={errors.categorySlug}
             label='Category'
           >
@@ -67,7 +64,6 @@ const PostForm: VFC<Props> = ({ session, type, post }) => {
 
           <InputField
             {...fieldValues.reward}
-            errorMessage='Please enter'
             errors={errors.reward}
             label='Reward - USD'
             type='number'

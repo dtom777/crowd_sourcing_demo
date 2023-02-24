@@ -1,20 +1,38 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/client';
 import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  changingEmail: string;
-  confirmationChangingEmail: string;
-};
+const schema = z
+  .object({
+    changingEmail: z.string().min(1),
+    confirmationChangingEmail: z.string().min(1),
+  })
+  .refine(
+    (data) =>
+      data.changingEmail.includes('@') &&
+      data.confirmationChangingEmail.includes('@'),
+    {
+      message: 'Please enter email',
+      path: ['email'],
+    }
+  )
+  .refine((data) => data.changingEmail === data.confirmationChangingEmail, {
+    message: 'Email does not match',
+    path: ['confirmationChangingEmail'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 type ReqBody = {
   email: string;
@@ -33,13 +51,15 @@ export const useSendEmail = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const sendConfirmationEmail: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
 
-      const { changingEmail, confirmationChangingEmail } = data;
+      const { changingEmail } = data;
 
       if (!email) {
         setErrorMessage('Email is required');
@@ -48,12 +68,6 @@ export const useSendEmail = () => {
       }
 
       try {
-        const errMsg = validateEmail({
-          changingEmail,
-          confirmationChangingEmail,
-        });
-        if (errMsg) throw new Error(errMsg);
-
         const body: ReqBody = { email, changingEmail };
 
         const res = await fetch('/api/email/change', {
@@ -78,40 +92,17 @@ export const useSendEmail = () => {
     [dispatch, email]
   );
 
-  const validateEmail = ({
-    changingEmail,
-    confirmationChangingEmail,
-  }: Inputs): ErrorMessage => {
-    if (!changingEmail || !confirmationChangingEmail) return 'Incomplete input';
-    if (!changingEmail === !confirmationChangingEmail)
-      return 'Email does not match';
-
-    return undefined;
-  };
-
   return {
     currentEmail: email,
     errorMessage,
     handleSubmit: originalHandleSubmit(sendConfirmationEmail),
     fieldValues: {
-      changingEmail: convert(
-        register('changingEmail', {
-          required: true,
-          minLength: 2,
-          maxLength: 20,
-        })
-      ),
-      confirmationChangingEmail: convert(
-        register('confirmationChangingEmail', {
-          required: true,
-          minLength: 2,
-          maxLength: 20,
-        })
-      ),
+      changingEmail: convert(register('changingEmail')),
+      confirmationChangingEmail: convert(register('confirmationChangingEmail')),
     },
     errors: {
-      changingEmail: errors.changingEmail,
-      confirmationChangingEmail: errors.confirmationChangingEmail,
+      changingEmail: resolve(errors.changingEmail),
+      confirmationChangingEmail: resolve(errors.confirmationChangingEmail),
     },
   };
 };

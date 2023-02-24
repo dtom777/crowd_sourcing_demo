@@ -1,18 +1,27 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { useAppDispatch } from '@/stores/hooks';
 import { loadingToggled } from '@/stores/loading-slice';
 
 import { successToast } from '@/libs/toast';
 
-import { convert } from '@/utils/helper';
+import { convert, resolve } from '@/utils/helper';
 
 type ErrorMessage = string | undefined;
 
-type Inputs = {
-  email: string;
-};
+const schema = z
+  .object({
+    email: z.string().min(1),
+  })
+  .refine((data) => data.email.includes('@'), {
+    message: 'Please enter email',
+    path: ['email'],
+  });
+
+type Inputs = z.infer<typeof schema>;
 
 export const useResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
@@ -23,18 +32,15 @@ export const useResetPassword = () => {
     register,
     handleSubmit: originalHandleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const resetPassword: SubmitHandler<Inputs> = useCallback(
     async (data) => {
       dispatch(loadingToggled());
 
-      const { email } = data;
-
       try {
-        const errMsg = validateEmail(email);
-        if (errMsg) throw new Error(errMsg);
-
         const res = await fetch('/api/password/reset', {
           method: 'POST',
           body: JSON.stringify(data),
@@ -58,25 +64,14 @@ export const useResetPassword = () => {
     [dispatch]
   );
 
-  const validateEmail = (email: Inputs['email']): ErrorMessage => {
-    if (!email) return 'Please enter';
-    if (!email.includes('@')) return 'Please enter email';
-
-    return undefined;
-  };
-
   return {
     errorMessage,
     handleSubmit: originalHandleSubmit(resetPassword),
     fieldValues: {
-      email: convert(
-        register('email', {
-          required: true,
-        })
-      ),
+      email: convert(register('email')),
     },
     errors: {
-      email: errors.email,
+      email: resolve(errors.email),
     },
   };
 };

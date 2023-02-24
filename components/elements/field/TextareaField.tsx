@@ -1,18 +1,15 @@
 import { VFC } from 'react';
-import { FieldError } from 'react-hook-form';
 
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 
 type Props = Omit<JSX.IntrinsicElements['textarea'], 'ref'> & {
   label: string;
-  errorMessage: string;
-  errors?: FieldError;
+  errors?: string[];
   inputRef?: React.Ref<HTMLTextAreaElement>;
 };
 
 const TextareaField: VFC<Props> = ({
   label,
-  errorMessage,
   errors,
   inputRef,
   ...inputProps
@@ -27,7 +24,8 @@ const TextareaField: VFC<Props> = ({
         {...inputProps}
         ref={inputRef}
       />
-      {errors && <ErrorMessage errorMessage={errorMessage} />}
+      {errors?.length &&
+        errors?.map((err) => <ErrorMessage key={err} errorMessage={err} />)}
     </div>
   );
 };

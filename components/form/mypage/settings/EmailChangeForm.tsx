@@ -15,7 +15,6 @@ const EmailChangeForm: VFC = () => {
       <form className='card-body' onSubmit={handleSubmit}>
         <InputField
           {...fieldValues.password}
-          errorMessage='Please enter 8 to 12 characters'
           errors={errors.password}
           label='Password'
           type='password'
@@ -24,7 +23,6 @@ const EmailChangeForm: VFC = () => {
 
         <InputField
           {...fieldValues.confirmationPassword}
-          errorMessage='Please enter 8 to 12 characters'
           errors={errors.confirmationPassword}
           label='Confirmation Password'
           type='password'

@@ -1,19 +1,16 @@
 import { ReactNode, FC } from 'react';
-import { FieldError } from 'react-hook-form';
 
 import ErrorMessage from '@/components/elements/error/ErrorMessage';
 
 type Props = Omit<JSX.IntrinsicElements['select'], 'ref'> & {
   label: string;
-  errorMessage: string;
-  errors?: FieldError;
+  errors?: string[];
   inputRef?: React.Ref<HTMLSelectElement>;
   children: ReactNode;
 };
 
 const SelectField: FC<Props> = ({
   label,
-  errorMessage,
   errors,
   inputRef,
   children,
@@ -31,7 +28,8 @@ const SelectField: FC<Props> = ({
       >
         {children}
       </select>
-      {errors && <ErrorMessage errorMessage={errorMessage} />}
+      {errors?.length &&
+        errors?.map((err) => <ErrorMessage key={err} errorMessage={err} />)}
     </div>
   );
 };
