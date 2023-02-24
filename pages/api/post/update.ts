@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const session: Session | null = await getSession({ req });
     if (!session) res.status(401).json({ message: 'Unauthorized' });
 
-    await prisma.post.update({
+    const updatedPost = await prisma.post.update({
       where: {
         id,
       },
@@ -29,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    res.status(200).json({ message: 'Updated' });
+    res.status(200).json(updatedPost);
   } catch (err) {
     console.error(err.message);
     res.status(500).json(err.message);

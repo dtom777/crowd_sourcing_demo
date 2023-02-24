@@ -32,14 +32,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
 
-    await prisma.post.create({
+    const newPost = await prisma.post.create({
       data: {
         ...body,
         userId: user.id,
       },
     });
 
-    res.status(201).json({ message: 'Created' });
+    res.status(201).json(newPost);
   } catch (err) {
     console.error(err.message);
     res.status(500).json(err.message);

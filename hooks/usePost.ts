@@ -82,8 +82,10 @@ export const usePost = ({ session, type, post = undefined }: Props) => {
         });
         if (!res.ok) throw new Error('Failed');
 
+        const post: Post = await res.json();
+
         await router.push({
-          pathname: '/mypage/posts',
+          pathname: `/posts/${post.id}`,
         });
         successToast('Success!');
       } catch (err) {
