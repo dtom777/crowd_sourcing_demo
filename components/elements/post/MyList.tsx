@@ -3,6 +3,7 @@ import {
   faEdit,
   faTrashAlt,
 } from '@fortawesome/free-regular-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { memo, VFC } from 'react';
 
@@ -30,6 +31,7 @@ const MyPostList: VFC<Props> = ({ posts }) => {
               <th>Title</th>
               <th>Reward</th>
               <th>Status</th>
+              <th>View</th>
               <th>Published</th>
               <th>Edit</th>
               <th>Delete</th>
@@ -50,6 +52,13 @@ const MyPostList: VFC<Props> = ({ posts }) => {
                   ) : (
                     <p className='text-gray-400'>No application</p>
                   )}
+                </td>
+                <td>
+                  <Link href={`/posts/${post.id}`}>
+                    <a className='hover:opacity-50'>
+                      <Icon icon={faEye} className='mr-1' />
+                    </a>
+                  </Link>
                 </td>
                 <td>
                   <div className='form-control'>
