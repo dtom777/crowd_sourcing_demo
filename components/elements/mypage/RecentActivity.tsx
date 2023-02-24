@@ -30,7 +30,11 @@ const RecentActivity: VFC<Props> = ({ comments }) => {
                 <a className='flex justify-between hover:opacity-50'>
                   <div className='flex'>
                     <Avatar
-                      src={comment.post.user.image}
+                      src={
+                        comment?.post.user.image
+                          ? comment.post.user.image
+                          : '/avatar-default.png'
+                      }
                       size={100}
                       className='w-14'
                     />

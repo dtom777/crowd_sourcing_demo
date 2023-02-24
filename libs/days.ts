@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Comment, Post } from '@prisma/client';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ja';
@@ -38,8 +38,8 @@ dayjs.updateLocale('ja', {
   },
 });
 
-const getRelativeTime = (post: Post) => {
-  const { createdAt, updatedAt } = post;
+const getRelativeTime = (arg: Post | Comment) => {
+  const { createdAt, updatedAt } = arg;
   if (updatedAt) {
     const relativeTime = updatedAt;
 

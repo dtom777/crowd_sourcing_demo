@@ -8,7 +8,7 @@ import { useLike } from '../../../hooks/useLike';
 import Icon from '../icon/Icon';
 
 type Props = {
-  session?: Session;
+  session: Session | null;
   post: PostWithUser;
 };
 

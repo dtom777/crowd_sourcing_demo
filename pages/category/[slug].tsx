@@ -67,7 +67,7 @@ const CategorySlugPage: NextPage<Props> = ({ posts }) => {
     <>
       <CategoryTitle />
       <div className='ml-2 mt-4 lg:ml-0'>
-        {posts.length ? (
+        {posts?.length ? (
           <div className='mb-8'>
             <Posts posts={posts} />
           </div>
