@@ -1,6 +1,6 @@
 # Crowd sourcing demo site
 
-クラウドソーシングのデモサイトです。
+クラウドソーシングのデモサイトです。  
 掲示板形式で、仕事の募集・応募を行うことができます。
 
 ## 使用技術
@@ -9,10 +9,11 @@
 - React 17.0.2
 - TypeScript 4.5.5
 - NextAuth 3.21.1
+- Prisma 4.10.1
 - Redux Toolkit 1.9.2
 - SWR 1.0.1
-- React Hook Form 7.6.6
-- Prisma 3.1.1
+- React Hook Form 7.22.5
+- Zod 3.20.6
 - Tailwind CSS 3.2.6
 - Jest 27.4.7
 - React Testing Library 12.1.2
