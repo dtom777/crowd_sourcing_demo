@@ -7,8 +7,7 @@ import { prisma } from '@/libs/prisma';
 import Chat from '@/components/elements/chat/Chat';
 
 import { ApplicationPosts, MyPosts } from '@/types/post.type';
-
-import { UserSelectId } from '../../../types/user.type';
+import { UserSelectId } from '@/types/user.type';
 
 type Props = {
   myPosts?: Array<MyPosts>;
