@@ -15,7 +15,7 @@ const Posts: VFC<Props> = ({ posts }) => {
   const { asPath } = useRouter();
   const [offset, setOffset] = useState<number>(0);
   const [slice, setSlice] = useState<Array<PostWithUser>>([]);
-  const [perPage, setPerPage] = useState<number>(8);
+  const [perPage, setPerPage] = useState<number>(6);
   const [pageCount, setPageCount] = useState<number>(0);
 
   const handlePageClick = useCallback(
