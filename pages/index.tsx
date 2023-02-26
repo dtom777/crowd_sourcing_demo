@@ -15,7 +15,7 @@ type Props = {
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const posts: Props['posts'] = await prisma.post.findMany({
     orderBy: {
-      id: 'desc',
+      createdAt: 'desc',
     },
     where: {
       AND: [{ published: true }, { draft: false }],
