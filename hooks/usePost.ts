@@ -20,7 +20,7 @@ type Props = {
 };
 
 const schema = z.object({
-  title: z.string().min(1),
+  title: z.string().min(1).max(50),
   content: z.string().min(1).max(255),
   categorySlug: z.string().min(1, { message: 'Please select' }),
   reward: z.number().min(1),
