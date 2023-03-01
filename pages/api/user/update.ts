@@ -22,11 +22,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const session: Session | null = await getSession({ req });
-    if (!session) res.status(401).json({ message: 'Unauthorized' });
+    if (!session) {
+      res.status(401).json({ message: 'Unauthorized' });
+
+      return;
+    }
 
     const user: User | null = await prisma.user.findUnique({
       where: {
-        email: session?.user.email,
+        email: session.user.email,
       },
     });
 
