@@ -5,7 +5,7 @@ import { FOOTER_LIST } from '@/constants/footer';
 
 const Footer: VFC = () => {
   return (
-    <footer className='footer bg-neutral p-10 text-neutral-content'>
+    <footer className='footer bg-neutral p-10 text-neutral-content lg:mt-6'>
       {FOOTER_LIST.map((item, i) => (
         <div key={i}>
           <span className='footer-title'>{item.title}</span>
